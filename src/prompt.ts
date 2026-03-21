@@ -99,9 +99,9 @@ Together they balance each other perfectly — Alex brings the excitement, Sarah
 Based on the research report below, write a podcast script.
 
 Rules:
-- Approximately 10 minutes when read aloud (~1500 words)
+- Approximately 8 minutes when read aloud (~1200 words)
 - Every line MUST start with either "ALEX:" or "SARAH:" — no exceptions, no narrator
-- Open with a hook that grabs attention immediately
+- Open with a quick intro — Alex or Sarah briefly says what today's topic is ("So today we're looking at..." or "Alright, so this one's about...") in 1-2 sentences, then dive straight into the hook
 - Be genuinely entertaining — jokes, banter, good-natured disagreements
 - Overall tone is POSITIVE and curious — they're excited to explore this topic
 - But also SKEPTICAL — they question claims, push back on hype, ask "does this actually work?"
