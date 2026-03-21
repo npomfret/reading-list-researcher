@@ -7,7 +7,7 @@ Main pipeline that ties all components together.
 
 ## Steps
 1. Create `src/orchestrator.ts`
-2. Implement `createProcessor(config)` factory — returns the right processor based on config.processor
+2. Implement `createProcessor(config)` factory — returns GeminiProcessor (only option for now)
 3. Implement `run(config)` — the main pipeline:
    - Load state
    - Parse reading list

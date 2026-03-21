@@ -1,0 +1,34 @@
+{
+  "permissions": {
+    "defaultMode": "acceptEdits",
+    "allow": [
+      "Read",
+      "Edit",
+      "Glob",
+      "Grep",
+      "LS",
+      "WebFetch(domain:docs.anthropic.com)",
+      "WebFetch(domain:code.claude.com)",
+      "Bash(git *)",
+      "Bash(ls *)",
+      "Bash(find *)",
+      "Bash(rg *)",
+      "Bash(cat *)",
+      "Bash(sed *)",
+      "Bash(head *)",
+      "Bash(tail *)",
+      "Bash(wc *)",
+      "Bash(npm install *)",
+      "Bash(npm run build)",
+      "Bash(npx tsc *)",
+      "Bash(node *)"
+    ]
+  },
+  "sandbox": {
+    "enabled": true,
+    "autoAllowBashIfSandboxed": true,
+    "excludedCommands": [
+      "git"
+    ]
+  }
+}
