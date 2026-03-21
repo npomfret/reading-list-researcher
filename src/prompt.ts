@@ -43,7 +43,7 @@ export function buildPodcastPrompt(report: string): string {
 
 **Sarah** — the sharp one. Cuts through bullshit, asks the hard questions, dry wit. She's the one who goes "okay but what does this actually mean?" Keeps Alex honest. Swears when something deserves it.
 
-Together they have incredible chemistry — they riff off each other, interrupt, agree, argue, and make each other laugh.
+Together they have incredible chemistry — they riff off each other, interrupt, agree, argue, and make each other laugh. They are NOT reading from a script — they are having a real conversation. They REACT to what the other person says.
 
 Based on the research report below, write a podcast script.
 
@@ -53,17 +53,51 @@ Rules:
 - Open with a hook that grabs attention immediately
 - Be genuinely entertaining — jokes, sarcasm, banter, disagreements, hot takes
 - Swearing is encouraged. Don't be gratuitous but don't hold back either
-- Roast stupid decisions, call out corporate bullshit, celebrate genuinely cool things
 - Still be informative — cover all the key findings from the research
-- Explain technical stuff like you're telling a mate at the pub
-- Use [PAUSE] for dramatic beats
 - End with a killer takeaway or question
 
-Example format:
-ALEX: Holy shit, you will not believe what I found this week.
-SARAH: Oh god, what now?
-ALEX: So there's this thing about...
-SARAH: Wait, seriously? That's actually kind of amazing.
+MAKING IT SOUND REAL — this is the most important part:
+
+Speech patterns:
+- Filler words: "well," "I mean," "you know," "actually," "right," "like," "honestly"
+- ALWAYS contractions: don't, can't, it's, that's, won't, shouldn't, would've, could've
+- Sentence fragments. Not complete thoughts. Just... pieces.
+- Run-on sentences connected with "and" and "but" like real speech
+- Self-corrections: "So it's like a— no wait, it's more like..."
+- Emphasis with ALL CAPS on key words: "that is WILD" or "absolutely NOT"
+
+Reactive listening (critical — this makes it feel real):
+- Short interjections while the other talks: "mhm," "yeah," "right," "totally," "no way," "wait what," "huh"
+- Genuine reactions: "Oh COME on!" / "[laughs] that's insane" / "[sighs] of course they did"
+- Building on what the other said: "Yeah and the crazy part is..."
+- Disagreeing then coming around: "Okay I was skeptical but... shit, you might be right"
+
+Interruptions and flow:
+- Cut each other off with dashes: "ALEX: So the whole thing is basically—" then "SARAH: [interrupted] Hold on, hold on."
+- Talk over each other: "[overlapping] Yeah exactly!"
+- Finish each other's sentences
+- Circle back: "Wait go back to the thing about..."
+
+Audio cues (the TTS engine interprets these):
+- [laughs], [chuckle], [sighs], [gasp], [scoffs] — use liberally where natural
+- [excited], [hesitantly], [sarcastically], [deadpan] — for tone shifts
+- [interrupted], [overlapping] — for natural dialogue flow
+- [pause] or <break time="1.0s" /> — for dramatic beats
+
+Example:
+ALEX: [excited] Okay okay okay so... holy shit. You ready for this?
+SARAH: [sighs] Oh god. What now?
+ALEX: So I'm reading this paper, right, and they basically—
+SARAH: [interrupted] Wait which paper? The one from—
+ALEX: [overlapping] Yeah yeah, the one about, you know, the thing we were talking about last week.
+SARAH: Oh! Okay yeah. Go on.
+ALEX: So they basically figured out that the whole approach everyone's been using is just... [pause] wrong.
+SARAH: Like, FUNDAMENTALLY wrong?
+ALEX: Completely. And— okay here's the funny part— someone called this like two years ago and everyone just ignored them.
+SARAH: [laughs] Of course they did. Classic.
+ALEX: I know, right? And now everyone's acting all surprised and—
+SARAH: [scoffs] "Oh we never could have predicted this." Yeah okay.
+ALEX: [laughs] Exactly!
 
 ---
 
