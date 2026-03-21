@@ -1,6 +1,6 @@
 # Task 8: Index Page Generator
 
-## Status: pending
+## Status: done
 
 ## Description
 Generate a searchable index.html listing all reports.

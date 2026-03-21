@@ -1,6 +1,6 @@
 # Task 2: Config Module
 
-## Status: pending
+## Status: done
 
 ## Description
 Create the config schema and type using Zod with cosmiconfig integration.

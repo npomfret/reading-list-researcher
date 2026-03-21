@@ -1,6 +1,6 @@
 # Task 6: Prompt Template
 
-## Status: pending
+## Status: done
 
 ## Description
 Shared LLM prompt template for generating research reports.

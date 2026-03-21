@@ -1,6 +1,6 @@
 # Task 14: Build & Verify
 
-## Status: pending
+## Status: done
 
 ## Description
 Verify the entire project compiles, passes type checks, and tests pass.

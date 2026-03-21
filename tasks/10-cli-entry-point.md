@@ -1,6 +1,6 @@
 # Task 10: CLI Entry Point
 
-## Status: pending
+## Status: done
 
 ## Description
 Wire up the CLI with cosmiconfig for configuration loading.

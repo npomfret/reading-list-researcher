@@ -1,6 +1,6 @@
 # Task 13: Tests
 
-## Status: pending
+## Status: done
 
 ## Description
 Write unit tests for the core modules.

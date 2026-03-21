@@ -1,6 +1,6 @@
 # Task 9: Orchestrator
 
-## Status: pending
+## Status: done
 
 ## Description
 Main pipeline that ties all components together.

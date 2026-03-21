@@ -1,7 +1,9 @@
 /tmp
 /out-tsc
+/dist
 
 /node_modules
 npm-debug.log*
 
+.DS_Store
 .gemini/.env

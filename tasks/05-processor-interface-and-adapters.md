@@ -1,6 +1,6 @@
 # Task 5: Processor Interface & Gemini Adapter
 
-## Status: pending
+## Status: done
 
 ## Description
 Define the LLM processor interface and implement the Gemini CLI adapter. Claude/Codex adapters deferred.

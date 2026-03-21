@@ -1,6 +1,6 @@
 # Task 1: Project Setup
 
-## Status: pending
+## Status: done
 
 ## Description
 Update package.json, tsconfig.json, and create vitest.config.ts to match the project spec.

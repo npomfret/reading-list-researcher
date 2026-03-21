@@ -1,6 +1,6 @@
 # Task 3: Safari Reading List Parser
 
-## Status: pending
+## Status: done
 
 ## Description
 Parse Safari's Bookmarks.plist to extract Reading List items.

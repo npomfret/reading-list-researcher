@@ -1,6 +1,6 @@
 # Task 12: launchd Plist
 
-## Status: pending
+## Status: done
 
 ## Description
 Create the launchd agent plist for running the tool every 15 minutes.

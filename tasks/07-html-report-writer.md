@@ -1,6 +1,6 @@
 # Task 7: HTML Report Writer
 
-## Status: pending
+## Status: done
 
 ## Description
 Generate standalone magazine-style HTML pages from markdown reports.
