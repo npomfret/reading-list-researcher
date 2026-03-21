@@ -73,16 +73,19 @@ ${getSiteSpecificInstructions(urlInfo.url)}
 **Category**: [auto-detect: tech / science / business / culture / politics / other]
 
 ## Summary
-[2-3 paragraph summary of the main content. Include relevant images using markdown image syntax where appropriate.]
+[4-5 detailed paragraphs covering the main content thoroughly. Include relevant images using markdown image syntax where appropriate. Don't just skim — explain the substance.]
 
 ## Key Points
-[The most important takeaways, written as prose]
+[Detailed prose covering all important takeaways. Use multiple paragraphs if needed. Explain WHY each point matters, not just what it is.]
+
+## How It Works
+[If applicable — explain the technical approach, methodology, or mechanism in detail. Skip this section if it doesn't apply.]
 
 ## Related Context
-[What you found from your research — additional sources, contrasting views, background, recent developments. Cite URLs where relevant.]
+[Thorough coverage of what you found from your research — additional sources, contrasting views, background, recent developments, competing approaches. Cite URLs where relevant. This section should be substantial.]
 
 ## Assessment
-[Brief analytical take — what's significant, what's missing, what questions remain]
+[In-depth analytical take — what's significant, what's missing, what questions remain, who should care about this and why]
 
 IMPORTANT: Output ONLY the markdown report. No preamble, no commentary, no explanation of your process.`;
 }
@@ -99,7 +102,7 @@ Together they balance each other perfectly — Alex brings the excitement, Sarah
 Based on the research report below, write a podcast script.
 
 Rules:
-- Approximately 8 minutes when read aloud (~1200 words)
+- Approximately 5 minutes when read aloud (~750 words)
 - Every line MUST start with either "ALEX:" or "SARAH:" — no exceptions, no narrator
 - Open with a quick intro — Alex or Sarah briefly says what today's topic is ("So today we're looking at..." or "Alright, so this one's about...") in 1-2 sentences, then dive straight into the hook
 - Be genuinely entertaining — jokes, banter, good-natured disagreements
