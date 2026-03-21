@@ -6,7 +6,7 @@ const icloudBase = `${home}/Library/Mobile Documents/com~apple~CloudDocs/Reading
 export const ConfigSchema = z.object({
   processor: z.enum(["gemini"]).default("gemini"),
   batchSize: z.number().default(5),
-  processingTimeout: z.number().default(300),
+  processingTimeout: z.number().default(120),
   bookmarksPlist: z.string().default(`${home}/Library/Safari/Bookmarks.plist`),
   outputDir: z.string().default(icloudBase),
   statePath: z.string().default(`${icloudBase}/state.json`),

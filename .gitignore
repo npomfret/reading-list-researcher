@@ -4,6 +4,6 @@
 
 /node_modules
 npm-debug.log*
-
+.venv
 .DS_Store
 .gemini/.env

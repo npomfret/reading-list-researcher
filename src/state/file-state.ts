@@ -7,7 +7,8 @@ export interface StateEntry {
   title: string;
   processedAt: string;
   processor: string;
-  status: "success" | "failed";
+  status: "success" | "failed" | "processing";
+  hostname?: string;
   reportFile?: string;
   error?: string;
 }
@@ -35,8 +36,26 @@ export function saveState(path: string, state: State): void {
   renameSync(tmp, path);
 }
 
+const STALE_CLAIM_MS = 15 * 60 * 1000; // 15 minutes
+
 export function isProcessed(state: State, url: string): boolean {
-  return url in state.processed;
+  const entry = state.processed[url];
+  if (!entry) return false;
+  if (entry.status === "success" || entry.status === "failed") return true;
+  // "processing" — check if stale
+  return !isStale(entry);
+}
+
+export function isClaimed(state: State, url: string): boolean {
+  const entry = state.processed[url];
+  if (!entry) return false;
+  if (entry.status !== "processing") return false;
+  return !isStale(entry);
+}
+
+function isStale(entry: StateEntry): boolean {
+  const claimedAt = new Date(entry.processedAt).getTime();
+  return Date.now() - claimedAt > STALE_CLAIM_MS;
 }
 
 export function markProcessed(state: State, entry: StateEntry): State {

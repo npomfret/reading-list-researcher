@@ -10,5 +10,6 @@ export interface ProcessorResult {
 
 export interface LlmProcessor {
   name: string;
-  process(urlInfo: UrlInfo): Promise<ProcessorResult>;
+  process(urlInfo: UrlInfo, pageContent: string): Promise<ProcessorResult>;
+  generate(prompt: string): Promise<string>;
 }

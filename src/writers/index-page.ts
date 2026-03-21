@@ -14,7 +14,7 @@ export function regenerateIndex(outputDir: string, state: State): void {
       (e) => `
       <tr class="entry" data-title="${escapeHtml(e.title.toLowerCase())}">
         <td class="date">${e.processedAt.slice(0, 10)}</td>
-        <td><a href="reports/${escapeHtml(e.reportFile!)}">${escapeHtml(e.title || e.url)}</a></td>
+        <td><a href="reports/${escapeHtml(e.reportFile!)}/index.html">${escapeHtml(e.title || e.url)}</a></td>
         <td class="source"><a href="${escapeHtml(e.url)}">source</a></td>
       </tr>`
     )

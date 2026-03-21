@@ -21,13 +21,15 @@ export function slugify(title: string): string {
 export async function writeReport(
   reportsDir: string,
   meta: ReportMeta,
-  markdown: string
+  markdown: string,
+  hasPodcast = false
 ): Promise<string> {
-  mkdirSync(reportsDir, { recursive: true });
+  const dirName = `${meta.date}-${meta.slug}`;
+  const reportDir = join(reportsDir, dirName);
+  mkdirSync(reportDir, { recursive: true });
 
   const htmlContent = await marked(markdown);
-  const filename = `${meta.date}-${meta.slug}.html`;
-  const filepath = join(reportsDir, filename);
+  const filepath = join(reportDir, "index.html");
 
   const html = `<!DOCTYPE html>
 <html lang="en">
@@ -169,17 +171,52 @@ export async function writeReport(
       display: block;
     }
 
+    img {
+      max-width: 100%;
+      height: auto;
+      border-radius: 4px;
+      margin: 1.2rem 0;
+    }
+
+    .podcast-player {
+      background: var(--card-bg);
+      border: 1px solid var(--border);
+      border-radius: 8px;
+      padding: 1.2rem;
+      margin-bottom: 2rem;
+    }
+
+    .podcast-player h3 {
+      font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif;
+      font-size: 0.85rem;
+      font-weight: 600;
+      text-transform: uppercase;
+      letter-spacing: 0.08em;
+      color: var(--muted);
+      margin-bottom: 0.6rem;
+    }
+
+    .podcast-player audio {
+      width: 100%;
+    }
+
     ul, ol { margin-bottom: 1.2rem; padding-left: 1.5rem; }
     li { margin-bottom: 0.3rem; }
   </style>
 </head>
 <body>
-  <a class="back-link" href="../index.html">&larr; All Reports</a>
+  <a class="back-link" href="../../index.html">&larr; All Reports</a>
   <div class="category">${escapeHtml(meta.category)}</div>
   <div class="meta">
     ${escapeHtml(meta.date)} &middot;
     <a href="${escapeHtml(meta.url)}">Original source</a>
   </div>
+  ${hasPodcast ? `<div class="podcast-player">
+    <h3>Listen to the podcast</h3>
+    <audio controls preload="metadata">
+      <source src="podcast.mp3" type="audio/mpeg">
+    </audio>
+  </div>` : ""}
   <article>
     ${htmlContent}
   </article>
@@ -187,7 +224,7 @@ export async function writeReport(
 </html>`;
 
   writeFileSync(filepath, html, "utf-8");
-  return filename;
+  return dirName;
 }
 
 function escapeHtml(s: string): string {

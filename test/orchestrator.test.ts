@@ -26,6 +26,14 @@ vi.mock("../src/watcher/safari-reading-list.js", () => ({
   ],
 }));
 
+vi.mock("../src/browser/fetch-page.js", () => ({
+  fetchPage: async () => ({
+    title: "Test Article",
+    text: "This is the page content for testing.",
+    url: "https://example.com/article",
+  }),
+}));
+
 vi.mock("../src/processors/gemini.js", () => ({
   GeminiProcessor: class {
     name = "gemini";
@@ -50,7 +58,12 @@ Related context here.
 Assessment here.`,
       };
     }
+    async generate() { return "Podcast script here."; }
   },
+}));
+
+vi.mock("../src/tts/synthesize.js", () => ({
+  synthesize: async () => {},
 }));
 
 describe("orchestrator", () => {
