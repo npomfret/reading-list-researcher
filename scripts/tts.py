@@ -1,27 +1,22 @@
 """
 Multi-voice TTS synthesis using ElevenLabs Text-to-Dialogue API.
-Parses ALEX:/SARAH: speaker markers, sends to ElevenLabs for natural
-conversational synthesis with different voices.
-Falls back to Kokoro-82M if ELEVENLABS_API_KEY is not set.
+Parses ALEX:/SARAH: speaker markers, chunks to stay under the 5000-char
+limit, and concatenates the resulting audio.
 Usage: python3 tts.py <input_text_file> <output_mp3_path>
 """
 import sys
 import os
 import re
-import json
+import io
+import subprocess
 
+MAX_CHARS = 4500  # stay safely under ElevenLabs' 5000-char limit
 
-# ElevenLabs voice IDs — pre-built voices
+# ElevenLabs voice IDs
 VOICES = {
     "ALEX": "TX3LPaxmHKxFdv7VOQHJ",   # Liam - young male, conversational
     "SARAH": "pFZP5JQG7iQjIQuC4Bku",   # Lily - velvety, confident, British
 }
-
-# Audio tags that Kokoro can't handle but ElevenLabs can
-ELEVENLABS_AUDIO_TAGS = re.compile(
-    r"\[(?:laughs?|chuckles?|sighs?|gasps?|clears? throat|pause|excited|whisper(?:ing)?|sarcastic|rushed)\]",
-    re.IGNORECASE,
-)
 
 
 def parse_segments(text):
@@ -56,10 +51,31 @@ def parse_segments(text):
     return segments
 
 
+def chunk_inputs(inputs, max_chars):
+    """Split dialogue inputs into chunks that fit within the char limit."""
+    chunks = []
+    current_chunk = []
+    current_chars = 0
+
+    for inp in inputs:
+        text_len = len(inp.text)
+        if current_chunk and current_chars + text_len > max_chars:
+            chunks.append(current_chunk)
+            current_chunk = []
+            current_chars = 0
+        current_chunk.append(inp)
+        current_chars += text_len
+
+    if current_chunk:
+        chunks.append(current_chunk)
+
+    return chunks
+
+
 def synthesize_elevenlabs(segments, output_mp3):
-    """Use ElevenLabs Text-to-Dialogue API."""
+    """Use ElevenLabs Text-to-Dialogue API, chunking to stay under char limit."""
     from elevenlabs.client import ElevenLabs
-    from elevenlabs.types import DialogueInput
+    from elevenlabs.types import DialogueInput, ModelSettingsResponseModel
 
     api_key = os.environ.get("ELEVENLABS_API_KEY", "")
     if not api_key:
@@ -75,80 +91,54 @@ def synthesize_elevenlabs(segments, output_mp3):
         voice_id = VOICES.get(speaker, VOICES["ALEX"])
         inputs.append(DialogueInput(voice_id=voice_id, text=text))
 
-    print(f"Sending {len(inputs)} segments to ElevenLabs...", file=sys.stderr)
+    total_chars = sum(len(i.text) for i in inputs)
+    chunks = chunk_inputs(inputs, MAX_CHARS)
+    print(f"ElevenLabs: {len(inputs)} segments, {total_chars} chars, {len(chunks)} chunk(s)", file=sys.stderr)
 
-    from elevenlabs.types import ModelSettingsResponseModel
-
-    response = client.text_to_dialogue.convert(
-        inputs=inputs,
-        model_id="eleven_v3",
-        settings=ModelSettingsResponseModel(
-            stability=0.3,          # more expressive, less robotic
-            similarity_boost=0.75,  # balanced voice consistency
-        ),
+    settings = ModelSettingsResponseModel(
+        stability=0.3,
+        similarity_boost=0.75,
     )
 
-    # Response is an iterator of audio bytes
-    with open(output_mp3, "wb") as f:
-        for chunk in response:
-            f.write(chunk)
+    if len(chunks) == 1:
+        # Single chunk — write directly
+        response = client.text_to_dialogue.convert(
+            inputs=chunks[0], model_id="eleven_v3", settings=settings,
+        )
+        with open(output_mp3, "wb") as f:
+            for data in response:
+                f.write(data)
+    else:
+        # Multiple chunks — synthesize each, then concatenate with ffmpeg
+        tmp_files = []
+        for i, chunk in enumerate(chunks):
+            print(f"  Chunk {i+1}/{len(chunks)} ({sum(len(x.text) for x in chunk)} chars, {len(chunk)} segments)", file=sys.stderr)
+            response = client.text_to_dialogue.convert(
+                inputs=chunk, model_id="eleven_v3", settings=settings,
+            )
+            tmp_path = output_mp3.replace(".mp3", f".part{i}.mp3")
+            with open(tmp_path, "wb") as f:
+                for data in response:
+                    f.write(data)
+            tmp_files.append(tmp_path)
 
-    print(f"Saved {output_mp3} ({len(inputs)} segments)", file=sys.stderr)
+        # Concatenate with ffmpeg
+        concat_list = output_mp3.replace(".mp3", ".concat.txt")
+        with open(concat_list, "w") as f:
+            for tmp in tmp_files:
+                f.write(f"file '{tmp}'\n")
 
+        subprocess.run(
+            ["ffmpeg", "-f", "concat", "-safe", "0", "-i", concat_list, "-c", "copy", "-y", output_mp3],
+            check=True, capture_output=True,
+        )
 
-def synthesize_kokoro(segments, output_mp3):
-    """Fallback: use Kokoro-82M locally."""
-    import numpy as np
-    import subprocess
+        # Clean up temp files
+        os.remove(concat_list)
+        for tmp in tmp_files:
+            os.remove(tmp)
 
-    SAMPLE_RATE = 24000
-    KOKORO_VOICES = {"ALEX": "am_adam", "SARAH": "af_sarah"}
-
-    from kokoro_mlx import KokoroTTS
-    import soundfile as sf
-
-    tts = KokoroTTS.from_pretrained("mlx-community/Kokoro-82M-bf16")
-
-    all_audio = []
-    silence = np.zeros((int(SAMPLE_RATE * 0.05), 2), dtype=np.float32)
-
-    for i, (speaker, text_segment) in enumerate(segments):
-        if not text_segment.strip():
-            continue
-
-        # Strip audio tags Kokoro can't handle
-        clean_text = ELEVENLABS_AUDIO_TAGS.sub("...", text_segment)
-        if not clean_text.strip() or clean_text.strip() == "...":
-            all_audio.append(silence)
-            continue
-
-        voice = KOKORO_VOICES.get(speaker, "am_adam")
-        print(f"  [{i+1}/{len(segments)}] {speaker} ({voice}): {clean_text[:60]}...", file=sys.stderr)
-
-        result = tts.generate(clean_text, voice=voice, sample_rate=SAMPLE_RATE)
-        mono = np.array(result.audio, dtype=np.float32)
-
-        # Simple stereo panning
-        left_gain = 0.7 if speaker == "ALEX" else 0.3
-        right_gain = 0.3 if speaker == "ALEX" else 0.7
-        stereo = np.column_stack([mono * left_gain, mono * right_gain])
-        all_audio.append(stereo)
-        all_audio.append(silence)
-
-    if not all_audio:
-        raise RuntimeError("No audio generated")
-
-    combined = np.concatenate(all_audio)
-    wav_path = output_mp3.rsplit(".", 1)[0] + ".wav"
-    sf.write(wav_path, combined, SAMPLE_RATE)
-
-    subprocess.run(
-        ["ffmpeg", "-i", wav_path, "-b:a", "128k", "-y", output_mp3],
-        check=True,
-        capture_output=True,
-    )
-    os.remove(wav_path)
-    print(f"Saved {output_mp3} ({len(segments)} segments, {len(combined)/SAMPLE_RATE:.1f}s)", file=sys.stderr)
+    print(f"Saved {output_mp3}", file=sys.stderr)
 
 
 def main():
@@ -171,17 +161,7 @@ def main():
         print("Error: no speaker segments found", file=sys.stderr)
         sys.exit(1)
 
-    print(f"Found {len(segments)} segments", file=sys.stderr)
-
-    # Try ElevenLabs first, fall back to Kokoro
-    if os.environ.get("ELEVENLABS_API_KEY"):
-        try:
-            synthesize_elevenlabs(segments, output_mp3)
-            return
-        except Exception as e:
-            print(f"ElevenLabs failed: {e}, falling back to Kokoro", file=sys.stderr)
-
-    synthesize_kokoro(segments, output_mp3)
+    synthesize_elevenlabs(segments, output_mp3)
 
 
 if __name__ == "__main__":

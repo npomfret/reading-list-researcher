@@ -42,7 +42,7 @@ export async function run(config: Config) {
     // Re-read state for latest iCloud sync before each item
     state = loadState(config.statePath);
     if (isProcessed(state, item.url) || isClaimed(state, item.url)) {
-      log.info({ host, url: item.url }, "Skipping — already claimed or processed");
+      log.info({ url: item.url }, "Skipping — already claimed or processed");
       continue;
     }
 
@@ -56,10 +56,10 @@ export async function run(config: Config) {
       hostname: host,
     });
     saveState(config.statePath, state);
-    log.info({ host, url: item.url }, "Claimed");
+    log.info({ url: item.url }, "Claimed");
 
     try {
-      log.info({ host, url: item.url }, "Fetching page");
+      log.info({ url: item.url }, "Fetching page");
       const page = await fetchPage(item.url);
       log.info({ url: item.url, chars: page.text.length, title: page.title }, "Page fetched");
 
@@ -107,7 +107,7 @@ export async function run(config: Config) {
         log.info({ url: item.url }, "Podcast audio ready");
       } catch (podcastErr) {
         const podcastMsg = podcastErr instanceof Error ? podcastErr.message : String(podcastErr);
-        log.warn({ url: item.url, error: podcastMsg }, "Podcast generation failed");
+        log.warn({ url: item.url, error: podcastMsg.slice(0, 200) }, "Podcast failed");
       }
 
       // Re-write HTML with podcast player if audio was generated
