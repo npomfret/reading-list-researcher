@@ -333,8 +333,8 @@ async function runResearch(url: string, title: string): Promise<ResearchOutput> 
       disallowedTools: ["Bash", "Write", "Edit", "Read"],  // research only, no filesystem
       mcpServers: {
         research: {
-          command: "node",
-          args: ["./dist/research-mcp.js"],
+          command: "npx",
+          args: ["tsx", "./src/research-mcp.ts"],
           env: { BRAVE_API_KEY: config.braveApiKey },
         },
       },
@@ -589,7 +589,7 @@ File: `com.researchpods.agent.plist` — points to a wrapper script, does NOT co
 #!/bin/bash
 set -euo pipefail
 source "$HOME/.config/reading-list-agent/env"
-exec /usr/local/bin/node "$(dirname "$0")/../dist/index.js"
+exec npx tsx "$(dirname "$0")/../src/index.ts"
 ```
 
 Secrets live in `~/.config/reading-list-agent/env`, not in the plist or the repo.
@@ -644,11 +644,11 @@ Note: `@anthropic-ai/claude-agent-sdk` is the Claude Code SDK for spawning resea
 
 ## Build Order
 
-### Phase 0: SDK Feasibility Spike (before committing the architecture)
+### Phase 0: SDK Feasibility Spike — DONE (2026-03-24)
 
-1. **SDK spike** — minimal script that: (a) spawns a Claude Code SDK subprocess with a custom stdio MCP server, (b) the MCP server exposes one dummy tool, (c) the SDK calls the tool and returns structured JSON via `outputFormat`. This validates: Max plan covers subprocess usage, MCP attachment works, structured output works. **If this fails, fall back to direct API (`@anthropic-ai/sdk`) with Sonnet for the rest of the plan.**
+All three validations passed: Max plan auth works, custom MCP server attaches and tools are called, structured JSON output works via `message.structured_output`. Spike code in `spike/`. Key finding: structured output lives on `structured_output` field (not `result`), and the schema goes directly as `{ type: "json_schema", schema: { type: "object", ... } }` without a `name` wrapper. No compilation needed — running `.ts` directly via tsx.
 
-### Phase 1: Foundation + Watcher (get the trigger working)
+### Phase 1: Foundation + Watcher (get the trigger working) — IN PROGRESS
 
 2. Project scaffolding — package.json, tsconfig, directory structure
 3. Logger — structured logging with winston
