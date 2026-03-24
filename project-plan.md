@@ -16,7 +16,9 @@ Headless Chrome via Patchright with a persistent browser profile. Invisible, no 
 
 Use `@anthropic-ai/claude-agent-sdk` to run Claude Code as a subprocess for each research task. With a Max plan, this is free — no per-token API cost. The SDK supports custom MCP servers, so we attach our own browser and search tools. It also supports structured JSON output via `outputFormat`, which gives us typed research results directly.
 
-**Why not direct API (`@anthropic-ai/sdk`):** Costs ~$0.05-0.15 per item with Sonnet. At 5-10 items/day that's $10-45/month. The SDK is a subprocess per research task (slightly heavier), but the cost saving is significant.
+**Unverified assumptions (must spike first):** (1) Max plan covers SDK subprocess usage for unattended daemon workloads, (2) `outputFormat` with JSON schema works as documented, (3) custom MCP servers attach correctly in subprocess mode. Phase 1 includes a feasibility spike to validate all three before committing the architecture. **Fallback:** If the SDK doesn't work as expected, fall back to direct API (`@anthropic-ai/sdk`) with Sonnet — more expensive but proven.
+
+**Why not direct API (`@anthropic-ai/sdk`):** Costs ~$0.05-0.15 per item with Sonnet. At 5-10 items/day that's $10-45/month. The SDK is a subprocess per research task (slightly heavier), but the cost saving is significant. This is the fallback if the SDK spike fails.
 
 **Why not Claude Code CLI via child_process:** The SDK provides a proper async generator API with typed messages, MCP server attachment, and structured output. Shelling out to `claude` would require parsing stdout.
 
@@ -34,7 +36,9 @@ Write HTML reports to `~/Library/Mobile Documents/com~apple~CloudDocs/ResearchPo
 
 ### State: Local JSON file (v1)
 
-Single local JSON file tracking processed URLs by content hash. No cross-machine coordination in v1.
+Single local JSON file tracking processed URLs. No cross-machine coordination in v1.
+
+**Identity strategy:** State is keyed by `sha256(canonicalized_url)` where canonicalization strips trailing slashes, lowercases the scheme/host, and sorts query parameters. This is *URL identity* — "have we researched this URL before?" Content identity (same article at different URLs) and output identity (Phase 6 idempotent outputs) are separate concerns addressed later.
 
 **Why not iCloud claim files:** iCloud is eventually consistent, not a lock service. The 15-second claim wait described in the original plan is theater — it doesn't prevent races, and duplicate processing wastes real money (LLM calls, not just CPU). Multi-machine coordination is a Phase 3 concern, and only if actually needed.
 
@@ -50,9 +54,9 @@ Mozilla's Readability (the algorithm behind Firefox Reader View) as the primary 
 
 **Why not just innerText:** `innerText` includes navigation, ads, footers — garbage for research. Readability strips to article content. But we don't need a full "fallback ladder" (PDF handling, paywall busting, lazy-render detection) in v1 — those are known limitations, not solved problems.
 
-### Research quality: Source-backed claims
+### Research quality: Source-backed claims with clear audit boundaries
 
-Every summary point, quote, and author claim in the research output references a source URL. Not a full provenance graph, but enough to audit whether Claude extracted, inferred, or hallucinated.
+The research output schema distinguishes two categories: **auditable claims** (key points, quotes, author bio, credibility notes) where each claim references a source URL and derivation method, and **model-generated synthesis** (summary, related coverage summaries, followed link summaries) which are narrative text synthesized from multiple sources. The schema makes this boundary explicit so the report template can render them differently — auditable claims get citation links, synthesis sections get a "synthesized from N sources" note.
 
 ### Web search: Brave Search API
 
@@ -249,7 +253,8 @@ interface StateEntry {
 - Per-item timeout: 10 minutes for research, 2 minutes for report generation
 - Items are processed independently — a failure in one does not affect others
 - On timeout, the item is marked failed and the next item starts
-- **Cost controls:**
+- **Crash recovery:** The queue is in-memory and not persisted. On daemon restart, queued-but-unstarted items are lost — but the next reconciliation pass (which runs on startup) reconstructs them by diffing the plist against state. Items marked `"researching"` at crash time are treated as failed and eligible for retry.
+- **Rate controls:**
     - Maximum 20 items per hour
     - Maximum 50 items per day
     - If limits are hit, remaining items stay queued for the next window
@@ -372,11 +377,13 @@ Mark each field with how it was derived: "extracted" (directly from page),
 
 **Purpose:** Expose browser and search tools to the Claude Code SDK research agent.
 
-This is a stdio MCP server that the SDK launches as a subprocess. It provides three tools:
+This is a stdio MCP server that the SDK launches as a subprocess. **Each research task gets its own MCP server process, which owns its own Patchright browser context.** The browser is launched on first `browse_url` call and closed when the MCP server exits. This means each research task has an isolated browsing session — no shared cookie state between research tasks, but cookies persist within a single research session via the shared Chrome profile directory. The daemon's `main()` does NOT launch or manage the browser directly.
 
-- **`browse_url`** — navigates Patchright to a URL, extracts content via Readability, returns structured page data (title, content, author, links, extraction quality)
+Tools provided:
+
+- **`browse_url`** — launches Patchright (if not yet started), navigates to URL, extracts content via Readability, returns structured page data (title, content, author, links, extraction quality)
 - **`web_search`** — queries Brave Search API, returns titles/URLs/snippets
-- **`screenshot`** — takes a screenshot of a URL, saves to disk, returns the file path
+- **`screenshot`** — takes a screenshot of a URL via the browser, saves to disk, returns the file path
 
 **Research output schema:**
 
@@ -402,12 +409,9 @@ interface ResearchOutput {
   // Sources visited during research
   sources: Source[];
 
-  // Primary content
-  summary: string;                    // 2-3 paragraph summary
+  // --- Auditable claims (each tied to a source URL) ---
   key_points: SourcedClaim[];         // Main takeaways with source references
   quotes: SourcedClaim[];             // Notable quotes with source references
-
-  // Source analysis
   author: {
     name: string | null;
     bio: SourcedClaim | null;
@@ -420,20 +424,22 @@ interface ResearchOutput {
     credibility_notes: SourcedClaim | null;
   };
 
-  // Broader context
+  // --- Model-generated synthesis (not individually sourced) ---
+  // These are narrative summaries synthesized from the sources above.
+  // They should be consistent with the auditable claims but are not
+  // individually traceable to a single source.
+  summary: string;                    // 2-3 paragraph synthesis of all sources
   related_coverage: {
-    url: string;
+    url: string;                      // this URL is itself the source
     title: string;
     perspective: string;              // agrees, disagrees, adds context
-    summary: string;
+    summary: string;                  // model synthesis of that source
   }[];
-
-  // Follow-up content from links in the article
   followed_links: {
-    url: string;
+    url: string;                      // this URL is itself the source
     title: string;
     relevance: string;
-    summary: string;
+    summary: string;                  // model synthesis of that source
   }[];
 
   // Media
@@ -483,7 +489,6 @@ async function main() {
   const logger = createLogger();
   const state = new StateManager();
   const queue = new JobQueue({ concurrency: 1, maxPerHour: 20, maxPerDay: 50 });
-  const browser = await BrowserManager.launch();
 
   logger.info("Reading List Research Agent started", {
     machine: os.hostname(),
@@ -491,9 +496,10 @@ async function main() {
   });
 
   // Process a single item — called by the queue
+  // Browser lifecycle is managed by the MCP server subprocess, not here.
   async function processItem(item: ReadingListEntry) {
     await state.updateStatus(item.url, "researching");
-    const research = await runResearch(browser, item.url, item.title);
+    const research = await runResearch(item.url, item.title);
 
     await state.updateStatus(item.url, "generating_report");
     const outputDir = await generateReport(research);
@@ -504,8 +510,10 @@ async function main() {
     logger.info("Completed", { url: item.url, output: outputDir });
   }
 
-  // Reconciliation: diff plist against state, queue new items
+  // Reconciliation: diff plist against state, queue new items.
+  // Also recovers items stuck in "researching" from a previous crash.
   async function reconcile() {
+    state.recoverStuckItems();  // mark "researching" items as failed
     const entries = await parseReadingList();
     const newItems = entries.filter(e => !state.isKnown(e.url));
     for (const item of newItems) {
@@ -526,7 +534,6 @@ async function main() {
   process.on("SIGTERM", async () => {
     logger.info("Shutting down...");
     watcher.stop();
-    await browser.close();
     process.exit(0);
   });
 }
@@ -637,16 +644,20 @@ Note: `@anthropic-ai/claude-agent-sdk` is the Claude Code SDK for spawning resea
 
 ## Build Order
 
+### Phase 0: SDK Feasibility Spike (before committing the architecture)
+
+1. **SDK spike** — minimal script that: (a) spawns a Claude Code SDK subprocess with a custom stdio MCP server, (b) the MCP server exposes one dummy tool, (c) the SDK calls the tool and returns structured JSON via `outputFormat`. This validates: Max plan covers subprocess usage, MCP attachment works, structured output works. **If this fails, fall back to direct API (`@anthropic-ai/sdk`) with Sonnet for the rest of the plan.**
+
 ### Phase 1: Foundation + Watcher (get the trigger working)
 
-1. Project scaffolding — package.json, tsconfig, directory structure
-2. Logger — structured logging with winston
-3. Config loader — parse env file, validate required values
-4. iCloud path utilities — resolve iCloud Drive path
-5. Plist parser — parse Bookmarks.plist, extract Reading List entries
-6. State manager — local JSON state with atomic writes
-7. Watcher + reconciler — fs.watch + polling + startup diff
-8. **Verify:** Add something to Reading List, confirm watcher detects it
+2. Project scaffolding — package.json, tsconfig, directory structure
+3. Logger — structured logging with winston
+4. Config loader — parse env file, validate required values
+5. iCloud path utilities — resolve iCloud Drive path
+6. Plist parser — parse Bookmarks.plist, extract Reading List entries
+7. State manager — local JSON state with atomic writes
+8. Watcher + reconciler — fs.watch + polling + startup diff
+9. **Verify:** Add something to Reading List, confirm watcher detects it
 
 ### Phase 2: Research (one URL in, structured data out)
 
