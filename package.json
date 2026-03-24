@@ -1,0 +1,26 @@
+{
+  "name": "reading-list-researcher",
+  "version": "1.0.0",
+  "description": "",
+  "main": "index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/npomfret/reading-list-researcher.git"
+  },
+  "keywords": [],
+  "author": "",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/npomfret/reading-list-researcher/issues"
+  },
+  "homepage": "https://github.com/npomfret/reading-list-researcher#readme",
+  "dependencies": {
+    "@anthropic-ai/claude-agent-sdk": "^0.2.81",
+    "@modelcontextprotocol/sdk": "^1.27.1",
+    "tsx": "^4.21.0",
+    "typescript": "^6.0.2"
+  }
+}
