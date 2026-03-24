@@ -1,6 +1,6 @@
 # Task 002: Foundation + Watcher
 
-## Status: TODO
+## Status: DONE (2026-03-24) — pending manual end-to-end verification
 
 ## Goal
 
@@ -10,7 +10,7 @@ Set up the project scaffolding and get the Reading List watcher working end-to-e
 
 1. **Project scaffolding** — tsconfig.json, src/ directory structure, npm scripts to run via tsx (no compilation step)
 2. **Logger** — structured logging with winston (console transport for now, file transport later for launchd)
-3. **Config loader** — load `~/.config/reading-list-agent/env` via dotenv, validate required values, export typed config object
+3. **Config loader** — load `.env` in project root via dotenv, validate required values, export typed config object
 4. **iCloud path utilities** — resolve and validate the iCloud Drive output path (`~/Library/Mobile Documents/com~apple~CloudDocs/ResearchPods/`)
 5. **Plist parser** — run `plutil -convert json` on `~/Library/Safari/Bookmarks.plist`, navigate the JSON tree to extract Reading List entries (URLString, title, DateAdded)
 6. **State manager** — local JSON state file at `~/.reading-list-agent/state.json` with atomic writes (write to tmp + rename). Track items as `queued | researching | generating_report | complete | failed`
@@ -55,3 +55,14 @@ npm install -D @types/node
 ```
 
 (patchright, readability, jsdom, handlebars etc. are not needed yet)
+
+## Results
+
+All code implemented and type-checks clean. Smoke test confirmed:
+- Startup, config loading, and logger all work
+- Plist parser gracefully handles EPERM/EBUSY (sandbox restricted access) without crashing
+- fs.watch gracefully degrades to polling fallback when it can't watch the file
+- Brave API key validated (200 response)
+- Config switched from `~/.config/reading-list-agent/env` to `.env` in project root (simpler for a personal tool)
+
+**Still needs manual verification**: run `npx tsx src/index.ts` in a terminal with Full Disk Access, add a URL to Safari Reading List, and confirm detection. The sandbox prevents this from being tested automatically.
