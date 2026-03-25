@@ -656,13 +656,9 @@ Simplified from original plan: no watcher/loop, single-item processing per run. 
 
 Built: browser module (Patchright), content extractor (Readability + jsdom), Brave Search wrapper, research MCP server (browse_url/web_search/screenshot), research agent (Claude Agent SDK with Haiku 4.5, structured JSON output). No job queue — single-item processing per run. Wired into index.ts with state management. Verified end-to-end.
 
-### Phase 3: Output (first visible result)
+### Phase 3: Output — DONE (2026-03-25)
 
-16. HTML report template — responsive, dark mode, citation links
-17. Report generator — render template, embed screenshots
-18. Index page generator — listing of all research items
-19. macOS notifications — completion and failure alerts
-20. **Verify:** Generate a report, open on iPhone/Mac, verify it looks good and citations link to real sources
+HTML report generator (self-contained, responsive, dark mode), index page generator, macOS notifications. Reports written to iCloud Drive. Template literals instead of Handlebars. Simplified ResearchOutput schema (flat fields vs. sourced claims). Verified end-to-end.
 
 ### Phase 4: Daemon (wire it together)
 
