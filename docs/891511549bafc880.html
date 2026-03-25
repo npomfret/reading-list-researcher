@@ -1,0 +1,142 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>LoGeR: Long-Context Geometric Reconstruction with Hybrid Memory</title>
+<style>
+  *, *::before, *::after { box-sizing: border-box; }
+  :root {
+    --bg: #fff; --fg: #1a1a1a; --muted: #666; --border: #e0e0e0;
+    --accent: #0066cc; --tag-bg: #f0f0f0; --tag-fg: #333;
+    --card-bg: #fafafa;
+  }
+  @media (prefers-color-scheme: dark) {
+    :root {
+      --bg: #1a1a1a; --fg: #e0e0e0; --muted: #999; --border: #333;
+      --accent: #4da6ff; --tag-bg: #2a2a2a; --tag-fg: #ccc;
+      --card-bg: #222;
+    }
+  }
+  body {
+    font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif;
+    line-height: 1.6; color: var(--fg); background: var(--bg);
+    max-width: 720px; margin: 0 auto; padding: 2rem 1.5rem;
+  }
+  a { color: var(--accent); text-decoration: none; }
+  a:hover { text-decoration: underline; }
+  h1 { font-size: 1.8rem; line-height: 1.2; margin-bottom: 0.25rem; }
+  .meta { color: var(--muted); font-size: 0.9rem; margin-bottom: 2rem; }
+  .meta a { color: var(--muted); }
+  h2 { font-size: 1.2rem; margin-top: 2rem; margin-bottom: 0.75rem; border-bottom: 1px solid var(--border); padding-bottom: 0.25rem; }
+  .summary { font-size: 1.05rem; }
+  ul { padding-left: 1.25rem; }
+  li { margin-bottom: 0.5rem; }
+  .relevance { color: var(--muted); font-size: 0.85rem; }
+  .topics { display: flex; flex-wrap: wrap; gap: 0.5rem; }
+  .tag {
+    background: var(--tag-bg); color: var(--tag-fg);
+    padding: 0.2rem 0.6rem; border-radius: 1rem; font-size: 0.8rem;
+  }
+  .about-card {
+    background: var(--card-bg); padding: 1rem; border-radius: 0.5rem;
+    border: 1px solid var(--border);
+  }
+  .about-card p { margin: 0.25rem 0; }
+  .notes { white-space: pre-wrap; color: var(--muted); font-size: 0.95rem; }
+  .share-btn {
+    display: inline-block; padding: 0.5rem 1rem; border-radius: 0.5rem;
+    background: var(--accent); color: #fff; font-size: 0.9rem; cursor: pointer;
+    border: none; font-family: inherit;
+  }
+  .share-btn:hover { opacity: 0.85; }
+  .share-section { margin-bottom: 1.5rem; }
+  .share-copied { color: var(--muted); font-size: 0.85rem; margin-left: 0.5rem; }
+</style>
+</head>
+<body>
+
+<h1>LoGeR: Long-Context Geometric Reconstruction with Hybrid Memory</h1>
+<div class="meta">
+  <a href="https://arxiv.org/html/2603.03269v1">https://arxiv.org/html/2603.03269v1</a><br>
+  Academic research paper (computer vision / 3D reconstruction) &middot; Researched March 25, 2026
+</div>
+
+<div class="share-section">
+<button class="share-btn" onclick="navigator.clipboard.writeText(window.location.href).then(()=>{document.getElementById('copied').style.display='inline'});window.open('https://notebooklm.google.com','_blank')">
+  Share to NotebookLM
+</button>
+<span id="copied" class="share-copied" style="display:none">URL copied — paste it as a website source in a new notebook</span>
+</div>
+
+<h2>Summary</h2>
+<div class="summary"><p>LoGeR addresses a critical bottleneck in modern 3D reconstruction: scaling feedforward neural networks from short video clips (tens of frames) to minutes-long sequences (thousands to tens of thousands of frames). Traditional feedforward models with full bidirectional attention suffer from quadratic computational complexity, while memory-efficient alternatives rely on lossy compression that degrades geometric precision. LoGeR proposes a novel hybrid memory architecture that splits the long-context problem into two complementary pathways: a Sliding Window Attention (SWA) mechanism preserves uncompressed, high-precision context for adjacent chunk alignment, while a Test-Time Training (TTT) memory module maintains a compressed, learnable representation of the global coordinate frame.</p>
+<p></p>
+<p>The paper's key insight is that long-context reconstruction doesn't require preserving every detail from the past—rather, it requires maintaining enough information to prevent two critical failure modes: scale drift (where the model gradually shrinks or expands the 3D reconstruction over time) and loss of global structure. The TTT component achieves this through efficient parametric updates using &quot;apply-then-update&quot; mechanics, inspired by biological long-term memory consolidation. The SWA component ensures precise local alignment at chunk boundaries by maintaining uncompressed context.</p>
+<p></p>
+<p>Remarkably, LoGeR is trained on only 128-frame sequences yet generalizes to sequences 150× longer during inference—up to 19,000 frames spanning multiple kilometers. This generalization suggests the hybrid memory captures transferable principles rather than memorizing dataset-specific patterns. Evaluated on standard benchmarks (KITTI, 7-Scenes, ScanNet, TUM-Dynamics) and on an extremely long-sequence repurposed dataset, LoGeR achieves 74% error reduction on KITTI ATE compared to prior feedforward methods while maintaining real-time performance without post-optimization (no SLAM backend).</p>
+<p></p>
+<p>The work is significant because it demonstrates that feedforward geometric foundation models—which previously maxed out at minute-long sequences—can now rival or exceed optimization-based SLAM systems on long-horizon tasks while remaining orders of magnitude more efficient. This opens possibilities for real-time, continuous 3D reconstruction in robotics, autonomous systems, and immersive applications without expensive offline optimization.</p></div>
+
+<h2>Key Takeaways</h2>
+<ul>
+  <li>LoGeR processes long video streams as overlapping chunks with bidirectional attention within each chunk, avoiding the quadratic complexity of full-attention models while maintaining local geometric fidelity.</li>
+  <li>The hybrid memory module combines Sliding Window Attention (for local precision) and Test-Time Training (for global consistency), directly inspired by the neuroscience distinction between working memory and long-term memory consolidation.</li>
+  <li>Trained on 128-frame sequences, LoGeR generalizes to 19,000-frame sequences (150× longer than training), suggesting the learned memory mechanisms capture general principles rather than dataset artifacts.</li>
+  <li>On KITTI, LoGeR reduces Absolute Trajectory Error from 72.86m to 18.65m (74% reduction) and achieves 69.2% relative improvement on 7-Scenes, substantially outperforming all prior feedforward methods.</li>
+  <li>The method requires no post-hoc optimization, loop closure detection, or backend SLAM, running as a pure feedforward pass—practical for real-time applications on edge devices.</li>
+  <li>Test-Time Training (TTT) prevents scale drift by updating fast weights at chunk boundaries, maintaining a consistent global coordinate frame across thousands of frames without explicit loop closure.</li>
+  <li>LoGeR demonstrates the 'data wall' problem: models trained solely on short sequences fail to generalize to large-scale scenes even if the architecture theoretically supports it, solved through careful chunk-based training.</li>
+  <li>On extremely long sequences (1k–19k frames), LoGeR shows monotonic improvement as sequence length increases, unlike prior methods that degrade with sequence length.</li>
+  <li>The architecture is modular: SWA and TTT can be added to other transformer-based reconstruction models, making it a general approach to handling long-context geometric tasks.</li>
+  <li>Competitive performance on short sequences (100–1k frames) shows the hybrid memory doesn't sacrifice local precision for long-context capability, maintaining state-of-the-art short-range reconstruction.</li>
+</ul>
+
+<h2>About</h2>
+<div class="about-card">
+  <p><strong>Author:</strong> Junyi Zhang, Charles Herrmann, Junhwa Hur, Chen Sun, Ming-Hsuan Yang, Forrester Cole, Trevor Darrell, Deqing Sun</p>
+  <p><strong>Publication:</strong> arXiv</p>
+  <p><strong>Published:</strong> 2026-03</p>
+</div>
+
+<h2>Sentiment / Tone</h2>
+<p>Technically rigorous and confident. The authors present their contributions with strong empirical evidence (74% ATE improvement on KITTI is substantial), yet they acknowledge limitations and architectural trade-offs candidly. The tone is optimistic about enabling &quot;unprecedented horizons&quot; without overstating: they carefully compare to relevant baselines and validate that gains persist across diverse benchmarks. The paper positions LoGeR as a pragmatic solution to a well-defined bottleneck rather than a breakthrough that solves all 3D reconstruction challenges. The framing of biological memory inspiration is presented as motivation but grounded in concrete architectural choices, avoiding hand-waving.</p>
+
+<h2>Related Links</h2>
+<ul>
+<li><a href="https://loger-project.github.io/">LoGeR Project Page</a><br><span class="relevance">Official project website with visual results, qualitative comparisons, and detailed ablation studies showing the contribution of SWA vs TTT components.</span></li>
+<li><a href="https://github.com/Junyi42/LoGeR">LoGeR GitHub Repository</a><br><span class="relevance">Official implementation and code release, essential for reproducibility and for practitioners building on this work.</span></li>
+<li><a href="https://arxiv.org/abs/2406.09756">Grounding Image Matching in 3D with MASt3R</a><br><span class="relevance">MASt3R is the foundational 3D reconstruction model that LoGeR builds upon; understanding its architecture is essential for understanding LoGeR's intra-chunk attention design.</span></li>
+<li><a href="https://arxiv.org/html/2507.16443v1">VGGT-Long: Chunk it, Loop it, Align it</a><br><span class="relevance">A concurrent/recent approach addressing long-sequence 3D reconstruction via chunk-based processing with post-hoc loop closure optimization; a key baseline and comparison point for LoGeR's feedforward approach.</span></li>
+<li><a href="https://rewire.it/blog/end-to-end-test-time-training-long-context-constant-latency/">End-to-End Test-Time Training for Long Context</a><br><span class="relevance">Explains TTT-E2E for language models, providing context for how Test-Time Training generalizes beyond vision and inspiring LoGeR's TTT memory module design.</span></li>
+<li><a href="https://openaccess.thecvf.com/content/CVPR2025/papers/Murai_MASt3R-SLAM_Real-Time_Dense_SLAM_with_3D_Reconstruction_Priors_CVPR_2025_paper.pdf">MASt3R-SLAM: Real-Time Dense SLAM with 3D Reconstruction Priors</a><br><span class="relevance">A SLAM system built on MASt3R; useful for understanding how foundation models integrate with traditional optimization-based approaches and how LoGeR's feedforward approach compares.</span></li>
+</ul>
+
+<h2>Research Notes</h2>
+<div class="notes">**Author Credibility**: Junyi Zhang is a PhD student at UC Berkeley under Trevor Darrell (a leading computer vision researcher); he has interned at Google DeepMind and Microsoft Research Asia. The paper includes senior researchers from Google DeepMind (Deqing Sun, Chen Sun, Forrester Cole, Charles Herrmann, Junhwa Hur) and UC Berkeley, giving it strong institutional credibility. This is a team with deep expertise in both geometric vision and transformer architectures.
+
+**Broader Context**: This paper sits at the intersection of several active research trends: (1) Foundation models for geometry (MASt3R, DUSt3R, VGGT), which have recently shifted the 3D reconstruction landscape from traditional feature-matching to learned dense methods, (2) Test-Time Training as a general technique for long-context transformers (independently being applied to LLMs via TTT-E2E and related work), and (3) chunk-based processing strategies (e.g., VGGT-Long) that address memory constraints in vision transformers. LoGeR's contribution is synthesizing these into a cohesive solution with a novel hybrid memory design.
+
+**Technical Novelty**: While chunk-based processing and both SWA and TTT exist independently, their combination for 3D reconstruction is novel. The key insight—that global consistency and local precision require decoupled memory pathways—translates ideas from cognitive neuroscience into an architectural pattern. The parametric TTT component (fast weight updates) is lighter-weight than full attention recurrence but more expressive than pure SWA.
+
+**Evaluation Rigor**: The paper evaluates on six benchmarks (KITTI, 7-Scenes, ScanNet, TUM-Dynamics, standard sequences, and an extremely long-sequence VBR dataset with up to 19k frames). The fact that LoGeR improves *monotonically* with sequence length (unlike baselines that degrade) is strong evidence the approach addresses the right problem. Ablations showing the contribution of SWA vs TTT components are included.
+
+**Practical Impact**: Unlike many vision papers that achieve high accuracy on benchmarks but are hard to deploy, LoGeR is fully feedforward (no expensive backend optimization) and scales linearly with sequence length, making it suitable for real-time robotics, autonomous driving, and embodied AI applications. The 150× generalization gap (trained on 128 frames, tested on 19k) is exceptional and suggests the learned mechanisms are robust.
+
+**Limitations &amp; Open Questions**: The paper doesn't deeply explore failure modes (e.g., when does TTT struggle to prevent drift?), nor does it compare to recent hybrid approaches like VGGT-Long that also use chunk + optimization. The VBR dataset is a repurposed benchmark, not an official long-sequence 3D reconstruction dataset, so real-world generalization remains somewhat open. The paper also doesn't discuss how the method performs on dynamic/moving scenes, which is relevant for autonomous driving.
+
+**Reception &amp; Reactions**: The paper is very recent (March 2026) and has generated interest in the computer vision community (referenced in emerging mind, daily.dev, Deep Learning Weekly). It's positioned as a clear advance over prior feedforward methods on the long-context frontier, though SLAM practitioners might note that traditional methods with post-optimization remain alternatives for offline scenarios.</div>
+
+<h2>Topics</h2>
+<div class="topics">
+  <span class="tag">3D reconstruction</span>
+  <span class="tag">Long-context transformers</span>
+  <span class="tag">Test-Time Training</span>
+  <span class="tag">Sliding Window Attention</span>
+  <span class="tag">Geometric foundation models</span>
+  <span class="tag">Video understanding</span>
+</div>
+
+
+</body>
+</html>
