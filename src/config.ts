@@ -21,4 +21,11 @@ export const config = {
   statePath: path.join(os.homedir(), ".reading-list-agent", "state.json"),
   researchDir: path.join(os.homedir(), ".reading-list-agent", "research"),
   bookmarksPlist: path.join(os.homedir(), "Library", "Safari", "Bookmarks.plist"),
+  outputDir: path.join(
+    os.homedir(),
+    "Library",
+    "Mobile Documents",
+    "com~apple~CloudDocs",
+    "ResearchPods"
+  ),
 };

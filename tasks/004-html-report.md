@@ -1,6 +1,6 @@
 # Task 004: HTML Report Generator
 
-## Status: TODO
+## Status: DONE (2026-03-25)
 
 ## Goal
 

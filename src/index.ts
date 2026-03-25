@@ -5,6 +5,9 @@ import { config } from "./config.js";
 import { parseReadingList } from "./utils/plist.js";
 import { loadState, saveState, addItem } from "./state.js";
 import { runResearch } from "./researcher.js";
+import { generateReport } from "./report.js";
+import { generateIndex } from "./report-index.js";
+import { notify } from "./utils/notify.js";
 
 logger.info("Reading List Researcher starting up");
 
@@ -48,13 +51,22 @@ try {
 
   logger.info(`Research saved to ${outputPath}`);
 
+  // Generate HTML report
+  state.items[newEntry.url].status = "generating_report";
+  saveState(state);
+
+  const reportPath = generateReport(output, hash);
+  generateIndex();
+
   state.items[newEntry.url].status = "complete";
   saveState(state);
 
-  logger.info(`Done: "${newEntry.title}" — status: complete`);
+  notify(`Research complete: "${output.title}"`);
+  logger.info(`Done: "${newEntry.title}" — report: ${reportPath}`);
 } catch (err: any) {
   logger.error(`Research failed: ${err.message}`);
   state.items[newEntry.url].status = "failed";
   saveState(state);
+  notify(`Research failed: "${newEntry.title}"`, "Research Agent");
   process.exit(1);
 }
