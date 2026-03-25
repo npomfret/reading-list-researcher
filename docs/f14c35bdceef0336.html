@@ -1,0 +1,137 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>CodexBar: macOS Menu Bar AI Assistant Usage Tracker</title>
+<style>
+  *, *::before, *::after { box-sizing: border-box; }
+  :root {
+    --bg: #fff; --fg: #1a1a1a; --muted: #666; --border: #e0e0e0;
+    --accent: #0066cc; --tag-bg: #f0f0f0; --tag-fg: #333;
+    --card-bg: #fafafa;
+  }
+  @media (prefers-color-scheme: dark) {
+    :root {
+      --bg: #1a1a1a; --fg: #e0e0e0; --muted: #999; --border: #333;
+      --accent: #4da6ff; --tag-bg: #2a2a2a; --tag-fg: #ccc;
+      --card-bg: #222;
+    }
+  }
+  body {
+    font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif;
+    line-height: 1.6; color: var(--fg); background: var(--bg);
+    max-width: 720px; margin: 0 auto; padding: 2rem 1.5rem;
+  }
+  a { color: var(--accent); text-decoration: none; }
+  a:hover { text-decoration: underline; }
+  h1 { font-size: 1.8rem; line-height: 1.2; margin-bottom: 0.25rem; }
+  .meta { color: var(--muted); font-size: 0.9rem; margin-bottom: 2rem; }
+  .meta a { color: var(--muted); }
+  h2 { font-size: 1.2rem; margin-top: 2rem; margin-bottom: 0.75rem; border-bottom: 1px solid var(--border); padding-bottom: 0.25rem; }
+  .summary { font-size: 1.05rem; }
+  ul { padding-left: 1.25rem; }
+  li { margin-bottom: 0.5rem; }
+  .relevance { color: var(--muted); font-size: 0.85rem; }
+  .topics { display: flex; flex-wrap: wrap; gap: 0.5rem; }
+  .tag {
+    background: var(--tag-bg); color: var(--tag-fg);
+    padding: 0.2rem 0.6rem; border-radius: 1rem; font-size: 0.8rem;
+  }
+  .about-card {
+    background: var(--card-bg); padding: 1rem; border-radius: 0.5rem;
+    border: 1px solid var(--border);
+  }
+  .about-card p { margin: 0.25rem 0; }
+  .notes { white-space: pre-wrap; color: var(--muted); font-size: 0.95rem; }
+  .share-btn {
+    display: inline-block; padding: 0.5rem 1rem; border-radius: 0.5rem;
+    background: var(--accent); color: #fff; font-size: 0.9rem; cursor: pointer;
+    border: none; font-family: inherit;
+  }
+  .share-btn:hover { opacity: 0.85; }
+  .share-section { margin-bottom: 1.5rem; }
+  .share-copied { color: var(--muted); font-size: 0.85rem; margin-left: 0.5rem; }
+</style>
+</head>
+<body>
+
+<h1>CodexBar: macOS Menu Bar AI Assistant Usage Tracker</h1>
+<div class="meta">
+  <a href="https://codexbar.app/">https://codexbar.app/</a><br>
+  Open-source software project website with technical documentation and release notes &middot; Researched March 25, 2026
+</div>
+
+<div class="share-section">
+<button class="share-btn" onclick="navigator.clipboard.writeText(window.location.href).then(()=>{document.getElementById('copied').style.display='inline'});window.open('https://notebooklm.google.com','_blank')">
+  Share to NotebookLM
+</button>
+<span id="copied" class="share-copied" style="display:none">URL copied — paste it as a website source in a new notebook</span>
+</div>
+
+<h2>Summary</h2>
+<div class="summary"><p>CodexBar is a lightweight, free, open-source macOS menu bar application designed to address a critical pain point for developers: knowing when they're approaching rate limits on AI coding assistants. Created by Peter Steinberger, an experienced iOS developer and former PSPDFKit founder, the tool displays real-time session and weekly usage quotas for 20+ AI coding assistants (Claude, Codex, Cursor, Gemini, Copilot, Antigravity, Droid, z.ai, and others) directly in the macOS menu bar. The tagline &quot;May your tokens never run out&quot; captures the core problem it solves—developers using multiple AI assistants with different rate limits need constant visibility into their usage to avoid hitting limits mid-development.</p>
+<p></p>
+<p>The application displays a minimalist two-bar icon in the menu bar: the top bar represents the 5-hour session window, while the bottom hairline bar shows weekly usage, both with color-coded progress and reset countdowns. Clicking the menu bar icon reveals detailed usage statistics, credits (where available), and reset times for each enabled provider. The tool's architecture supports multiple authentication strategies per provider—CLI-based access, browser cookies (Safari/Chrome/Firefox), OAuth tokens, and API authentication—allowing flexibility for different user setups. Notably, CodexBar prioritizes privacy by reusing existing browser cookies rather than storing passwords, with a transparent audit trail documented in GitHub issue #12.</p>
+<p></p>
+<p>Recent development has been prolific, with version 0.19.0 adding subscription history charts, Alibaba Coding Plan support, and enhanced Cursor dashboard alignment. The provider architecture is modular and well-documented, making it relatively straightforward to add support for new AI assistants. Peter Steinberger has been actively iterating on the tool based on community feedback, addressing issues like performance optimization (faster JSONL scanning), UX improvements (reducing Keychain prompts), and expanding provider support. The tool remains actively maintained despite Steinberger's recent move to OpenAI in early 2026, suggesting strong commitment to the open-source project.</p>
+<p></p>
+<p>Privacy and security have been central concerns. When questions arose about disk access (GitHub issue #12), Steinberger explained transparently that CodexBar runs provider CLI binaries to extract usage data—the same binaries users would run in Terminal—and that these CLIs sometimes perform background operations. The tool explicitly does not store credentials and falls back to local CLI output when browser cookies are unavailable. This privacy-first design has been well-received in the developer community, though some competing tools (like ClaudeMeter) have emerged offering similar functionality.</p></div>
+
+<h2>Key Takeaways</h2>
+<ul>
+  <li>Solves a critical developer workflow problem: real-time visibility into AI assistant rate limits prevents mid-session productivity losses when hitting token caps</li>
+  <li>Supports 20+ AI providers including Claude, Codex, Cursor, Gemini, Copilot, and lesser-known options like Antigravity and z.ai, with an extensible architecture for adding new providers</li>
+  <li>Privacy-first design: reuses existing browser cookies instead of storing passwords; transparent about disk access and provides audit notes in GitHub issue #12</li>
+  <li>Minimal, non-intrusive UI: displays usage as a two-bar icon in the menu bar (session on top, weekly on bottom) with optional merged-icon mode to reduce menu bar clutter</li>
+  <li>Multiple authentication strategies per provider (CLI, browser cookies, OAuth, API tokens) provide flexibility for different user setups and development environments</li>
+  <li>Created by Peter Steinberger, an accomplished iOS developer with 13+ years of native iOS experience and former co-founder of PSPDFKit, lending credibility and quality to the tool</li>
+  <li>Actively developed with regular releases adding features (subscription history, new providers, performance improvements) even after Steinberger's move to OpenAI in February 2026</li>
+  <li>Includes bundled CLI (codexbar) for scripting and CI/CD integration, plus Linux support via Linuxbrew and community Waybar module</li>
+  <li>Well-documented provider architecture with explicit guardrails around identity silo privacy, reliability timeouts, and graceful data degradation when services are unavailable</li>
+  <li>MIT license and fully open-source; completely free with no premium tier or tracking, eliminating monetization pressure and misaligned incentives</li>
+</ul>
+
+<h2>About</h2>
+<div class="about-card">
+  <p><strong>Author:</strong> Peter Steinberger (@steipete)</p>
+  <p><strong>Publication:</strong> Open Source (GitHub)</p>
+  <p><strong>Published:</strong> 2025-2026 (actively maintained)</p>
+</div>
+
+<h2>Sentiment / Tone</h2>
+<p>Pragmatic and developer-focused with transparent communication about technical tradeoffs. The author presents CodexBar as a practical solution to a real problem, not overselling its capabilities. When privacy concerns arise (disk scanning), Steinberger responds with clear technical explanations rather than defensiveness. The tone across releases and documentation is informative and iterative—the author openly discusses UX decisions (submenu layout for reducing clutter), performance optimizations, and architectural refactoring. The project's messaging (&quot;May your tokens never run out&quot;) is lighthearted yet acknowledges genuine developer frustration. Overall, the sentiment is one of honest utility: this tool does one specific job well for a specific audience without unnecessary complexity.</p>
+
+<h2>Related Links</h2>
+<ul>
+<li><a href="https://github.com/steipete/CodexBar">CodexBar GitHub Repository</a><br><span class="relevance">Full source code, issue tracking, release history, and provider documentation. Essential for understanding the tool's architecture and contributing.</span></li>
+<li><a href="https://steipete.me">Peter Steinberger's Personal Blog</a><br><span class="relevance">Author's blog featuring recent posts on AI developer workflows, his experience with Claude Code, and reflections on agentic engineering—provides context for why he built CodexBar.</span></li>
+<li><a href="https://github.com/tddworks/ClaudeBar">ClaudeBar (Competitor Project)</a><br><span class="relevance">Alternative macOS menu bar app for tracking Claude usage; useful for comparison of feature sets and different architectural approaches to the same problem.</span></li>
+<li><a href="https://github.com/steipete/CodexBar/blob/main/docs/provider.md">CodexBar Provider Authoring Guide</a><br><span class="relevance">Detailed technical guide for extending CodexBar with new providers; demonstrates the thoughtfulness of the codebase architecture and makes clear how to contribute.</span></li>
+<li><a href="https://www.reddit.com/r/ClaudeCode/comments/1qrlf00/is_codexbar_claude_usage_tracker_safe_to_use/">Reddit Discussion: Is CodexBar Safe to Use?</a><br><span class="relevance">Community discussion of CodexBar's privacy and security model, showing real user concerns and how the tool is perceived in the Claude Code community.</span></li>
+</ul>
+
+<h2>Research Notes</h2>
+<div class="notes">Peter Steinberger's background significantly enhances CodexBar's credibility. With 13+ years shipping native iOS (including co-founding PSPDFKit, a major PDF library used by thousands of apps), he brings deep expertise in building reliable, privacy-conscious software for real users. His recent pivot toward AI-powered developer tools (including OpenClaw, Poltergeist, and others) reflects a broader career shift from iOS to polyglot web development while maintaining open-source principles. The fact that he continues maintaining CodexBar after joining OpenAI in February 2026 suggests genuine commitment to the open-source community rather than using it as a short-term marketing vehicle. 
+
+Competitive context: ClaudeMeter and ClaudeBar are emerging alternatives, but CodexBar's multi-provider support (20+ assistants) and established community give it an advantage. The tool addresses real pain points in the AI-assisted development workflow—hitting rate limits mid-session is genuinely frustrating and breaks concentration. Community discussions on Reddit show users weighing CodexBar against alternatives, with privacy and multi-provider support as deciding factors.
+
+Privacy claims are substantiated: The transparent discussion in GitHub issue #12 about disk scanning (explaining that CodexBar runs CLI binaries, just like developers do manually) demonstrates good faith. The architecture document's explicit guardrails against identity leakage between providers shows thoughtful design. However, the tool's reliance on browser cookies does require users to trust that Safari/Chrome/Firefox's cookie storage is secure—a reasonable but not zero-risk assumption.
+
+Recent development velocity (versions 0.12→0.19 within 3 months) and feature breadth (historical pace forecasting for Codex, subscription history charts, support for emerging providers) indicate active iteration based on user needs. The detailed provider authoring guide suggests Steinberger wants community contributions, positioning the project for long-term maintenance beyond his personal capacity.
+
+One minor caveat: CodexBar is macOS-only (with CLI support for Linux), which limits its addressable market. The mentioned Windows version (Win-CodexBar) exists but isn't directly maintained by Steinberger, so Windows users get second-class support.</div>
+
+<h2>Topics</h2>
+<div class="topics">
+  <span class="tag">AI coding assistants</span>
+  <span class="tag">macOS menu bar apps</span>
+  <span class="tag">developer productivity tools</span>
+  <span class="tag">rate limit monitoring</span>
+  <span class="tag">privacy-first software</span>
+  <span class="tag">open source development</span>
+</div>
+
+
+</body>
+</html>
