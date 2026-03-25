@@ -648,16 +648,9 @@ Note: `@anthropic-ai/claude-agent-sdk` is the Claude Code SDK for spawning resea
 
 All three validations passed: Max plan auth works, custom MCP server attaches and tools are called, structured JSON output works via `message.structured_output`. Spike code in `spike/`. Key finding: structured output lives on `structured_output` field (not `result`), and the schema goes directly as `{ type: "json_schema", schema: { type: "object", ... } }` without a `name` wrapper. No compilation needed — running `.ts` directly via tsx.
 
-### Phase 1: Foundation + Watcher (get the trigger working) — IN PROGRESS
+### Phase 1: Foundation — DONE (2026-03-24)
 
-2. Project scaffolding — package.json, tsconfig, directory structure
-3. Logger — structured logging with winston
-4. Config loader — parse env file, validate required values
-5. iCloud path utilities — resolve iCloud Drive path
-6. Plist parser — parse Bookmarks.plist, extract Reading List entries
-7. State manager — local JSON state with atomic writes
-8. Watcher + reconciler — fs.watch + polling + startup diff
-9. **Verify:** Add something to Reading List, confirm watcher detects it
+Simplified from original plan: no watcher/loop, single-item processing per run. Config via `.env` in project root (not `~/.config/`). Plist parsed via `plutil -extract` (binary plist has `<data>` blobs incompatible with JSON conversion). All code committed and verified end-to-end.
 
 ### Phase 2: Research (one URL in, structured data out)
 
