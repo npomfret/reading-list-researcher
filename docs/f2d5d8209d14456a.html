@@ -1,0 +1,133 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Number Three: The Collapse of Three Arrows Capital and Lessons for Crypto Finance</title>
+<style>
+  *, *::before, *::after { box-sizing: border-box; }
+  :root {
+    --bg: #fff; --fg: #1a1a1a; --muted: #666; --border: #e0e0e0;
+    --accent: #0066cc; --tag-bg: #f0f0f0; --tag-fg: #333;
+    --card-bg: #fafafa;
+  }
+  @media (prefers-color-scheme: dark) {
+    :root {
+      --bg: #1a1a1a; --fg: #e0e0e0; --muted: #999; --border: #333;
+      --accent: #4da6ff; --tag-bg: #2a2a2a; --tag-fg: #ccc;
+      --card-bg: #222;
+    }
+  }
+  body {
+    font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif;
+    line-height: 1.6; color: var(--fg); background: var(--bg);
+    max-width: 720px; margin: 0 auto; padding: 2rem 1.5rem;
+  }
+  a { color: var(--accent); text-decoration: none; }
+  a:hover { text-decoration: underline; }
+  h1 { font-size: 1.8rem; line-height: 1.2; margin-bottom: 0.25rem; }
+  .meta { color: var(--muted); font-size: 0.9rem; margin-bottom: 2rem; }
+  .meta a { color: var(--muted); }
+  h2 { font-size: 1.2rem; margin-top: 2rem; margin-bottom: 0.75rem; border-bottom: 1px solid var(--border); padding-bottom: 0.25rem; }
+  .summary { font-size: 1.05rem; }
+  ul { padding-left: 1.25rem; }
+  li { margin-bottom: 0.5rem; }
+  .relevance { color: var(--muted); font-size: 0.85rem; }
+  .topics { display: flex; flex-wrap: wrap; gap: 0.5rem; }
+  .tag {
+    background: var(--tag-bg); color: var(--tag-fg);
+    padding: 0.2rem 0.6rem; border-radius: 1rem; font-size: 0.8rem;
+  }
+  .about-card {
+    background: var(--card-bg); padding: 1rem; border-radius: 0.5rem;
+    border: 1px solid var(--border);
+  }
+  .about-card p { margin: 0.25rem 0; }
+  .notes { white-space: pre-wrap; color: var(--muted); font-size: 0.95rem; }
+  .share-btn {
+    display: inline-block; padding: 0.5rem 1rem; border-radius: 0.5rem;
+    background: var(--accent); color: #fff; font-size: 0.9rem; cursor: pointer;
+    border: none; font-family: inherit;
+  }
+  .share-btn:hover { opacity: 0.85; }
+  .share-section { margin-bottom: 1.5rem; }
+  .share-copied { color: var(--muted); font-size: 0.85rem; margin-left: 0.5rem; }
+</style>
+</head>
+<body>
+
+<h1>Number Three: The Collapse of Three Arrows Capital and Lessons for Crypto Finance</h1>
+<div class="meta">
+  <a href="https://blog.bitmex.com/number-three/">https://blog.bitmex.com/number-three/</a><br>
+  Long-form technical essay with investigative journalism elements; blend of financial analysis, case study, and philosophical argument about institutional design &middot; Researched March 25, 2026
+</div>
+
+<div class="share-section">
+<button class="share-btn" onclick="navigator.clipboard.writeText(window.location.href).then(()=>{document.getElementById('copied').style.display='inline'});window.open('https://notebooklm.google.com','_blank')">
+  Share to NotebookLM
+</button>
+<span id="copied" class="share-copied" style="display:none">URL copied — paste it as a website source in a new notebook</span>
+</div>
+
+<h2>Summary</h2>
+<div class="summary"><p>Arthur Hayes, the co-founder of BitMEX and a prominent crypto trader, uses the catastrophic collapse of Three Arrows Capital (3AC) in June 2022 as a lens to examine fundamental lessons about centralized versus decentralized finance. The essay is structured as a detailed case study that traces 3AC's rise through its founding by Su Zhu and Kyle Davies as arbitrage specialists in traditional finance, their transition into crypto where they executed profitable carry trades and basis trades, and ultimately their downfall through over-leveraged bets on the Terra/TerraUSD ecosystem.</p>
+<p></p>
+<p>Hayes argues that 3AC's core mistake was not in their original strategy—arbitrage and cash-and-carry trades are fundamentally sound—but in their decision to use excessive leverage and transition into directional trading to boost returns. When the Terra ecosystem collapsed in May 2022 (with UST losing its peg and LUNA token becoming nearly worthless), 3AC suffered massive losses on both their direct holdings and their illiquid collateral positions, which then triggered margin calls and defaults across the lending ecosystem.</p>
+<p></p>
+<p>The critical insight Hayes presents is that the contagion effect that nearly destroyed the entire crypto industry was not caused by failures in the underlying blockchain technology or DeFi protocols, but rather by the structural weaknesses of centralized lending platforms. When 3AC defaulted on hundreds of millions in loans to companies like Voyager, Celsius, BlockFi, and Babel Finance, these centralized lenders faced massive losses—many had lent to 3AC with little or no collateral because of 3AC's reputation and apparent creditworthiness. In contrast, decentralized lending protocols on Ethereum (Compound, Aave, MakerDAO) that also had exposure to 3AC all survived without interruption because their lending terms were governed by transparent, immutable smart contracts with strict over-collateralization requirements and automatic liquidation mechanisms.</p>
+<p></p>
+<p>Hayes concludes with a powerful argument: the 2022 crypto crisis proved that removing trust from the equation—replacing human judgment with programmatic code—produces dramatically superior outcomes during financial stress. Centralized lenders failed because they made discretionary decisions based on reputation and relationships; decentralized protocols survived because they enforced mathematical certainty. This distinction, he argues, validates the foundational vision of Satoshi Nakamoto and justifies the entire push toward decentralized finance.</p></div>
+
+<h2>Key Takeaways</h2>
+<ul>
+  <li>Three Arrows Capital began as a sophisticated arbitrage fund specializing in non-deliverable forwards (NDFs) in traditional Asian banking markets, an approach that was stable, capital-intensive, and returned steady but modest profits.</li>
+  <li>The UST carry trade offered approximately 10% pure profit opportunity (20% yield minus ~10% borrowing costs), and 3AC likely deployed billions in borrowed capital to amplify this—likely using Bitcoin, Ether, and illiquid altcoins as collateral.</li>
+  <li>Out of roughly 3 million bonds tracked by Bloomberg with maturity under one year, only 159 offered 20%+ yields, mostly from distressed sovereigns like Sri Lanka, Ukraine, and Argentina; institutional investors should have immediately recognized Anchor's 20% yield as an extreme red flag.</li>
+  <li>Centralized crypto lenders (Voyager, Celsius, BlockFi, Babel Finance) became insolvent not because of crypto's technology but because they abandoned prudent lending standards to deploy retail deposits quickly, often lending hundreds of millions with no collateral based on reputation alone.</li>
+  <li>When 3AC defaulted, decentralized lending protocols (Compound, Aave, MakerDAO) survived with no interruption or loss, liquidating collateral programmatically at preset thresholds—a direct contrast to centralized lenders who lost access to billions.</li>
+  <li>The core difference: decentralized protocols remove trust entirely by relying on transparent code and mathematical certainty, while centralized lenders rely on human judgment, reputation, and discretion—the latter failed catastrophically.</li>
+  <li>Voyager Digital lent 3AC 15,250 Bitcoin (~$328 million at the time) and $350 million in USDC with zero collateral, an extreme violation of basic risk management that demonstrated how desperately lenders needed to deploy capital during the yield-seeking frenzy.</li>
+  <li>The Terra ecosystem's failure proves that code executed exactly as written (the peg mechanism worked as designed), but investor perception failures and subsidized yields masked the mathematical impossibility of sustaining UST without continuous capital infusion.</li>
+  <li>BlockFi's GBTC arbitrage trade illustrates how sophisticated players got trapped: they accepted Bitcoin deposits to create GBTC, expecting a 40% premium to persist, but the premium turned to a discount during the waiting period, crystallizing losses.</li>
+  <li>Hayes frames the lesson as validation that Satoshi Nakamoto's vision—removing intermediaries and replacing human judgment with code—produces materially better outcomes during financial crises than traditional institutions built on reputation and trust.</li>
+</ul>
+
+<h2>About</h2>
+<div class="about-card">
+  <p><strong>Author:</strong> Arthur Hayes</p>
+  <p><strong>Publication:</strong> BitMEX Blog</p>
+  <p><strong>Published:</strong> 2022-06-30</p>
+</div>
+
+<h2>Sentiment / Tone</h2>
+<p>Authoritatively analytical with dark humor and pointed critique. Hayes adopts a professorial, investigative tone while making sharp observations about human behavior and institutional failure. He is sympathetic to 3AC's principals as fellow traders but merciless toward centralized lenders' recklessness. The piece alternates between technical explanation, historical narrative, and moral judgment. Hayes positions himself as someone sharing hard-won wisdom from TradFi experience to explain why the crypto industry's crisis wasn't about crypto's technology but about replicating old finance's mistakes. There's a vindicated tone when discussing DeFi's resilience—he frames it as validation of his earlier bet on decentralized systems—though he stops short of triumphalism, acknowledging that loan demand destruction is the next crisis.</p>
+
+<h2>Related Links</h2>
+<ul>
+<li><a href="https://blog.bitmex.com/luna-brothers-inc/">Luna Brothers, Inc. (Hayes' earlier essay on Terra/Luna mechanics)</a><br><span class="relevance">Directly cited within the essay; provides the foundational technical analysis of how UST's peg mechanism worked that 3AC relied upon for their carry trade</span></li>
+<li><a href="https://cryptohayes.medium.com/all-aboard-4d50435190d6">All Aboard! (Hayes' essay on cash-and-carry basis trades)</a><br><span class="relevance">Referenced in the essay; explains the core arbitrage strategy that both 3AC and Hayes himself use, essential for understanding why the carry trade was so compelling</span></li>
+<li><a href="https://www.theblock.co/post/159261/three-arrows-capital-founders-miss-the-mark-in-first-interview-since-firms-collapse">Three Arrows Capital Founders' First Interview Post-Collapse</a><br><span class="relevance">Su Zhu and Kyle Davies' own account of what went wrong; corroborates Hayes' analysis and provides additional detail on their decision-making</span></li>
+<li><a href="https://nymag.com/intelligencer/article/three-arrows-capital-kyle-davies-su-zhu-crash.html">Inside the Crash of Three Arrows Capital (New York Magazine investigation)</a><br><span class="relevance">Deep-dive investigative journalism providing context on the principals, their previous success, and how quickly the situation deteriorated; complements Hayes' narrative</span></li>
+<li><a href="https://www.chicagofed.org/publications/chicago-fed-letter/2023/479">A Retrospective on the Crypto Runs of 2022 (Federal Reserve Bank of Chicago)</a><br><span class="relevance">Official analysis of the contagion and institutional structure; validates Hayes' thesis about centralized vs decentralized resilience with systematic data</span></li>
+</ul>
+
+<h2>Research Notes</h2>
+<div class="notes">Arthur Hayes is exceptionally credible on this topic: he is the co-founder of BitMEX (founded 2014), which pioneered the Bitcoin perpetual swap and became one of crypto's most important trading platforms. He personally traded in the Asian NDF markets for Deutsche Bank and Citibank, giving him direct experience with the exact arbitrage strategies 3AC deployed. He also knew Su Zhu and Kyle Davies personally from overlapping circles in Hong Kong and Singapore finance. This essay was published just two weeks after 3AC's default became public (June 15-17, 2022), when the full extent of the contagion was still unfolding. Hayes' prediction that centralized lenders would fail en masse proved prescient—Voyager (July 6), Celsius (July 13), and BlockFi (November 2022) all filed for bankruptcy within months. His core thesis about DeFi's superiority held up: Compound, Aave, and MakerDAO navigated the crisis without insolvency. Hayes has since continued this line of thinking, founding Maelstrom (a family office/fund) and serving as CIO; his 2026 writings show he remains bullish on DeFi infrastructure. The piece is notable for explicitly crediting Satoshi Nakamoto and Vitalik Buterin as visionaries whose design choices (trustlessness, transparency, programmatic execution) proved their worth. The writing style blends technical precision with literary flourishes (opening with Coleridge's &quot;Rime of the Ancient Mariner&quot; to illustrate the crisis of liquidity), making it accessible to non-specialist readers while maintaining rigor. One limitation: Hayes acknowledges he has &quot;no non-public information&quot; and is &quot;purely speculating&quot; about 3AC's leverage and collateral decisions—while his deductions appear sound, some specifics have been confirmed by later bankruptcy filings and interviews with 3AC's founders, validating his analysis but highlighting that he was inferring structure from public evidence rather than inside knowledge.</div>
+
+<h2>Topics</h2>
+<div class="topics">
+  <span class="tag">cryptocurrency lending</span>
+  <span class="tag">Three Arrows Capital</span>
+  <span class="tag">Terra Luna collapse</span>
+  <span class="tag">centralized vs decentralized finance</span>
+  <span class="tag">crypto derivatives</span>
+  <span class="tag">leverage and carry trades</span>
+  <span class="tag">financial contagion</span>
+  <span class="tag">DeFi protocols</span>
+  <span class="tag">risk management</span>
+  <span class="tag">blockchain technology</span>
+</div>
+
+
+</body>
+</html>
