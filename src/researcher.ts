@@ -25,11 +25,11 @@ const RESEARCH_SCHEMA = {
     author: { type: ["string", "null"] as const },
     publication: { type: ["string", "null"] as const },
     datePublished: { type: ["string", "null"] as const },
-    summary: { type: "string" as const, description: "2-3 paragraph summary of the content" },
+    summary: { type: "string" as const, description: "3-5 paragraph detailed summary covering thesis, argument, evidence, counterpoints, and significance" },
     keyPoints: {
       type: "array" as const,
       items: { type: "string" as const },
-      description: "3-7 key takeaways",
+      description: "5-10 specific, detailed takeaways — each a complete thought with concrete details",
     },
     topics: {
       type: "array" as const,
@@ -50,14 +50,14 @@ const RESEARCH_SCHEMA = {
       },
       description: "Notable related links found during research",
     },
-    sentiment: { type: "string" as const, description: "Overall tone/sentiment of the piece" },
+    sentiment: { type: "string" as const, description: "Detailed description of tone, rhetorical style, and how the author positions their argument" },
     contentType: {
       type: "string" as const,
       description: "e.g. blog post, news article, research paper, tutorial, opinion piece",
     },
     researchNotes: {
       type: "string" as const,
-      description: "Any additional context, caveats, or notes from the research process",
+      description: "Additional value-add: author background, broader context, reactions/counterarguments found, reliability caveats, how this fits the wider conversation",
     },
   },
   required: [
@@ -77,16 +77,38 @@ const RESEARCH_SCHEMA = {
   additionalProperties: false,
 };
 
-const SYSTEM_PROMPT = `You are a research assistant. Your job is to thoroughly research a given URL from someone's reading list and produce structured output.
+const SYSTEM_PROMPT = `You are an expert research analyst. Your job is to thoroughly research a given URL from someone's reading list and produce rich, detailed, structured output that saves the reader significant time.
 
-Steps:
-1. Browse the URL to read the full content
-2. Identify the author, publication, and date
-3. If the content references other important sources, browse 1-2 of the most relevant ones
-4. Search the web for additional context about the topic or author if helpful
-5. Compile your findings into the structured JSON output
+## Research process
 
-Be thorough but efficient. Focus on understanding what the content is about, why it matters, and what the key takeaways are.`;
+1. **Read the source thoroughly.** Browse the URL and read every section. Do not skim — understand the full argument, narrative, or explanation before summarising.
+
+2. **Identify metadata.** Find the author, publication/site, and publication date. If not stated explicitly, check bylines, meta tags, or search the web.
+
+3. **Follow referenced sources.** If the content cites, links to, or builds on other work, browse 3-5 of the most important references to deepen your understanding. Prioritise primary sources, data, and counterarguments.
+
+4. **Search for context.** Do at least one web search to find:
+   - Who the author is and why their perspective matters
+   - Reactions, critiques, or follow-ups to this piece
+   - Broader context: what debate or trend does this fit into?
+
+5. **Synthesise.** Combine everything into the structured JSON output, following the quality guidelines below.
+
+## Quality guidelines
+
+- **Summary**: Write 3-5 substantial paragraphs. Open with the core thesis/finding, then walk through the main argument or narrative arc, cover supporting evidence and examples, note any limitations or counterpoints, and close with significance/implications. Write in a way that someone who hasn't read the original would understand the content fully.
+
+- **Key points**: Provide 5-10 specific, actionable takeaways. Each should be a complete thought (1-2 sentences), not a vague label. Include specific numbers, names, or claims where relevant.
+
+- **Sentiment**: Go beyond a single word. Describe the tone, rhetorical style, and how the author positions their argument (e.g. "Cautiously optimistic with an evidence-driven approach; the author acknowledges risks but argues the potential benefits outweigh them").
+
+- **Content type**: Be specific (e.g. "long-form investigative journalism", "technical tutorial with code examples", "academic literature review", "founder's personal essay").
+
+- **Research notes**: This is your space to add value beyond what the source says. Include: context you found from other sources, the author's credibility/background, how this piece fits into the broader conversation, any notable reactions or counterarguments you found, and any caveats about the source's reliability or potential biases.
+
+- **Related links**: Include links you actually browsed or found during research, with a sentence explaining why each is relevant.
+
+- **Topics**: Provide 3-6 specific topic tags. Prefer specific terms over generic ones (e.g. "LLM fine-tuning" not just "AI").`;
 
 export async function runResearch(
   url: string,
@@ -102,11 +124,11 @@ export async function runResearch(
   let result: ResearchOutput | null = null;
 
   for await (const message of query({
-    prompt: `Research this URL from my reading list:\n\nTitle: ${title}\nURL: ${url}\n\nBrowse the URL, understand the content, search for additional context if needed, and produce the structured research output.`,
+    prompt: `Research this URL from my reading list:\n\nTitle: ${title}\nURL: ${url}\n\nInstructions:\n1. Browse the URL and read the full content carefully\n2. Follow 3-5 of the most important referenced sources or links\n3. Search the web for context about the author and reactions to this piece\n4. Produce detailed, thorough structured output — the reader should feel they fully understand the content without reading the original`,
     options: {
       model: "claude-haiku-4-5-20251001",
       systemPrompt: SYSTEM_PROMPT,
-      maxTurns: 15,
+      maxTurns: 25,
       allowedTools: [
         "mcp__research__browse_url",
         "mcp__research__web_search",
