@@ -652,15 +652,9 @@ All three validations passed: Max plan auth works, custom MCP server attaches an
 
 Simplified from original plan: no watcher/loop, single-item processing per run. Config via `.env` in project root (not `~/.config/`). Plist parsed via `plutil -extract` (binary plist has `<data>` blobs incompatible with JSON conversion). All code committed and verified end-to-end.
 
-### Phase 2: Research (one URL in, structured data out)
+### Phase 2: Research — DONE (2026-03-25)
 
-9. Browser module — Patchright persistent context, page loading
-10. Content extractor — Readability + innerText fallback + metadata
-11. Brave Search wrapper — web search tool
-12. Research MCP server — stdio server exposing browse/search/screenshot tools
-13. Research agent — Claude Code SDK integration with MCP server + structured output
-14. Job queue — concurrency control, timeouts, rate limits
-15. **Verify:** Give it a URL, confirm it produces a complete ResearchOutput with source references
+Built: browser module (Patchright), content extractor (Readability + jsdom), Brave Search wrapper, research MCP server (browse_url/web_search/screenshot), research agent (Claude Agent SDK with Haiku 4.5, structured JSON output). No job queue — single-item processing per run. Wired into index.ts with state management. Verified end-to-end.
 
 ### Phase 3: Output (first visible result)
 
