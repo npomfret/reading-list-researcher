@@ -1,6 +1,5 @@
 import dotenv from "dotenv";
 import path from "path";
-import os from "os";
 import { logger } from "./utils/logger.js";
 
 dotenv.config(); // loads .env from project root
@@ -17,17 +16,11 @@ function requireEnv(key: string): string {
 
 export const config = {
   braveApiKey: requireEnv("BRAVE_API_KEY"),
-  stateDir: path.join(os.homedir(), ".reading-list-agent"),
-  statePath: path.join(os.homedir(), ".reading-list-agent", "state.json"),
-  researchDir: path.join(os.homedir(), ".reading-list-agent", "research"),
-  bookmarksPlist: path.join(os.homedir(), "Library", "Safari", "Bookmarks.plist"),
-  outputDir: path.join(
-    os.homedir(),
-    "Library",
-    "Mobile Documents",
-    "com~apple~CloudDocs",
-    "ResearchPods"
-  ),
+  stateDir: requireEnv("STATE_DIR"),
+  statePath: path.join(requireEnv("STATE_DIR"), "state.json"),
+  researchDir: path.join(requireEnv("STATE_DIR"), "research"),
+  bookmarksPlist: requireEnv("BOOKMARKS_PLIST"),
+  outputDir: requireEnv("OUTPUT_DIR"),
   deployEnabled: process.env.DEPLOY_ENABLED !== "false" && !!process.env.GITHUB_PAGES_BASE_URL,
   docsDir: path.join(process.cwd(), "docs"),
   githubPagesBaseUrl: process.env.GITHUB_PAGES_BASE_URL || "",

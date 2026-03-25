@@ -14,8 +14,8 @@ Automatically researches every article in your Safari Reading List using AI, gen
 
 - macOS (uses Safari bookmarks and `osascript` for notifications)
 - Node.js 18+
+- [Claude CLI](https://docs.anthropic.com/en/docs/claude-code) logged in (the research agent runs via the Claude Agent SDK)
 - A [Brave Search API](https://brave.com/search/api/) key
-- An [Anthropic API](https://console.anthropic.com/) key
 
 ## Setup
 
@@ -23,11 +23,13 @@ Automatically researches every article in your Safari Reading List using AI, gen
 npm install
 ```
 
-Create a `.env` file:
+Create a `.env` file with all required variables:
 
 ```
 BRAVE_API_KEY=your_brave_api_key
-ANTHROPIC_API_KEY=your_anthropic_api_key
+STATE_DIR=~/.reading-list-agent
+BOOKMARKS_PLIST=~/Library/Safari/Bookmarks.plist
+OUTPUT_DIR=~/Library/Mobile Documents/com~apple~CloudDocs/ResearchPods
 ```
 
 To enable GitHub Pages deployment (optional), add your pages URL:
