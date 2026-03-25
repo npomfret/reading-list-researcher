@@ -1,0 +1,131 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Modly: Open-Source Desktop App for AI-Powered Image-to-3D Model Generation</title>
+<style>
+  *, *::before, *::after { box-sizing: border-box; }
+  :root {
+    --bg: #fff; --fg: #1a1a1a; --muted: #666; --border: #e0e0e0;
+    --accent: #0066cc; --tag-bg: #f0f0f0; --tag-fg: #333;
+    --card-bg: #fafafa;
+  }
+  @media (prefers-color-scheme: dark) {
+    :root {
+      --bg: #1a1a1a; --fg: #e0e0e0; --muted: #999; --border: #333;
+      --accent: #4da6ff; --tag-bg: #2a2a2a; --tag-fg: #ccc;
+      --card-bg: #222;
+    }
+  }
+  body {
+    font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif;
+    line-height: 1.6; color: var(--fg); background: var(--bg);
+    max-width: 720px; margin: 0 auto; padding: 2rem 1.5rem;
+  }
+  a { color: var(--accent); text-decoration: none; }
+  a:hover { text-decoration: underline; }
+  h1 { font-size: 1.8rem; line-height: 1.2; margin-bottom: 0.25rem; }
+  .meta { color: var(--muted); font-size: 0.9rem; margin-bottom: 2rem; }
+  .meta a { color: var(--muted); }
+  h2 { font-size: 1.2rem; margin-top: 2rem; margin-bottom: 0.75rem; border-bottom: 1px solid var(--border); padding-bottom: 0.25rem; }
+  .summary { font-size: 1.05rem; }
+  ul { padding-left: 1.25rem; }
+  li { margin-bottom: 0.5rem; }
+  .relevance { color: var(--muted); font-size: 0.85rem; }
+  .topics { display: flex; flex-wrap: wrap; gap: 0.5rem; }
+  .tag {
+    background: var(--tag-bg); color: var(--tag-fg);
+    padding: 0.2rem 0.6rem; border-radius: 1rem; font-size: 0.8rem;
+  }
+  .about-card {
+    background: var(--card-bg); padding: 1rem; border-radius: 0.5rem;
+    border: 1px solid var(--border);
+  }
+  .about-card p { margin: 0.25rem 0; }
+  .notes { white-space: pre-wrap; color: var(--muted); font-size: 0.95rem; }
+  .share-btn {
+    display: inline-block; padding: 0.5rem 1rem; border-radius: 0.5rem;
+    background: var(--accent); color: #fff; font-size: 0.9rem; cursor: pointer;
+    border: none; font-family: inherit;
+  }
+  .share-btn:hover { opacity: 0.85; }
+  .share-section { margin-bottom: 1.5rem; }
+  .share-copied { color: var(--muted); font-size: 0.85rem; margin-left: 0.5rem; }
+</style>
+</head>
+<body>
+
+<h1>Modly: Open-Source Desktop App for AI-Powered Image-to-3D Model Generation</h1>
+<div class="meta">
+  <a href="https://github.com/lightningpixel/modly">https://github.com/lightningpixel/modly</a><br>
+  Open-Source Software Repository with Official Marketing Website &middot; Researched March 25, 2026
+</div>
+
+<div class="share-section">
+<button class="share-btn" onclick="navigator.clipboard.writeText(window.location.href).then(()=>{document.getElementById('copied').style.display='inline'});window.open('https://notebooklm.google.com','_blank')">
+  Share to NotebookLM
+</button>
+<span id="copied" class="share-copied" style="display:none">URL copied — paste it as a website source in a new notebook</span>
+</div>
+
+<h2>Summary</h2>
+<div class="summary"><p>Modly is an open-source desktop application that converts 2D photographs into high-quality 3D mesh models using artificial intelligence, with a critical distinction: all processing runs locally on the user's NVIDIA GPU rather than cloud servers. Created by Lightning Pixel, a developer based in France, the application addresses a growing demand for AI-powered 3D asset generation while solving the privacy, cost, and dependency concerns associated with cloud-based competitors like Meshy AI and Tripo.</p>
+<p></p>
+<p>The core technology leverages Tencent's Hunyuan3D-2 Mini model, a 0.6-billion parameter diffusion-based generative model that handles both shape generation and texture synthesis. Users upload a photograph of an object, the application automatically removes the background using AI, and then generates a complete 3D mesh with geometry and textures in seconds—all without any data leaving their computer. The generated models can be exported in multiple industry-standard formats (GLB, OBJ, STL, PLY) for use in professional 3D software like Blender, game engines (Unity, Unreal Engine), or XR applications.</p>
+<p></p>
+<p>What distinguishes Modly in the market is its value proposition: it's completely free with no subscriptions, per-generation costs, account requirements, or rate limits, and it offers full access to the underlying AI models and pipeline for modification or research purposes. The application features a modular extension system allowing developers to swap different AI models or create custom pipelines. Officially, it ships with support for Hunyuan3D 2 Mini with plans to expand to other models like Trellis 2, and the developer has committed to supporting non-CUDA GPUs in future updates. The project targets multiple user segments from indie game developers needing rapid asset generation to professional 3D artists using it as a base mesh generator to refine in specialized tools like ZBrush.</p>
+<p></p>
+<p>The landscape reveals Modly positioned as a deliberate alternative to the commercial SaaS model: cloud-based services charge per generation and collect user imagery on their servers, while Modly operates entirely offline on personal hardware. However, it does have limitations—it's currently GPU-intensive and NVIDIA-dependent, requires local hardware investment, and is younger than established competitors, with ongoing development (active GitHub commits and Discord community). The MIT license requires attribution if forked, and the creator maintains a transparent approach to licensing and credit requirements.</p></div>
+
+<h2>Key Takeaways</h2>
+<ul>
+  <li>Modly eliminates per-generation costs and subscription fees by running entirely on local GPUs—users can generate unlimited 3D models for free, compared to cloud services that charge per generation or require credits.</li>
+  <li>All image processing stays private and offline; unlike cloud competitors, photographs and generated models never touch external servers, addressing data privacy concerns critical for professional and sensitive work.</li>
+  <li>The application uses Tencent's Hunyuan3D-2 Mini (0.6B parameter model), which is optimized for speed and quality on consumer GPUs, with generated meshes that maintain structural integrity during rotation in 3D viewers.</li>
+  <li>Open-source architecture with a plugin extension system allows developers and researchers to swap AI models, modify generation pipelines, integrate custom tools, and run local benchmarking—no black-box limitations.</li>
+  <li>Exports to multiple professional formats (GLB, OBJ, STL, PLY) ensure compatibility with all major 3D software, game engines, and 3D printing workflows without requiring additional conversion tools.</li>
+  <li>Automatic background removal via AI eliminates tedious manual masking, and the built-in 3D viewer with collections/workspace organization creates a complete generation-to-export workflow in a single application.</li>
+  <li>Creator has committed to GPU portability (non-CUDA support planned), expanding the model ecosystem (Trellis 2 integration in progress), and maintaining active community engagement via Discord despite being a solo developer project.</li>
+  <li>Positioned for specific use cases: indie game devs can populate levels with quick assets, 3D artists use outputs as refinement base meshes, product designers digitize prototypes without 3D scanners, and students learn 3D workflows without expensive software licensing.</li>
+  <li>Windows and Linux support with macOS coming soon ensures broad accessibility, though current NVIDIA GPU dependency limits reach to users with compatible hardware.</li>
+  <li>Transparent MIT licensing and attribution requirements reflect the creator's commitment to open-source principles, though forked projects must maintain credit attribution in UI/documentation.</li>
+</ul>
+
+<h2>About</h2>
+<div class="about-card">
+  <p><strong>Author:</strong> Lightning Pixel</p>
+  <p><strong>Publication:</strong> GitHub</p>
+  <p><strong>Published:</strong> 2025</p>
+</div>
+
+<h2>Sentiment / Tone</h2>
+<p>Modly is presented with pragmatic optimism and technical transparency. The creator adopts a value-driven marketing approach (emphasizing free, private, offline-first) rather than hype, positioning the project as a philosophical alternative to the subscription SaaS model rather than claiming superiority in generation quality. The tone is matter-of-fact about limitations—NVIDIA GPU requirement, active development status, macOS still pending—while confidently highlighting what differentiates the offering. On technical fronts, the positioning is evidence-based (comparing cost/privacy/features against named competitors with a transparent 2025 comparison table), and the licensing transparency reflects a developer prioritizing community contribution over proprietary control.</p>
+
+<h2>Related Links</h2>
+<ul>
+<li><a href="https://modly3d.app">Modly Official Website</a><br><span class="relevance">The official landing page with feature overview, interactive demo of generated models, use case guides for different creator types (game developers, 3D artists, product designers), and direct download links.</span></li>
+<li><a href="https://github.com/Tencent-Hunyuan/Hunyuan3D-2">Tencent Hunyuan3D-2 GitHub Repository</a><br><span class="relevance">The underlying AI model's official repository, detailing the shape generation (Hunyuan3D-DiT) and texture synthesis (Hunyuan3D-Paint) components, plus usage examples for both single-image and multi-view 3D generation.</span></li>
+<li><a href="https://huggingface.co/tencent/Hunyuan3D-2mini">Hunyuan3D-2mini Model on Hugging Face</a><br><span class="relevance">Model weights and documentation for the 0.6B parameter Mini variant used in Modly, showing performance characteristics, model size optimization compared to previous versions, and technical specifications.</span></li>
+<li><a href="https://www.meshy.ai/">Meshy AI - Commercial Cloud-Based 3D Generator</a><br><span class="relevance">The primary commercial competitor offering similar features but as a cloud service with per-generation costs and image uploading, highlighting the contrast in Modly's value proposition around privacy, cost, and data sovereignty.</span></li>
+<li><a href="https://github.com/mudler/LocalAI">LocalAI: Open-Source AI Engine for Local Inference</a><br><span class="relevance">Related open-source project demonstrating the broader ecosystem of locally-run AI models (LLMs, vision, voice, video), showing the cultural shift toward on-device processing and the competitive landscape for privacy-first AI tooling.</span></li>
+</ul>
+
+<h2>Research Notes</h2>
+<div class="notes">Lightning Pixel appears to be a solo or small-team developer based on GitHub profile activity and the French web development freelance background (lightningpixel.fr). The project gained traction recently in local AI communities, evidenced by discussion on r/LocalLLaMA where the creator actively participates responding to feature requests (Trellis 2 support, non-CUDA GPU support). The broader context shows a 2025-2026 shift toward local AI processing driven by privacy concerns, cost awareness, and GPU capability improvements—Modly fits within this trend alongside projects like LocalAI and the general enthusiasm for running open-source models on consumer hardware. The choice of Tencent's Hunyuan3D-2 Mini is strategic: it's one of the highest-quality open-source image-to-3D models available, smaller than previous variants (0.6B vs 1.1B), and designed for consumer GPUs. The competitive analysis is honest—cloud services offer superior UX polishing and enterprise features—but Modly's value density for price-sensitive and privacy-conscious users is significant. No major media coverage or academic citations were found, suggesting this is early-stage but momentum-building in developer communities rather than mainstream visibility. The creator's attribution requirements in the MIT license show concern about commercial repackaging of the project, a practical consideration for open-source tooling. Potential weaknesses include GPU hardware barriers (requires NVIDIA), the single-developer risk for sustained maintenance, and the need for users to manage model downloads and VRAM allocation—lowering the bar compared to &quot;click-and-go&quot; cloud services.</div>
+
+<h2>Topics</h2>
+<div class="topics">
+  <span class="tag">AI Image-to-3D Generation</span>
+  <span class="tag">Local AI Processing</span>
+  <span class="tag">Open-Source 3D Tools</span>
+  <span class="tag">GPU-Accelerated Inference</span>
+  <span class="tag">Privacy-First AI</span>
+  <span class="tag">Desktop AI Applications</span>
+  <span class="tag">3D Asset Generation</span>
+  <span class="tag">Hunyuan3D Models</span>
+</div>
+
+
+</body>
+</html>
