@@ -1,0 +1,140 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Intercepting HTTPS Traffic</title>
+<style>
+  *, *::before, *::after { box-sizing: border-box; }
+  :root {
+    --bg: #fff; --fg: #1a1a1a; --muted: #666; --border: #e0e0e0;
+    --accent: #0066cc; --tag-bg: #f0f0f0; --tag-fg: #333;
+    --card-bg: #fafafa;
+  }
+  @media (prefers-color-scheme: dark) {
+    :root {
+      --bg: #1a1a1a; --fg: #e0e0e0; --muted: #999; --border: #333;
+      --accent: #4da6ff; --tag-bg: #2a2a2a; --tag-fg: #ccc;
+      --card-bg: #222;
+    }
+  }
+  body {
+    font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif;
+    line-height: 1.6; color: var(--fg); background: var(--bg);
+    max-width: 720px; margin: 0 auto; padding: 2rem 1.5rem;
+  }
+  a { color: var(--accent); text-decoration: none; }
+  a:hover { text-decoration: underline; }
+  h1 { font-size: 1.8rem; line-height: 1.2; margin-bottom: 0.25rem; }
+  .meta { color: var(--muted); font-size: 0.9rem; margin-bottom: 2rem; }
+  .meta a { color: var(--muted); }
+  h2 { font-size: 1.2rem; margin-top: 2rem; margin-bottom: 0.75rem; border-bottom: 1px solid var(--border); padding-bottom: 0.25rem; }
+  .summary { font-size: 1.05rem; }
+  ul { padding-left: 1.25rem; }
+  li { margin-bottom: 0.5rem; }
+  .relevance { color: var(--muted); font-size: 0.85rem; }
+  .topics { display: flex; flex-wrap: wrap; gap: 0.5rem; }
+  .tag {
+    background: var(--tag-bg); color: var(--tag-fg);
+    padding: 0.2rem 0.6rem; border-radius: 1rem; font-size: 0.8rem;
+  }
+  .about-card {
+    background: var(--card-bg); padding: 1rem; border-radius: 0.5rem;
+    border: 1px solid var(--border);
+  }
+  .about-card p { margin: 0.25rem 0; }
+  .notes { white-space: pre-wrap; color: var(--muted); font-size: 0.95rem; }
+  .share-btn {
+    display: inline-block; padding: 0.5rem 1rem; border-radius: 0.5rem;
+    background: var(--accent); color: #fff; font-size: 0.9rem; cursor: pointer;
+    border: none; font-family: inherit;
+  }
+  .share-btn:hover { opacity: 0.85; }
+  .share-section { margin-bottom: 1.5rem; }
+  .share-copied { color: var(--muted); font-size: 0.85rem; margin-left: 0.5rem; }
+</style>
+</head>
+<body>
+
+<h1>Intercepting HTTPS Traffic</h1>
+<div class="meta">
+  <a href="http://blog.scphillips.com/posts/2017/04/intercept-https/">http://blog.scphillips.com/posts/2017/04/intercept-https/</a><br>
+  Technical how-to guide with detailed networking configuration and reverse engineering methodology &middot; Researched March 25, 2026
+</div>
+
+<div class="share-section">
+<button class="share-btn" onclick="navigator.clipboard.writeText(window.location.href).then(()=>{document.getElementById('copied').style.display='inline'});window.open('https://notebooklm.google.com','_blank')">
+  Share to NotebookLM
+</button>
+<span id="copied" class="share-copied" style="display:none">URL copied — paste it as a website source in a new notebook</span>
+</div>
+
+<h2>Summary</h2>
+<div class="summary"><p>Stephen C. Phillips provides a detailed technical guide for setting up a transparent HTTPS proxy to intercept encrypted traffic from devices on a home network. The primary motivation is reverse-engineering the Tado smart thermostat mobile app's API calls, as Tado does not publicly document its API. The post explains that HTTPS interception requires executing a man-in-the-middle (MITM) attack—which is feasible when targeting one's own network and devices.</p>
+<p></p>
+<p>The core approach involves three main components: (1) configuring a DD-WRT-enabled wireless router (a D-Link DIR-615) as an access point on a separate subnet, (2) using iptables firewall rules to transparently redirect HTTP and HTTPS traffic to a laptop running Burp Suite proxy, and (3) configuring Burp Suite with &quot;invisible proxying&quot; enabled and installing its CA certificate on the target device (smartphone) to allow decryption of HTTPS traffic.</p>
+<p></p>
+<p>Phillips methodically walks through router configuration, starting with basic wireless access point setup on subnet 192.168.5.x, then moves to the complex iptables NAT (Network Address Translation) rules needed to redirect traffic. The key iptables commands use PREROUTING (to redirect inbound packets to the proxy), POSTROUTING (to rewrite source addresses so replies return through the router), and FORWARD rules (to allow the proxy traffic). He explains that HTTP uses port 80 and HTTPS uses port 443, so separate proxy listeners on ports 3128 and 3129 are configured. The technical explanation is thorough, including actual output from ifconfig and iptables commands showing which router interfaces (br0 for WiFi, vlan2 for WAN) correspond to different network segments.</p>
+<p></p>
+<p>Finally, the post covers Burp Suite configuration: creating two proxy listeners bound to &quot;all interfaces&quot; on ports 3128 and 3129, enabling &quot;Support invisible proxying&quot; in the request handling tab, and ensuring the Burp CA certificate is installed on the smartphone. Once configured, all traffic from devices on the test WiFi network automatically appears in Burp's Intercept tab for inspection and modification. Phillips also documents failed attempts using the mangle table and iproute2 routing rules, noting that DD-WRT's stripped-down version of the ip command made debugging impossible. This honest discussion of what didn't work adds practical value.</p></div>
+
+<h2>Key Takeaways</h2>
+<ul>
+  <li>HTTPS interception requires a man-in-the-middle (MITM) attack: the attacker creates two encrypted connections (one with the client, one with the server), decrypts both ends, and can inspect/modify traffic in the middle. This is feasible for testing your own devices but difficult to execute undetected on others' devices.</li>
+  <li>Transparent proxying differs from standard proxying: normal proxies require the client to be configured with proxy settings (host/port), but transparent (invisible) proxying intercepts traffic at the network level so the client connects normally while the router redirects it to the proxy without the client's knowledge.</li>
+  <li>iptables operates on three critical chains: PREROUTING (alter packets before routing decisions), POSTROUTING (alter packets after routing), and FORWARD (allow packets to pass between interfaces). Correct NAT rules are needed in both PREROUTING and POSTROUTING to both intercept and return traffic through the router.</li>
+  <li>DD-WRT firmware on commodity routers (like the $50 D-Link DIR-615) provides sufficient control via shell access to configure advanced networking. A separate subnet (192.168.5.x) for the test WiFi isolates traffic and allows applying iptables rules selectively without affecting the main home network.</li>
+  <li>Burp Suite's 'Support invisible proxying' setting enables it to accept connections that weren't explicitly configured as proxies by the client, essential for transparent proxy scenarios. The Burp CA certificate must be installed on the target device so it trusts the proxy's HTTPS certificates.</li>
+  <li>HTTP (port 80) and HTTPS (port 443) traffic require separate proxy listeners (ports 3128 and 3129 in this example) because they need different handling—HTTP can be intercepted directly, but HTTPS requires the proxy to perform TLS decryption and re-encryption with its own certificate.</li>
+  <li>iptables rules must exclude the proxy server itself (using -s ! laptop-ip) to prevent infinite loops where the proxy's own outbound connections get redirected back to itself, which would break functionality.</li>
+  <li>The author's practical motivation—reverse-engineering the Tado smart thermostat API—is a legitimate use case that has produced community documentation and open-source libraries (e.g., node-tado-client on npm), enabling integration with home automation platforms.</li>
+  <li>Failed approaches matter: the author documents attempting the iproute2 mangle table method and explains why it didn't work (missing ip rule show command in DD-WRT). This saves readers from pursuing dead ends.</li>
+  <li>Router interface naming (br0 for bridge, vlan1/vlan2 for virtual LANs, eth2 for physical ports) requires understanding your specific hardware via ifconfig output; generic tutorials won't work without adapting interface names to your router.</li>
+</ul>
+
+<h2>About</h2>
+<div class="about-card">
+  <p><strong>Author:</strong> Stephen C. Phillips</p>
+  <p><strong>Publication:</strong> SC Phillips Personal Blog</p>
+  <p><strong>Published:</strong> 2017-04-01</p>
+</div>
+
+<h2>Sentiment / Tone</h2>
+<p>Technically precise, practical, and methodical with an educational tone. Phillips presents himself as a problem-solver sharing solutions with a community audience, not as a security researcher warning about dangers. The style is matter-of-fact about the legitimacy of the approach when applied to one's own network and devices. There's honest acknowledgment of complexity and failures, which builds credibility. The writing assumes moderate technical background (familiarity with Linux, networking concepts) but explains iptables and proxy concepts thoroughly. Overall sentiment is constructively empowering—the author gives readers the tools and knowledge to take control of their own networks.</p>
+
+<h2>Related Links</h2>
+<ul>
+<li><a href="http://blog.scphillips.com/posts/2017/01/the-tado-api-v2/">The Tado API v2 - Stephen C. Phillips</a><br><span class="relevance">The companion post that motivated this HTTPS interception guide; documents the Tado API endpoints discovered via traffic analysis. Shows the practical payoff of the interception technique.</span></li>
+<li><a href="https://github.com/mattdavis90/node-tado-client">node-tado-client (npm package)</a><br><span class="relevance">A widely-used Node.js library for Tado integration that explicitly credits Phillips' reverse-engineered API documentation. Demonstrates the community value created by the reverse-engineering effort.</span></li>
+<li><a href="https://www.cisa.gov/news-events/alerts/2017/03/16/https-interception-weakens-tls-security">HTTPS Interception Weakens TLS Security - CISA Alert (March 2017)</a><br><span class="relevance">A critical counterpoint published just weeks before this blog post. CISA warns that HTTPS interception by security products and enterprise proxies weakens encryption and creates attack surface. Provides important security context often missing from how-to guides.</span></li>
+<li><a href="https://blog.cloudflare.com/monsters-in-the-middleboxes/">Monsters in the Middleboxes: Detecting HTTPS Interception - Cloudflare</a><br><span class="relevance">2020 Cloudflare research showing that 18.6% of TLS traffic was being intercepted at the network level (up from 10.9% in 2017). Empirical evidence that MITM proxying is pervasive but also detectable.</span></li>
+<li><a href="https://portswigger.net/burp/documentation/desktop/tools/proxy/invisible">Invisible Proxying - PortSwigger (Burp Suite Docs)</a><br><span class="relevance">Official Burp Suite documentation on the 'Support invisible proxying' feature that enables transparent proxy interception. Essential reference for the Burp configuration step.</span></li>
+<li><a href="https://wiki.dd-wrt.com/wiki/index.php/Squid_Transparent_Proxy">Squid Transparent Proxy - DD-WRT Wiki</a><br><span class="relevance">The DD-WRT community wiki page that Phillips references; documents transparent proxy setup using Squid web proxy. Shows the original iptables technique the post adapts for Burp Suite.</span></li>
+</ul>
+
+<h2>Research Notes</h2>
+<div class="notes">**Author Background**: Stephen C. Phillips is a UK-based software engineer with diverse interests spanning audio processing, Morse code (personal project morsecode.scphillips.com), dance/salsa rhythm, and IoT/home automation. His Tado API reverse-engineering work has had significant community impact—the node-tado-client npm package explicitly credits his documentation as its foundation, and multiple other Tado API libraries reference his blog. He maintains active GitHub and LinkedIn profiles and occasionally contributes to community projects.
+
+**Broader Context**: This 2017 post sits at the intersection of legitimate security testing, reverse engineering, and home automation culture. Around the same time (2017), CISA issued a formal alert warning that HTTPS interception &quot;weakens TLS security&quot; when used by enterprises or security software. However, Cloudflare's research (2017-2019) found that 10-18% of all TLS traffic to Cloudflare was already being intercepted—by firewalls, antivirus software, and corporate proxies. The post doesn't address these security implications directly; it treats transparent proxying as a neutral technical capability.
+
+**Relevance to Wider Conversation**: This tutorial represents the &quot;tinkerer's perspective&quot; on IoT security: when vendors don't document their APIs (Tado explicitly states &quot;we haven't published our API&quot;), reverse-engineering via traffic interception becomes the practical path to integration and automation. The post contributed to a shift where community-maintained API documentation became the de facto standard, eventually leading Tado to provide semi-official API definitions (as seen in GitHub repos like tado-openapispec-v2).
+
+**Notable Reactions**: The post spawned practical follow-ups in forum discussions, GitHub repositories, and home automation communities (particularly Home Assistant and openHAB integrations). No public criticism or counter-arguments found; the reception was pragmatic—users either found it useful for their own testing or didn't need the technique.
+
+**Reliability &amp; Caveats**: The technical content is accurate and well-tested (evidenced by multiple independent implementations following this guide). However, the post doesn't discuss: (1) SSL/TLS pinning in apps (which defeats transparent proxying), (2) certificate validation bypasses (needed if the target app validates the server certificate), (3) legal/ethical implications when applied to others' devices or networks, or (4) modern defenses like HTTPS Everywhere and certificate transparency logs that would detect such interception in production. The guide is specific to 2017-era tools and may need adaptation for current Burp Suite versions and router firmware. The Tado API information is now partially outdated as Tado has evolved v2.0 and v3.0 APIs, though the networking/proxy techniques remain relevant for any HTTPS interception scenario.</div>
+
+<h2>Topics</h2>
+<div class="topics">
+  <span class="tag">HTTPS Interception and Man-in-the-Middle Attacks</span>
+  <span class="tag">Transparent Proxying</span>
+  <span class="tag">iptables and Linux Firewall Rules</span>
+  <span class="tag">DD-WRT Router Configuration</span>
+  <span class="tag">Burp Suite</span>
+  <span class="tag">API Reverse Engineering</span>
+  <span class="tag">Network Address Translation (NAT)</span>
+  <span class="tag">Home Lab Security Testing</span>
+</div>
+
+
+</body>
+</html>
