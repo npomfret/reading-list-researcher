@@ -30,14 +30,15 @@ BRAVE_API_KEY=your_brave_api_key
 ANTHROPIC_API_KEY=your_anthropic_api_key
 ```
 
-Optionally configure GitHub Pages deployment:
+To enable GitHub Pages deployment (optional), add your pages URL:
 
 ```
-DEPLOY_ENABLED=true
-GITHUB_PAGES_BASE_URL=https://yourusername.github.io/reading-list-researcher
+GITHUB_PAGES_BASE_URL=https://yourusername.github.io/your-repo-name
 ```
 
-Enable GitHub Pages on your repo to serve from the `docs/` folder on the `master` branch.
+Then enable GitHub Pages on your repo (Settings > Pages) to serve from the `docs/` folder on the `master` branch. Deployment is automatically enabled when `GITHUB_PAGES_BASE_URL` is set. Each report gets a "Share to NotebookLM" button that copies the public URL and opens NotebookLM.
+
+To explicitly disable deployment even with a URL set, add `DEPLOY_ENABLED=false`.
 
 ## Usage
 
@@ -87,3 +88,7 @@ src/
 - **HTML reports** are written to iCloud Drive at `~/Library/Mobile Documents/com~apple~CloudDocs/ResearchPods/`
 - **Research JSON** is stored at `~/.reading-list-agent/research/`
 - **GitHub Pages** reports are deployed to `docs/` in this repo
+
+## License
+
+MIT — see [LICENSE](LICENSE)
