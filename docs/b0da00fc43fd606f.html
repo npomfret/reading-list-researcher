@@ -1,0 +1,139 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Browser Use CLI - Command-Line Interface for AI-Powered Browser Automation</title>
+<style>
+  *, *::before, *::after { box-sizing: border-box; }
+  :root {
+    --bg: #fff; --fg: #1a1a1a; --muted: #666; --border: #e0e0e0;
+    --accent: #0066cc; --tag-bg: #f0f0f0; --tag-fg: #333;
+    --card-bg: #fafafa;
+  }
+  @media (prefers-color-scheme: dark) {
+    :root {
+      --bg: #1a1a1a; --fg: #e0e0e0; --muted: #999; --border: #333;
+      --accent: #4da6ff; --tag-bg: #2a2a2a; --tag-fg: #ccc;
+      --card-bg: #222;
+    }
+  }
+  body {
+    font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif;
+    line-height: 1.6; color: var(--fg); background: var(--bg);
+    max-width: 720px; margin: 0 auto; padding: 2rem 1.5rem;
+  }
+  a { color: var(--accent); text-decoration: none; }
+  a:hover { text-decoration: underline; }
+  h1 { font-size: 1.8rem; line-height: 1.2; margin-bottom: 0.25rem; }
+  .meta { color: var(--muted); font-size: 0.9rem; margin-bottom: 2rem; }
+  .meta a { color: var(--muted); }
+  h2 { font-size: 1.2rem; margin-top: 2rem; margin-bottom: 0.75rem; border-bottom: 1px solid var(--border); padding-bottom: 0.25rem; }
+  .summary { font-size: 1.05rem; }
+  ul { padding-left: 1.25rem; }
+  li { margin-bottom: 0.5rem; }
+  .relevance { color: var(--muted); font-size: 0.85rem; }
+  .topics { display: flex; flex-wrap: wrap; gap: 0.5rem; }
+  .tag {
+    background: var(--tag-bg); color: var(--tag-fg);
+    padding: 0.2rem 0.6rem; border-radius: 1rem; font-size: 0.8rem;
+  }
+  .about-card {
+    background: var(--card-bg); padding: 1rem; border-radius: 0.5rem;
+    border: 1px solid var(--border);
+  }
+  .about-card p { margin: 0.25rem 0; }
+  .notes { white-space: pre-wrap; color: var(--muted); font-size: 0.95rem; }
+  .share-btn {
+    display: inline-block; padding: 0.5rem 1rem; border-radius: 0.5rem;
+    background: var(--accent); color: #fff; font-size: 0.9rem; cursor: pointer;
+    border: none; font-family: inherit;
+  }
+  .share-btn:hover { opacity: 0.85; }
+  .share-section { margin-bottom: 1.5rem; }
+  .share-copied { color: var(--muted); font-size: 0.85rem; margin-left: 0.5rem; }
+</style>
+</head>
+<body>
+
+<h1>Browser Use CLI - Command-Line Interface for AI-Powered Browser Automation</h1>
+<div class="meta">
+  <a href="https://docs.browser-use.com/open-source/browser-use-cli">https://docs.browser-use.com/open-source/browser-use-cli</a><br>
+  Technical documentation with practical CLI reference; includes implementation examples and quick-start guides &middot; Researched March 25, 2026
+</div>
+
+<div class="share-section">
+<button class="share-btn" onclick="navigator.clipboard.writeText(window.location.href).then(()=>{document.getElementById('copied').style.display='inline'});window.open('https://notebooklm.google.com','_blank')">
+  Share to NotebookLM
+</button>
+<span id="copied" class="share-copied" style="display:none">URL copied — paste it as a website source in a new notebook</span>
+</div>
+
+<h2>Summary</h2>
+<div class="summary"><p>Browser Use CLI is a command-line interface component of the Browser Use project, an open-source library created by Magnus Müller and Gregor Zunic that enables AI agents to automate web browser tasks. The CLI provides a persistent, interactive way to control a browser directly from the terminal, complementing the Python library's more programmatic approach. Commands allow users to open URLs, inspect page state with clickable element indices, interact with elements (click, type, input), take screenshots, and manage browser sessions—all without writing code.</p>
+<p></p>
+<p>The project has achieved remarkable adoption since its launch in 2024, accumulating 78,000+ GitHub stars and raised $17 million in funding. Browser Use stands out in the AI web automation space by wrapping Chromium-based browser control with AI reasoning capabilities, enabling tasks described in natural language to be executed against any website. The CLI represents the fastest path to browser automation for developers and AI coding assistants (it's integrated as a skill in Claude Code), offering a much lighter-weight alternative to traditional test automation frameworks like Selenium or Playwright.</p>
+<p></p>
+<p>The CLI is most powerful when paired with an integrated skill in AI coding assistants, which allows those tools to understand and execute browser automation tasks autonomously. Users can chain commands together for fast iteration during development, and the persistent browser session between commands significantly speeds up interactive workflows. For production use, Browser Use offers both the open-source option and a cloud version with managed infrastructure, stealth features, CAPTCHA solving, and residential proxies.</p>
+<p></p>
+<p>The platform represents a paradigm shift in browser automation: instead of writing brittle selector-based scripts that break when UIs change, users describe what they want to accomplish in natural language, and AI handles the &quot;how.&quot; This makes browser automation accessible to non-engineers and reduces maintenance burden for complex workflows. The creators' vision is to make &quot;websites accessible for AI agents&quot; through intelligent browser control that understands web pages contextually rather than relying on static locators.</p></div>
+
+<h2>Key Takeaways</h2>
+<ul>
+  <li>The CLI provides direct terminal control over browsers with commands like `browser-use open`, `browser-use click`, `browser-use type`, `browser-use screenshot`, and `browser-use state` for inspecting clickable elements by index, enabling rapid iteration without code.</li>
+  <li>Browser Use is created by Magnus Müller (background in web-scraping tools) and Gregor Zunic, who met while pursuing master's degrees at ETH Zurich in 2024, initially developing the project through ETH's Student Project House accelerator.</li>
+  <li>The project has amassed 78,000+ GitHub stars in just over a year and raised $17 million in Series A funding (announced March 2025), with 7 employees based in San Francisco and active hiring for engineering roles.</li>
+  <li>The CLI keeps the browser running persistently between commands for fast iteration—a major advantage over creating new browser instances for each action, particularly valuable during interactive development sessions.</li>
+  <li>Browser Use optimized a proprietary model (ChatBrowserUse) that completes web automation tasks 3-5x faster than competing LLM approaches with state-of-the-art accuracy, though the platform supports multiple LLM providers including OpenAI, Google, and Anthropic.</li>
+  <li>Unlike traditional tools (Selenium, Playwright), Browser Use uses AI to understand and interact with websites naturally rather than relying on fragile CSS selectors or ARIA labels—addressing the core maintenance problem that makes legacy tools expensive at scale.</li>
+  <li>The platform can handle authentication across multiple systems, CAPTCHA solving (via cloud), 2FA workflows, and real browser profiles with saved logins, capabilities often unavailable in simpler automation frameworks.</li>
+  <li>The CLI integrates as a skill in Claude Code and other AI coding assistants, allowing agents to use it as a tool for autonomous browser automation—representing a key use case for the tool beyond manual command-line usage.</li>
+  <li>Production users choose Browser Use Cloud ($0.20 per 1M input tokens, $2.00 per 1M output tokens) for scalability, memory management, stealth fingerprinting, proxy rotation, and persistent filesystem/memory—addressing limitations of self-hosted browser instances.</li>
+  <li>Community reception shows strong GitHub engagement and appreciation for the straightforward approach, though some users note limitations with highly complex enterprise workflows and multi-tab scenarios that require the more advanced cloud version.</li>
+</ul>
+
+<h2>About</h2>
+<div class="about-card">
+  <p><strong>Author:</strong> Magnus Müller and Gregor Zunic (Browser Use creators)</p>
+  <p><strong>Publication:</strong> Browser Use Official Documentation</p>
+  <p><strong>Published:</strong> 2024</p>
+</div>
+
+<h2>Sentiment / Tone</h2>
+<p>Pragmatic and forward-looking with confidence in addressing a real market need. The documentation adopts an accessible, encouraging tone that emphasizes simplicity and natural language control as revolutionary improvements over traditional brittle selector-based automation. The authors position Browser Use as solving a fundamental problem—the maintenance burden and fragility of existing automation tools—while simultaneously democratizing browser automation for non-technical users. There's underlying optimism about AI's capability to understand and reason about complex web interactions, coupled with honest acknowledgment of current limitations (reliability is 80-95% vs 99%+ for deterministic Playwright) and transparent trade-offs between self-hosted and cloud versions.</p>
+
+<h2>Related Links</h2>
+<ul>
+<li><a href="https://github.com/browser-use/browser-use">Browser Use GitHub Repository</a><br><span class="relevance">Official open-source repository with 78,000+ stars; contains the complete library code, CLI implementation, community discussions, and active development. Essential reference for understanding the full scope beyond the CLI documentation.</span></li>
+<li><a href="https://browser-use.com/">Browser Use Official Website</a><br><span class="relevance">Main landing page highlighting the project's capabilities, cloud services, pricing, and positioning. Shows market-facing messaging and demonstrates that Browser Use is now a commercial-grade platform with both open-source and cloud offerings.</span></li>
+<li><a href="https://www.pkgpulse.com/blog/stagehand-vs-playwright-ai-vs-browser-use-ai-web-automation-2026">Stagehand vs Playwright AI vs Browser Use: Detailed Feature Comparison (2026)</a><br><span class="relevance">In-depth technical comparison showing Browser Use alongside emerging competitors (Stagehand) and traditional tools (Playwright). Critical for understanding Browser Use's positioning, trade-offs (reliability 80-95% vs Playwright's 99%+), and when to use each tool.</span></li>
+<li><a href="https://www.skyvern.com/blog/browser-use-reviews-and-alternatives-in-2025/">Browser Use Reviews and Alternatives (2025)</a><br><span class="relevance">Third-party review highlighting Browser Use's strengths (straightforward approach, strong GitHub community) and limitations (complexity handling, enterprise needs). Useful for balanced perspective from a competitor's viewpoint on real-world performance and use case fit.</span></li>
+<li><a href="https://www.infoworld.com/article/3812644/browser-use-an-open-source-ai-agent-to-automate-web-based-tasks.html">InfoWorld: Browser Use—An Open-Source AI Agent to Automate Web-Based Tasks</a><br><span class="relevance">Technology press coverage explaining Browser Use's significance in the context of AI agents, market adoption, and competitive landscape. Provides credible third-party perspective on the project's importance in the broader AI automation ecosystem.</span></li>
+<li><a href="https://techcrunch.com/2025/03/23/browser-use-the-tool-making-it-easier-for-ai-agents-to-navigate-websites-raises-17m/">TechCrunch: Browser Use Raises $17M (March 2025)</a><br><span class="relevance">Recent announcement of Browser Use's Series A funding, co-founders' background (ETH Zurich, web-scraping experience), and company trajectory. Critical for understanding the project's commercial viability and trajectory.</span></li>
+</ul>
+
+<h2>Research Notes</h2>
+<div class="notes">Browser Use's creators brought complementary expertise: Müller's years working on web-scraping infrastructure combined with Zunic's fresh perspective from their master's work created a product addressing real pain points in automation. The timing is significant—the project launched into a market increasingly focused on agentic AI systems, and its rapid adoption (78,000 GitHub stars in ~16 months) reflects strong demand for AI-driven browser automation among developers building agent systems. 
+
+The competitive landscape has matured quickly: Stagehand (from Browserbase, ~8,000 stars) offers TypeScript-first AI automation with computer use support; traditional Playwright remains dominant at 70,000+ npm downloads/week but lacks AI reasoning; and specialized tools like Skyvern emphasize enterprise features. However, Browser Use dominates the pure open-source AI browser automation space and powers many production AI agents.
+
+The community's enthusiasm centers on accessibility—Browser Use makes browser automation approachable for non-engineers via natural language, a significant departure from Selenium/Playwright's code-heavy requirements. Discord community engagement is active, suggesting strong peer-to-peer learning. Some enterprise users note that while Browser Use excels at straightforward tasks, complex multi-step workflows benefit from tools like Skyvern that add computer vision and advanced reasoning.
+
+Credibility factors: Y Combinator backing, Fortune 500 adoption mentioned on their main site, open-source transparency with 50+ contributors, and rapid iteration (v2.0, v2.1 releases visible in their changelog). The 3-5x speedup claim for ChatBrowserUse is significant but comes from the creators' own benchmarks—independent validation would strengthen the claim.
+
+The $17M funding announcement (March 2025) occurred very recently, indicating strong investor confidence. The project is likely to continue rapid development and market expansion, particularly for cloud-hosted services and enterprise features.</div>
+
+<h2>Topics</h2>
+<div class="topics">
+  <span class="tag">AI Browser Automation</span>
+  <span class="tag">Web Scraping and Data Extraction</span>
+  <span class="tag">Natural Language Interfaces</span>
+  <span class="tag">AI Agents and Agentic AI</span>
+  <span class="tag">Open-Source Developer Tools</span>
+  <span class="tag">CLI Tools and Command-Line Interfaces</span>
+  <span class="tag">LLM Integration and Reasoning</span>
+</div>
+
+
+</body>
+</html>
