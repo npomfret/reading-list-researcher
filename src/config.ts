@@ -28,4 +28,7 @@ export const config = {
     "com~apple~CloudDocs",
     "ResearchPods"
   ),
+  deployEnabled: process.env.DEPLOY_ENABLED !== "false",
+  docsDir: path.join(process.cwd(), "docs"),
+  githubPagesBaseUrl: process.env.GITHUB_PAGES_BASE_URL || "https://npomfret.github.io/reading-list-researcher",
 };

@@ -11,6 +11,7 @@ export interface StateItem {
   dateAdded: string;
   status: ItemStatus;
   addedToState: string;
+  publicUrl?: string;
 }
 
 export interface State {

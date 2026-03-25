@@ -8,6 +8,7 @@ import { runResearch } from "./researcher.js";
 import { generateReport } from "./report.js";
 import { generateIndex } from "./report-index.js";
 import { notify } from "./utils/notify.js";
+import { deployReport, deployIndex } from "./deploy.js";
 
 logger.info("Reading List Researcher starting up");
 
@@ -55,8 +56,25 @@ try {
   state.items[newEntry.url].status = "generating_report";
   saveState(state);
 
-  const reportPath = generateReport(output, hash);
+  let reportPath = generateReport(output, hash);
   generateIndex();
+
+  // Deploy to GitHub Pages
+  if (config.deployEnabled) {
+    try {
+      const publicUrl = deployReport(reportPath, hash);
+      state.items[newEntry.url].publicUrl = publicUrl;
+
+      // Re-generate report + index with share button now that we have the public URL
+      reportPath = generateReport(output, hash, publicUrl);
+      deployReport(reportPath, hash);
+      deployIndex();
+
+      logger.info(`Report copied to docs/ — push to deploy (${publicUrl})`);
+    } catch (deployErr: any) {
+      logger.warn(`Deploy failed (non-fatal): ${deployErr.message}`);
+    }
+  }
 
   state.items[newEntry.url].status = "complete";
   saveState(state);

@@ -12,7 +12,7 @@ function escapeHtml(str: string): string {
     .replace(/"/g, "&quot;");
 }
 
-function renderReport(data: ResearchOutput): string {
+function renderReport(data: ResearchOutput, publicUrl?: string): string {
   const dateResearched = new Date().toLocaleDateString("en-US", {
     year: "numeric",
     month: "long",
@@ -79,6 +79,14 @@ function renderReport(data: ResearchOutput): string {
   }
   .about-card p { margin: 0.25rem 0; }
   .notes { white-space: pre-wrap; color: var(--muted); font-size: 0.95rem; }
+  .share-btn {
+    display: inline-block; padding: 0.5rem 1rem; border-radius: 0.5rem;
+    background: var(--accent); color: #fff; font-size: 0.9rem; cursor: pointer;
+    border: none; font-family: inherit;
+  }
+  .share-btn:hover { opacity: 0.85; }
+  .share-section { margin-top: 2rem; padding-top: 1rem; border-top: 1px solid var(--border); }
+  .share-copied { color: var(--muted); font-size: 0.85rem; margin-left: 0.5rem; }
 </style>
 </head>
 <body>
@@ -118,16 +126,23 @@ ${data.researchNotes ? `<h2>Research Notes</h2>
 ${data.topics.map((t) => `  <span class="tag">${escapeHtml(t)}</span>`).join("\n")}
 </div>
 
+${publicUrl ? `<div class="share-section">
+<button class="share-btn" onclick="navigator.clipboard.writeText('${escapeHtml(publicUrl)}').then(()=>{document.getElementById('copied').style.display='inline'});window.open('https://notebooklm.google.com','_blank')">
+  Share to NotebookLM
+</button>
+<span id="copied" class="share-copied" style="display:none">URL copied — paste it as a website source</span>
+</div>` : ""}
+
 </body>
 </html>`;
 }
 
-export function generateReport(data: ResearchOutput, hash: string): string {
+export function generateReport(data: ResearchOutput, hash: string, publicUrl?: string): string {
   if (!fs.existsSync(config.outputDir)) {
     fs.mkdirSync(config.outputDir, { recursive: true });
   }
 
-  const html = renderReport(data);
+  const html = renderReport(data, publicUrl);
   const filePath = path.join(config.outputDir, `${hash}.html`);
   fs.writeFileSync(filePath, html, "utf-8");
   logger.info(`Report written to ${filePath}`);
