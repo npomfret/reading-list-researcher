@@ -1,0 +1,139 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Flashbots: Kings of The Mempool 🤖</title>
+<style>
+  *, *::before, *::after { box-sizing: border-box; }
+  :root {
+    --bg: #fff; --fg: #1a1a1a; --muted: #666; --border: #e0e0e0;
+    --accent: #0066cc; --tag-bg: #f0f0f0; --tag-fg: #333;
+    --card-bg: #fafafa;
+  }
+  @media (prefers-color-scheme: dark) {
+    :root {
+      --bg: #1a1a1a; --fg: #e0e0e0; --muted: #999; --border: #333;
+      --accent: #4da6ff; --tag-bg: #2a2a2a; --tag-fg: #ccc;
+      --card-bg: #222;
+    }
+  }
+  body {
+    font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif;
+    line-height: 1.6; color: var(--fg); background: var(--bg);
+    max-width: 720px; margin: 0 auto; padding: 2rem 1.5rem;
+  }
+  a { color: var(--accent); text-decoration: none; }
+  a:hover { text-decoration: underline; }
+  h1 { font-size: 1.8rem; line-height: 1.2; margin-bottom: 0.25rem; }
+  .meta { color: var(--muted); font-size: 0.9rem; margin-bottom: 2rem; }
+  .meta a { color: var(--muted); }
+  h2 { font-size: 1.2rem; margin-top: 2rem; margin-bottom: 0.75rem; border-bottom: 1px solid var(--border); padding-bottom: 0.25rem; }
+  .summary { font-size: 1.05rem; }
+  ul { padding-left: 1.25rem; }
+  li { margin-bottom: 0.5rem; }
+  .relevance { color: var(--muted); font-size: 0.85rem; }
+  .topics { display: flex; flex-wrap: wrap; gap: 0.5rem; }
+  .tag {
+    background: var(--tag-bg); color: var(--tag-fg);
+    padding: 0.2rem 0.6rem; border-radius: 1rem; font-size: 0.8rem;
+  }
+  .about-card {
+    background: var(--card-bg); padding: 1rem; border-radius: 0.5rem;
+    border: 1px solid var(--border);
+  }
+  .about-card p { margin: 0.25rem 0; }
+  .notes { white-space: pre-wrap; color: var(--muted); font-size: 0.95rem; }
+  .share-btn {
+    display: inline-block; padding: 0.5rem 1rem; border-radius: 0.5rem;
+    background: var(--accent); color: #fff; font-size: 0.9rem; cursor: pointer;
+    border: none; font-family: inherit;
+  }
+  .share-btn:hover { opacity: 0.85; }
+  .share-section { margin-bottom: 1.5rem; }
+  .share-copied { color: var(--muted); font-size: 0.85rem; margin-left: 0.5rem; }
+</style>
+</head>
+<body>
+
+<h1>Flashbots: Kings of The Mempool 🤖</h1>
+<div class="meta">
+  <a href="https://noxx.substack.com/p/flashbots-kings-of-the-mempool">https://noxx.substack.com/p/flashbots-kings-of-the-mempool</a><br>
+  Technical deep-dive / educational explainer with code walkthroughs &middot; Researched March 25, 2026
+</div>
+
+<div class="share-section">
+<button class="share-btn" onclick="navigator.clipboard.writeText(window.location.href).then(()=>{document.getElementById('copied').style.display='inline'});window.open('https://notebooklm.google.com','_blank')">
+  Share to NotebookLM
+</button>
+<span id="copied" class="share-copied" style="display:none">URL copied — paste it as a website source in a new notebook</span>
+</div>
+
+<h2>Summary</h2>
+<div class="summary"><p>This article provides a comprehensive technical deep-dive into how Flashbots fundamentally transformed Ethereum's MEV (Maximal Extractable Value) landscape by moving MEV extraction off-chain through custom client software and relay infrastructure. The narrative begins by establishing the foundational mechanics of the Ethereum mempool—a local database of pending transactions that varies across nodes based on geography and peer connections—and then traces how transactions are prioritized during block construction, with local transactions receiving priority over remote transactions and high gas prices determining inclusion order. The author meticulously examines the original &quot;Priority Gas Auction&quot; (PGA) system where competing bots would continually escalate gas prices to win block space, resulting in losers still paying gas for reverted transactions.</p>
+<p></p>
+<p>The bulk of the article traces the evolution of MEV-Geth from its initial v0.1 release through v0.6, explaining how each version introduced architectural innovations that gave miners progressively more power to capture MEV while improving efficiency. Version 0.1 introduced MEV bundles—atomic collections of transactions submitted through the Flashbots relay that would either execute together or not at all—changing the auction mechanism from pure gas price competition to an &quot;Adjusted Gas Price&quot; calculation that considers both direct coinbase payments and gas fees. Subsequent versions introduced bundle merging (v0.2), EIP-1559 compatibility (v0.3), Megabundles with signature verification (v0.4), and private transactions (v0.6), each iteration solving real problems like bundle stuffing and computational overhead.</p>
+<p></p>
+<p>The article explains in precise technical detail how MEV-Geth code actually implements these concepts, walking through Ethereum's Geth client source code to show the TxPool struct, transaction ordering via heap data structures, and the mathematical formula for determining bundle profitability. A critical innovation discussed is the shift from miners having to merge bundles themselves (computationally expensive) to the Flashbots relay pre-merging bundles into &quot;megabundles&quot; and simply presenting the highest-profit option, reducing node computational burden while requiring trust in the relay.</p>
+<p></p>
+<p>The piece concludes by positioning MEV-Geth as a precursor to MEV-Boost, which will implement Proposer-Builder Separation (PBS) in post-merge Ethereum, where validators (not miners) receive blinded blocks from competing builders, preventing validators from stealing MEV while still allowing them to opt into MEV rewards. Throughout, the author emphasizes how Flashbots solved a crucial coordination problem: moving MEV extraction from destructive on-chain bidding wars that waste block space and user funds, to an off-chain sealed-bid auction mechanism that preserves block space and failed transaction costs while still allowing miners to maximize revenue.</p></div>
+
+<h2>Key Takeaways</h2>
+<ul>
+  <li>The mempool is not global—each Ethereum node maintains its own local database of pending transactions with different contents based on geography and peer connections, fundamentally affecting which transactions miners see and can include.</li>
+  <li>Before Flashbots, 'Priority Gas Auctions' forced competing bots to continuously bid up gas prices in 13.5-second block times, wasting block space and forcing losers to pay gas on reverted transactions, creating a destructive on-chain arms race.</li>
+  <li>MEV-Geth v0.1 introduced the 'Adjusted Gas Price' formula (total ETH sent to miner ÷ total gas used), shifting MEV extraction from pure gas bidding to a profitability metric that accounts for direct coinbase payments, fundamentally changing the game.</li>
+  <li>Bundle merging (v0.2) added bundle stuffing protections by excluding gas fees from transactions already in the mempool, preventing searchers from artificially inflating bundle profitability by including public transactions.</li>
+  <li>Megabundles (v0.4) offloaded computational complexity from miners to the Flashbots relay, which pre-merges bundles and returns only the single most profitable option, reducing computational load while requiring trust in relay verification.</li>
+  <li>MEV-Geth allowed reverting transactions in bundles because with bundle merging, transaction order is uncertain—a searcher might want to include a liquidation as allowed to revert in case another bundle executes first and changes state.</li>
+  <li>The evolution from v0.1 to v0.6 represents systematic optimization of the miner/searcher auction mechanism, balancing profit maximization with node performance, computational overhead, and private transaction support.</li>
+  <li>MEV-Boost represents the post-merge successor to MEV-Geth, implementing Proposer-Builder Separation where validators receive blinded blocks from builders, preventing validators from stealing MEV while allowing maximum revenue capture.</li>
+  <li>By moving MEV extraction off-chain into sealed-bid auctions, Flashbots eliminated wasted transactions and block space while making MEV extraction predictable and profitable, solving a major coordination problem.</li>
+  <li>Flashbots' relay infrastructure shifted power dynamics by letting miners outsource block construction to a relay that aggregates the most profitable opportunities from hundreds of searchers automatically.</li>
+</ul>
+
+<h2>About</h2>
+<div class="about-card">
+  <p><strong>Author:</strong> noxx</p>
+  <p><strong>Publication:</strong> Substack (noxx newsletter)</p>
+  <p><strong>Published:</strong> 2022-07</p>
+</div>
+
+<h2>Sentiment / Tone</h2>
+<p>Highly technical and educational with a matter-of-fact tone; the author presents Flashbots as a pragmatic solution to a real coordination problem rather than making moral judgments. The piece is deeply explanatory and assumes reader sophistication—it doesn't apologize for MEV's existence but instead demonstrates how Flashbots made MEV extraction more efficient and less wasteful. There's implicit respect for the engineering elegance of the solutions across versions, with the author methodically showing how each iteration solved specific problems (bundle stuffing, computational overhead, trust requirements). The tone is neither celebratory nor critical of MEV itself, but rather analytical and instructive about how infrastructure evolved to manage it.</p>
+
+<h2>Related Links</h2>
+<ul>
+<li><a href="https://noxx.substack.com/p/order-flows-kingmaker-of-the-block">Order Flows: Kingmaker of the Block Builders 👑 - noxx</a><br><span class="relevance">Direct follow-up exploring how exclusive order flows concentrate power in post-merge builder market, examining risks of wallet providers like Metamask dominating if they monetize transaction flows.</span></li>
+<li><a href="https://www.flashbots.net/">Flashbots Official Website</a><br><span class="relevance">Primary source for Flashbots' mission, products (MEV-Boost, Protect), and research direction; provides official context for the evolution traced in the article.</span></li>
+<li><a href="https://github.com/flashbots/mev-geth">Flashbots MEV-Geth Repository</a><br><span class="relevance">The actual implementation discussed—readers can verify code examples and trace version evolution (v0.1-v0.6) described in the technical walkthrough.</span></li>
+<li><a href="https://ethereum.org/developers/docs/mev/">Maximal Extractable Value (MEV) - ethereum.org</a><br><span class="relevance">Official Ethereum documentation on MEV concepts (frontrunning, sandwich attacks, MEV-Boost) that the article assumes readers understand; provides authoritative context.</span></li>
+<li><a href="https://boost.flashbots.net/">MEV-Boost in a Nutshell</a><br><span class="relevance">Explains MEV-Boost as the post-merge continuation of MEV-Geth's work, showing how Proposer-Builder Separation implements architectural trends discussed in the article's conclusion.</span></li>
+</ul>
+
+<h2>Research Notes</h2>
+<div class="notes">**Author Background**: noxx (@noxx3xxon) is an Ethereum researcher specializing in EVM internals and MEV, publishing Substack articles with deep technical dives into Ethereum architecture. The author demonstrates working-level expertise by walking through actual Geth source code, explaining heap data structures, transaction nonce ordering, and state simulation. This is not surface-level analysis. noxx's follow-up &quot;Order Flows: Kingmaker of the Block Builders&quot; extends MEV analysis to post-merge implications, exploring how wallet providers could monopolize order flows.
+
+**Historical Context**: Published in mid-2022 when Ethereum's Proof-of-Stake transition was imminent. MEV-Geth was developed 2020-2021 during PoW era; the article serves as both retrospective on how MEV-Geth solved PoW-era problems and bridge to understanding why PBS was necessary. The timing was critical—MEV-Boost was still being designed for post-merge deployment.
+
+**Broader Conversation**: Part of intense MEV research spanning Flashbots researchers, Ethereum core developers, and academics. Concurrent discussions included MEV's centralizing effects, exclusive order flow risks, and whether MEV could be minimized through protocol design (threshold encryption, encrypted mempools). The article notably treats MEV as engineering problem, not moral issue.
+
+**Reliability and Credibility**: Code examples come directly from Ethereum's public go-ethereum and Flashbots' public mev-geth repositories, making claims highly verifiable. Technical explanations are accurate and detailed—developers building MEV infrastructure regularly cite similar analyses. Article is well-regarded in technical communities with no significant factual critiques emerging.
+
+**Impact and Reception**: Became a standard reference for developers trying to understand MEV infrastructure. Comments from other Ethereum researchers (&quot;awesome work noxx!&quot;) indicate it filled a knowledge gap—few accessible yet technically rigorous explainers of MEV-Geth internals existed at the time.
+
+**Potential Limitations**: Focuses entirely on technical implementation details without deeply exploring MEV's negative externalities—sandwich attacks, frontrunning, and user harm. While mentioned in passing, the article doesn't center these concerns. Readers seeking MEV's ethical dimensions or solutions beyond Flashbots would need supplementary sources.</div>
+
+<h2>Topics</h2>
+<div class="topics">
+  <span class="tag">MEV (Maximal Extractable Value)</span>
+  <span class="tag">Flashbots architecture and evolution</span>
+  <span class="tag">Ethereum mempool mechanics</span>
+  <span class="tag">MEV-Geth client implementation</span>
+  <span class="tag">Block construction and mining auctions</span>
+  <span class="tag">Proposer-Builder Separation (PBS)</span>
+</div>
+
+
+</body>
+</html>
