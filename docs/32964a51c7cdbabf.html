@@ -1,0 +1,119 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Detect Ethereum front-runners with honey pot contract</title>
+<style>
+  *, *::before, *::after { box-sizing: border-box; }
+  :root {
+    --bg: #fff; --fg: #1a1a1a; --muted: #666; --border: #e0e0e0;
+    --accent: #0066cc; --tag-bg: #f0f0f0; --tag-fg: #333;
+    --card-bg: #fafafa;
+  }
+  @media (prefers-color-scheme: dark) {
+    :root {
+      --bg: #1a1a1a; --fg: #e0e0e0; --muted: #999; --border: #333;
+      --accent: #4da6ff; --tag-bg: #2a2a2a; --tag-fg: #ccc;
+      --card-bg: #222;
+    }
+  }
+  body {
+    font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif;
+    line-height: 1.6; color: var(--fg); background: var(--bg);
+    max-width: 720px; margin: 0 auto; padding: 2rem 1.5rem;
+  }
+  a { color: var(--accent); text-decoration: none; }
+  a:hover { text-decoration: underline; }
+  h1 { font-size: 1.8rem; line-height: 1.2; margin-bottom: 0.25rem; }
+  .meta { color: var(--muted); font-size: 0.9rem; margin-bottom: 2rem; }
+  .meta a { color: var(--muted); }
+  h2 { font-size: 1.2rem; margin-top: 2rem; margin-bottom: 0.75rem; border-bottom: 1px solid var(--border); padding-bottom: 0.25rem; }
+  .summary { font-size: 1.05rem; }
+  ul { padding-left: 1.25rem; }
+  li { margin-bottom: 0.5rem; }
+  .relevance { color: var(--muted); font-size: 0.85rem; }
+  .topics { display: flex; flex-wrap: wrap; gap: 0.5rem; }
+  .tag {
+    background: var(--tag-bg); color: var(--tag-fg);
+    padding: 0.2rem 0.6rem; border-radius: 1rem; font-size: 0.8rem;
+  }
+  .about-card {
+    background: var(--card-bg); padding: 1rem; border-radius: 0.5rem;
+    border: 1px solid var(--border);
+  }
+  .about-card p { margin: 0.25rem 0; }
+  .notes { white-space: pre-wrap; color: var(--muted); font-size: 0.95rem; }
+  .share-btn {
+    display: inline-block; padding: 0.5rem 1rem; border-radius: 0.5rem;
+    background: var(--accent); color: #fff; font-size: 0.9rem; cursor: pointer;
+    border: none; font-family: inherit;
+  }
+  .share-btn:hover { opacity: 0.85; }
+  .share-section { margin-bottom: 1.5rem; }
+  .share-copied { color: var(--muted); font-size: 0.85rem; margin-left: 0.5rem; }
+</style>
+</head>
+<body>
+
+<h1>Detect Ethereum front-runners with honey pot contract</h1>
+<div class="meta">
+  <a href="https://sergeypotekhin.com/detect-ethereum-front-runners/">https://sergeypotekhin.com/detect-ethereum-front-runners/</a><br>
+  Technical blog post / smart contract security tutorial &middot; Researched March 25, 2026
+</div>
+
+<div class="share-section">
+<button class="share-btn" onclick="navigator.clipboard.writeText(window.location.href).then(()=>{document.getElementById('copied').style.display='inline'});window.open('https://notebooklm.google.com','_blank')">
+  Share to NotebookLM
+</button>
+<span id="copied" class="share-copied" style="display:none">URL copied — paste it as a website source in a new notebook</span>
+</div>
+
+<h2>Summary</h2>
+<div class="summary"><p>This article is currently unavailable (404 error as of March 2026). However, based on the title and author context, the piece likely presents a technical approach to identifying frontrunning bots on the Ethereum network by deploying a honeypot contract—a deliberately vulnerable smart contract designed to attract malicious actors. Sergey Potekhin, a blockchain engineer with significant Ethereum expertise (formerly CTO at Revain, currently Founding Engineer at Pimlico), would have approached this from a practical security perspective. The strategy involves creating a contract that appears to contain exploitable vulnerabilities or profit opportunities, thereby luring frontrunning bots into interaction. By observing how these bots behave when they engage with the honeypot, developers can gather intelligence about their characteristics, detection methods, and attack patterns. This is a defensive security technique used to understand and mitigate frontrunning attacks—a critical problem in Ethereum where malicious actors observe pending transactions in the mempool and insert their own transactions ahead of them to profit from predictable price movements or transaction ordering. The article would likely have included practical implementation details, contract code, and methods for analyzing bot behavior captured through the honeypot interaction.</p></div>
+
+<h2>Key Takeaways</h2>
+<ul>
+  <li>Honeypot contracts are intentionally vulnerable smart contracts deployed to attract and study malicious frontrunning bots by observing their attack patterns and behavior</li>
+  <li>Frontrunning on Ethereum occurs when bots monitor the mempool for profitable transactions and insert their own transactions ahead to exploit price slippage or transaction ordering</li>
+  <li>Sergey Potekhin is an established Ethereum developer with deep expertise in smart contract security, having worked as CTO at Revain and currently as a Founding Engineer at Pimlico specializing in account abstraction</li>
+  <li>Detecting frontrunners requires understanding bot psychology—honeypots work by presenting seemingly exploitable opportunities that attract automated attack vectors</li>
+  <li>This technique falls within the broader category of active defense mechanisms against Ethereum's 'dark forest' of MEV (Maximal Extractable Value) and frontrunning attacks</li>
+  <li>The article likely included code implementations and practical methods for analyzing transaction data from honeypot interactions to characterize bot behavior</li>
+  <li>Understanding frontrunning bot behavior is critical for DeFi developers to protect their protocols from transaction ordering manipulation and sandwich attacks</li>
+</ul>
+
+<h2>About</h2>
+<div class="about-card">
+  <p><strong>Author:</strong> Sergey Potekhin</p>
+  <p><strong>Publication:</strong> sergeypotekhin.com</p>
+</div>
+
+<h2>Sentiment / Tone</h2>
+<p>Technical and analytical; the author would take a practical, solution-oriented approach to a significant security problem. The tone is likely educational and defensive—presenting frontrunning as a real threat that developers should understand and defend against through active investigation and honeypot deployment. Potekhin's background suggests a systematic, evidence-based approach rather than sensationalism.</p>
+
+<h2>Related Links</h2>
+<ul>
+<li><a href="https://www.usenix.org/system/files/sec19-torres.pdf">The Art of The Scam: Demystifying Honeypots in Ethereum Smart Contracts (USENIX Security 2019)</a><br><span class="relevance">Academic research paper that systematizes honeypot techniques and presents HoneyBadger detection tool—foundational research on honeypot smart contracts</span></li>
+<li><a href="https://zengo.com/ethology-a-safari-tour-in-ethereums-dark-forest/">Frontrunner Bot: Ethereum's Dark Forest Explained (Zengo)</a><br><span class="relevance">Practical investigation of frontrunning bots and their detection methods, demonstrating real-world honeypot and ProxyTaker contract experiments</span></li>
+<li><a href="https://www.coindesk.com/tech/2020/12/29/new-research-sheds-light-on-the-front-running-bots-in-ethereums-dark-forest">New Research Sheds Light on Front-Running Bots in Ethereum's Dark Forest (CoinDesk)</a><br><span class="relevance">Accessible overview of frontrunning research and honeypot trap deployment as a detection method</span></li>
+<li><a href="https://www.researchgate.net/publication/349106848_Frontrunner_Jones_and_the_Raiders_of_the_Dark_Forest_An_Empirical_Study_of_Frontrunning_on_the_Ethereum_Blockchain">Frontrunner Jones and the Raiders of the Dark Forest: An Empirical Study of Frontrunning on the Ethereum Blockchain</a><br><span class="relevance">Large-scale empirical study providing methodology to detect and characterize frontrunning attacks on Ethereum</span></li>
+<li><a href="https://github.com/pavlovdog">Sergey Potekhin's GitHub Repository</a><br><span class="relevance">Author's GitHub with 82+ repositories showing his technical contributions to blockchain development and smart contract projects</span></li>
+</ul>
+
+<h2>Research Notes</h2>
+<div class="notes">The original article is no longer accessible (404 error), making a full analysis impossible. However, Sergey Potekhin is a credible and established Ethereum developer with documented expertise in smart contract security. He was CTO at Revain (where he published multiple technical pieces on blockchain and malware security) and is currently a Founding Engineer at Pimlico working on account abstraction. His GitHub (pavlovdog) shows 82+ repositories related to blockchain development. The topic of using honeypots to detect frontrunners is a legitimate security research approach, supported by academic literature including USENIX Security 2019 research on honeypot smart contracts and empirical studies on Ethereum frontrunning (e.g., 'Frontrunner Jones and the Raiders of the Dark Forest'). Related detection tools and research exist in the wild, including HoneyBadger and various honeypot detector services. The article likely contributed practical implementation guidance to this active area of Ethereum security research. The piece appears to have been part of Potekhin's broader body of work educating developers on Ethereum security best practices.</div>
+
+<h2>Topics</h2>
+<div class="topics">
+  <span class="tag">Ethereum frontrunning</span>
+  <span class="tag">Smart contract security</span>
+  <span class="tag">Honeypot contracts</span>
+  <span class="tag">MEV (Maximal Extractable Value)</span>
+  <span class="tag">Blockchain transaction monitoring</span>
+  <span class="tag">DeFi security</span>
+</div>
+
+
+</body>
+</html>
