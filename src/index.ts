@@ -1,7 +1,10 @@
+import fs from "fs";
+import crypto from "crypto";
 import { logger } from "./utils/logger.js";
 import { config } from "./config.js";
 import { parseReadingList } from "./utils/plist.js";
 import { loadState, saveState, addItem } from "./state.js";
+import { runResearch } from "./researcher.js";
 
 logger.info("Reading List Researcher starting up");
 
@@ -27,4 +30,31 @@ saveState(state);
 
 logger.info(`Processing: "${newEntry.title}"`, { url: newEntry.url });
 
-// TODO: research + report generation goes here
+// Update status to researching
+state.items[newEntry.url].status = "researching";
+saveState(state);
+
+try {
+  const output = await runResearch(newEntry.url, newEntry.title);
+
+  // Save research output
+  if (!fs.existsSync(config.researchDir)) {
+    fs.mkdirSync(config.researchDir, { recursive: true });
+  }
+
+  const hash = crypto.createHash("sha256").update(newEntry.url).digest("hex").slice(0, 16);
+  const outputPath = `${config.researchDir}/${hash}.json`;
+  fs.writeFileSync(outputPath, JSON.stringify(output, null, 2));
+
+  logger.info(`Research saved to ${outputPath}`);
+
+  state.items[newEntry.url].status = "complete";
+  saveState(state);
+
+  logger.info(`Done: "${newEntry.title}" — status: complete`);
+} catch (err: any) {
+  logger.error(`Research failed: ${err.message}`);
+  state.items[newEntry.url].status = "failed";
+  saveState(state);
+  process.exit(1);
+}

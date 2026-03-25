@@ -2,10 +2,13 @@
   "name": "reading-list-researcher",
   "version": "1.0.0",
   "description": "",
+  "type": "module",
   "main": "index.js",
   "scripts": {
-    "start": "npx tsx src/index.ts",
-    "test": "echo \"Error: no test specified\" && exit 1"
+    "start": "tsx src/index.ts",
+    "reset": "rm -rf ~/.reading-list-agent/state.json ~/.reading-list-agent/research",
+    "typecheck": "tsc --noEmit",
+    "research-mcp": "tsx src/research-mcp.ts"
   },
   "repository": {
     "type": "git",
@@ -21,12 +24,17 @@
   "dependencies": {
     "@anthropic-ai/claude-agent-sdk": "^0.2.81",
     "@modelcontextprotocol/sdk": "^1.27.1",
+    "@mozilla/readability": "^0.6.0",
     "dotenv": "^17.3.1",
+    "jsdom": "^29.0.1",
+    "patchright": "^1.58.2",
     "tsx": "^4.21.0",
     "typescript": "^6.0.2",
-    "winston": "^3.19.0"
+    "winston": "^3.19.0",
+    "zod": "^4.3.6"
   },
   "devDependencies": {
+    "@types/jsdom": "^28.0.1",
     "@types/node": "^25.5.0"
   }
 }

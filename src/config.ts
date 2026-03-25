@@ -19,5 +19,6 @@ export const config = {
   braveApiKey: requireEnv("BRAVE_API_KEY"),
   stateDir: path.join(os.homedir(), ".reading-list-agent"),
   statePath: path.join(os.homedir(), ".reading-list-agent", "state.json"),
+  researchDir: path.join(os.homedir(), ".reading-list-agent", "research"),
   bookmarksPlist: path.join(os.homedir(), "Library", "Safari", "Bookmarks.plist"),
 };
