@@ -1,0 +1,134 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>X API Introduction &amp; Developer Platform</title>
+<style>
+  *, *::before, *::after { box-sizing: border-box; }
+  :root {
+    --bg: #fff; --fg: #1a1a1a; --muted: #666; --border: #e0e0e0;
+    --accent: #0066cc; --tag-bg: #f0f0f0; --tag-fg: #333;
+    --card-bg: #fafafa;
+  }
+  @media (prefers-color-scheme: dark) {
+    :root {
+      --bg: #1a1a1a; --fg: #e0e0e0; --muted: #999; --border: #333;
+      --accent: #4da6ff; --tag-bg: #2a2a2a; --tag-fg: #ccc;
+      --card-bg: #222;
+    }
+  }
+  body {
+    font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif;
+    line-height: 1.6; color: var(--fg); background: var(--bg);
+    max-width: 720px; margin: 0 auto; padding: 2rem 1.5rem;
+  }
+  a { color: var(--accent); text-decoration: none; }
+  a:hover { text-decoration: underline; }
+  h1 { font-size: 1.8rem; line-height: 1.2; margin-bottom: 0.25rem; }
+  .meta { color: var(--muted); font-size: 0.9rem; margin-bottom: 2rem; }
+  .meta a { color: var(--muted); }
+  h2 { font-size: 1.2rem; margin-top: 2rem; margin-bottom: 0.75rem; border-bottom: 1px solid var(--border); padding-bottom: 0.25rem; }
+  .summary { font-size: 1.05rem; }
+  ul { padding-left: 1.25rem; }
+  li { margin-bottom: 0.5rem; }
+  .relevance { color: var(--muted); font-size: 0.85rem; }
+  .topics { display: flex; flex-wrap: wrap; gap: 0.5rem; }
+  .tag {
+    background: var(--tag-bg); color: var(--tag-fg);
+    padding: 0.2rem 0.6rem; border-radius: 1rem; font-size: 0.8rem;
+  }
+  .about-card {
+    background: var(--card-bg); padding: 1rem; border-radius: 0.5rem;
+    border: 1px solid var(--border);
+  }
+  .about-card p { margin: 0.25rem 0; }
+  .notes { white-space: pre-wrap; color: var(--muted); font-size: 0.95rem; }
+  .share-btn {
+    display: inline-block; padding: 0.5rem 1rem; border-radius: 0.5rem;
+    background: var(--accent); color: #fff; font-size: 0.9rem; cursor: pointer;
+    border: none; font-family: inherit;
+  }
+  .share-btn:hover { opacity: 0.85; }
+  .share-section { margin-bottom: 1.5rem; }
+  .share-copied { color: var(--muted); font-size: 0.85rem; margin-left: 0.5rem; }
+</style>
+</head>
+<body>
+
+<h1>X API Introduction &amp; Developer Platform</h1>
+<div class="meta">
+  <a href="https://docs.x.com/x-api/introduction">https://docs.x.com/x-api/introduction</a><br>
+  Technical API documentation with business/pricing details &middot; Researched March 25, 2026
+</div>
+
+<div class="share-section">
+<button class="share-btn" onclick="navigator.clipboard.writeText(window.location.href).then(()=>{document.getElementById('copied').style.display='inline'});window.open('https://notebooklm.google.com','_blank')">
+  Share to NotebookLM
+</button>
+<span id="copied" class="share-copied" style="display:none">URL copied — paste it as a website source in a new notebook</span>
+</div>
+
+<h2>Summary</h2>
+<div class="summary"><p>The X API introduction page serves as the central gateway to X's programmatic platform for developers, providing programmatic access to X's public conversation. The documentation was completely redesigned and relaunched in January 2025 to docs.x.com, marking a major overhaul of the developer experience. The API enables developers to read posts, publish content, manage users, and analyze trends through modern REST endpoints with a flexible pricing model.</p>
+<p></p>
+<p>The platform is built around two API versions: v1.1 (legacy, limited support) and v2 (current standard for all new projects). V2 provides comprehensive endpoints organized by resource type including Posts, Users, Trends, Engagement metrics, Spaces, and Lists. Core capabilities include near real-time filtered streaming (supporting up to 1,000 filtering rules), full-archive historical search dating back to 2006, and rich data objects that provide detailed metadata including full post text, engagement metrics, user profiles with verification status, media with subtitles, poll data, and conversation threading.</p>
+<p></p>
+<p>A major shift occurred in November 2025 with the introduction of a new pay-per-use credit-based pricing model that replaced the previous fixed monthly subscription tiers. Under the new system, developers pay per API request (approximately $0.005 per post read, $0.01 per user lookup) with no fixed monthly costs, no tier-dependent rate limits, and no monthly caps—a significant change from the previous $200/month Basic, $5,000/month Pro, and $42,000+/month Enterprise tiers. The platform now includes an all-new Developer Console for managing apps, viewing real-time consumption, and purchasing credits. Additionally, X introduced a revenue-sharing opportunity where developers can earn free xAI API credits (up to 20% back) when purchasing X API credits, creating a synergy between the X API and X's AI platform.</p>
+<p></p>
+<p>The platform is actively evolving with regular updates: the new documentation site launched January 2025, the xurl testing tool launched December 2024, v2 media upload endpoints were enhanced (April 2025) with subtitle and metadata support, DM blocking endpoints were added (September 2024), and longform post support extended to 25,000 characters (August 2024). The developer experience now includes an extensive ecosystem of official and community-maintained SDKs across languages including JavaScript/TypeScript, Python, Java, Go, Rust, C#, PHP, Ruby, and others, plus a comprehensive Postman collection for visual API exploration and testing.</p></div>
+
+<h2>Key Takeaways</h2>
+<ul>
+  <li>The X API moved to a pay-per-use credit-based pricing model in November 2025, eliminating fixed monthly subscriptions ($200-$5,000) and charging roughly $0.005 per post read and $0.01 per user lookup with no monthly caps, addressing long-standing accessibility concerns for indie developers.</li>
+  <li>X launched a completely redesigned developer documentation platform at docs.x.com in January 2025, consolidating API information and introducing improved tooling including the new xurl API testing tool (launched December 2024) that simplifies testing with OAuth 2.0 support.</li>
+  <li>The API v2 provides filtered real-time streaming with support for up to 1,000 simultaneous filtering rules, full-archive historical search back to 2006, and rich data objects including post metrics (impressions, likes, reposts, replies, video views), user profiles with follower counts and verification status, and media with metadata.</li>
+  <li>Developers can now upload media (images, videos) programmatically via v2 Media Upload endpoints (enhanced April 2025) with metadata and subtitle support, replacing deprecated v1.1 media endpoints—a key capability gap that's now been addressed.</li>
+  <li>The platform includes dedicated SDKs for 12+ programming languages (JavaScript/Node, TypeScript, Python, Java, Go, Rust, C#, PHP, Ruby, Kotlin, Dart/Flutter, R, Swift) maintained by both X and the community, plus an official Postman collection for testing.</li>
+  <li>The new Developer Console provides real-time consumption tracking, credit management, OAuth app configuration, and API status monitoring—representing a major UX improvement over previous dashboard functionality.</li>
+  <li>Enterprise access is available for organizations needing high-volume data, dedicated support, and custom terms, with the product roadmap emphasizing faster, more frequent API versioning (new major versions every 12+ months with 1+ year backward compatibility).</li>
+  <li>Recent feature additions include DM (Direct Message) blocking endpoints (September 2024), community ID support (November 2024), email address retrieval with OAuth 2.0 (April 2025), and improvements to DM event behavior (June 2025) to reduce data redundancy.</li>
+  <li>The xAI credits program rewards X API customers with up to 20% back in free xAI API credits, creating cross-platform value for developers building with both services and reflecting X's broader ecosystem strategy.</li>
+  <li>The v1.1 API is in limited support mode; X provides migration guides and tooling to help developers move to v2, where most advanced features (streaming, enhanced search operators, metrics) exclusively reside.</li>
+</ul>
+
+<h2>About</h2>
+<div class="about-card">
+  <p><strong>Author:</strong> X Developer Platform</p>
+  <p><strong>Publication:</strong> X (formerly Twitter)</p>
+  <p><strong>Published:</strong> 2025-01-13</p>
+</div>
+
+<h2>Sentiment / Tone</h2>
+<p>Professional, approachable, and developer-first in tone. The documentation is organized to reduce friction for new developers while maintaining comprehensive depth for advanced use cases. The author (X Developer Platform) positions the API as a democratized, accessible tool through the new pay-per-use model, explicitly contrasting it with the previous high-barrier subscription tiers. The messaging emphasizes flexibility, transparency, and real-time data power. There's an undertone of attempting to rebuild developer trust after controversial pricing decisions in 2023-2024 that alienated indie hackers. The writing balances celebration of new features (xurl, media endpoints, new console) with pragmatic acknowledgment of migration needs from v1.1.</p>
+
+<h2>Related Links</h2>
+<ul>
+<li><a href="https://docs.x.com/changelog">X API Changelog</a><br><span class="relevance">Comprehensive record of all API updates from June 2025 back several years; essential for tracking feature releases, deprecations, and behavioral changes across all X API products.</span></li>
+<li><a href="https://developer.x.com/en/products/x-api/early-access/guide">Guide to the Future of the X API</a><br><span class="relevance">Official roadmap and versioning strategy; clarifies X's commitment to faster API iteration (major versions every 12+ months) and 1-year backward compatibility guarantees—critical for platform stability planning.</span></li>
+<li><a href="https://devcommunity.x.com">X Developers Community Forum</a><br><span class="relevance">Active discussion forum where developers ask questions, X provides announcements, and community shares code examples; reflects real developer sentiment and pain points with the API.</span></li>
+<li><a href="https://www.wearefounders.uk/the-x-api-price-hike-a-blow-to-indie-hackers/">Analysis: X API Pricing in 2026 and Impact on Indie Hackers</a><br><span class="relevance">Third-party deep dive into the pricing tiers with real-world case studies of indie developer impact; provides context for why the pay-per-use pivot was needed and who it affects.</span></li>
+<li><a href="https://docs.x.com/x-api/tools-and-libraries/overview">X API Tools &amp; Libraries Overview</a><br><span class="relevance">Curated index of official and community SDKs across 12+ languages; critical resource for developers selecting the right client library for their tech stack.</span></li>
+<li><a href="https://superframeworks.com/articles/x-api-pay-per-use-pricing-indie-hackers">X API Pay-Per-Use: What Indie Hackers Should Build Now</a><br><span class="relevance">Analysis of which product categories become economically viable under pay-per-use (high-engagement, low-volume tools vs. bulk data scraping); practical for understanding the new market dynamics.</span></li>
+</ul>
+
+<h2>Research Notes</h2>
+<div class="notes">The X API documentation reflects a platform in active transformation under Elon Musk's ownership. The company has explicitly acknowledged developer feedback and made significant changes in response: the January 2025 documentation redesign consolidated previously scattered resources, and the November 2025 pay-per-use pivot directly addressed community outcry over the 2023 pricing increases that doubled the Basic tier from $100 to $200/month and made the Pro tier prohibitively expensive at $5,000/month for indie projects. Industry analysis from WeAreFounders notes that the gap between $200 and $5,000 was where &quot;most of the damage has been done&quot; to the indie developer community. The pay-per-use model is designed to lower barriers to entry while scaling costs with actual usage. However, the platform still maintains high-tier Enterprise options ($42,000+/year), positioning it for enterprise customers while attempting to recapture the indie developer segment. The developer community remains cautious but optimistic—forums show interest in the new pricing but also skepticism about long-term platform stability given the historical pattern of rapid policy changes. The active changelog (updated June 2025) shows X is shipping features regularly. The xAI credits integration reflects Elon's broader strategy of bundling AI services. Notably, third-party alternatives (Apify, Netrows) exist and market themselves on cost savings and stability, suggesting ongoing competition for X API's developer mindshare. The platform's commitment to faster versioning (major updates every 12+ months) contrasts sharply with the previous 8-year gap between v1.1 and v2, indicating a shift toward more responsive development cycles.</div>
+
+<h2>Topics</h2>
+<div class="topics">
+  <span class="tag">X API v2</span>
+  <span class="tag">REST API</span>
+  <span class="tag">real-time streaming</span>
+  <span class="tag">pay-per-use pricing</span>
+  <span class="tag">developer platform</span>
+  <span class="tag">social media data</span>
+  <span class="tag">OAuth 2.0</span>
+  <span class="tag">API documentation</span>
+  <span class="tag">developer tools</span>
+  <span class="tag">SDKs and libraries</span>
+</div>
+
+
+</body>
+</html>
