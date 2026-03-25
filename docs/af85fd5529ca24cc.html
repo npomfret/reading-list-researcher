@@ -1,0 +1,127 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>WhisperS2T ⚡ - An Optimized Speech-to-Text Pipeline for Whisper</title>
+<style>
+  *, *::before, *::after { box-sizing: border-box; }
+  :root {
+    --bg: #fff; --fg: #1a1a1a; --muted: #666; --border: #e0e0e0;
+    --accent: #0066cc; --tag-bg: #f0f0f0; --tag-fg: #333;
+    --card-bg: #fafafa;
+  }
+  @media (prefers-color-scheme: dark) {
+    :root {
+      --bg: #1a1a1a; --fg: #e0e0e0; --muted: #999; --border: #333;
+      --accent: #4da6ff; --tag-bg: #2a2a2a; --tag-fg: #ccc;
+      --card-bg: #222;
+    }
+  }
+  body {
+    font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif;
+    line-height: 1.6; color: var(--fg); background: var(--bg);
+    max-width: 720px; margin: 0 auto; padding: 2rem 1.5rem;
+  }
+  a { color: var(--accent); text-decoration: none; }
+  a:hover { text-decoration: underline; }
+  h1 { font-size: 1.8rem; line-height: 1.2; margin-bottom: 0.25rem; }
+  .meta { color: var(--muted); font-size: 0.9rem; margin-bottom: 2rem; }
+  .meta a { color: var(--muted); }
+  h2 { font-size: 1.2rem; margin-top: 2rem; margin-bottom: 0.75rem; border-bottom: 1px solid var(--border); padding-bottom: 0.25rem; }
+  .summary { font-size: 1.05rem; }
+  ul { padding-left: 1.25rem; }
+  li { margin-bottom: 0.5rem; }
+  .relevance { color: var(--muted); font-size: 0.85rem; }
+  .topics { display: flex; flex-wrap: wrap; gap: 0.5rem; }
+  .tag {
+    background: var(--tag-bg); color: var(--tag-fg);
+    padding: 0.2rem 0.6rem; border-radius: 1rem; font-size: 0.8rem;
+  }
+  .about-card {
+    background: var(--card-bg); padding: 1rem; border-radius: 0.5rem;
+    border: 1px solid var(--border);
+  }
+  .about-card p { margin: 0.25rem 0; }
+  .notes { white-space: pre-wrap; color: var(--muted); font-size: 0.95rem; }
+  .share-btn {
+    display: inline-block; padding: 0.5rem 1rem; border-radius: 0.5rem;
+    background: var(--accent); color: #fff; font-size: 0.9rem; cursor: pointer;
+    border: none; font-family: inherit;
+  }
+  .share-btn:hover { opacity: 0.85; }
+  .share-section { margin-bottom: 1.5rem; }
+  .share-copied { color: var(--muted); font-size: 0.85rem; margin-left: 0.5rem; }
+</style>
+</head>
+<body>
+
+<h1>WhisperS2T ⚡ - An Optimized Speech-to-Text Pipeline for Whisper</h1>
+<div class="meta">
+  <a href="https://github.com/shashikg/WhisperS2T">https://github.com/shashikg/WhisperS2T</a><br>
+  Open Source Software Project Repository &middot; Researched March 25, 2026
+</div>
+
+<div class="share-section">
+<button class="share-btn" onclick="navigator.clipboard.writeText('https://npomfret.github.io/reading-list-researcher/af85fd5529ca24cc.html').then(()=>{document.getElementById('copied').style.display='inline'});window.open('https://notebooklm.google.com','_blank')">
+  Share to NotebookLM
+</button>
+<span id="copied" class="share-copied" style="display:none">URL copied — paste it as a website source</span>
+</div>
+
+<h2>Summary</h2>
+<div class="summary"><p>WhisperS2T is a lightning-fast, open-sourced speech-to-text (ASR) pipeline optimized specifically for the OpenAI Whisper model. It achieves a 2.3X speed improvement over WhisperX and 3X speedup compared to HuggingFace Pipeline with FlashAttention 2, while maintaining or improving accuracy through intelligent heuristics and optimized pipeline design rather than changes to underlying inference engines.</p>
+<p></p>
+<p>The project supports multiple inference backends including Original OpenAI Model, HuggingFace with FlashAttention2, CTranslate2, and NVIDIA TensorRT-LLM. It includes advanced features such as Voice Activity Detection (VAD) integration, intelligent batching for files of any size, support for multilingual transcription and translation in a single batch, hallucination reduction, and experimental dynamic time-length processing.</p>
+<p></p>
+<p>Released under the MIT License with Docker container support and comprehensive documentation, WhisperS2T is designed for both research and production deployment scenarios, with benchmarking tools and multiple integration pathways provided for users.</p></div>
+
+<h2>Key Takeaways</h2>
+<ul>
+  <li>Achieves 2.3X speed improvement over WhisperX and 3X over HuggingFace Pipeline with FlashAttention 2 through superior pipeline design</li>
+  <li>Multi-backend support including CTranslate2 and TensorRT-LLM, with optional TensorRT-LLM backend providing additional 2X speedup over CTranslate2</li>
+  <li>Includes Voice Activity Detection (VAD), intelligent batching, custom prompt support, and hallucination reduction heuristics to improve both speed and accuracy</li>
+  <li>Supports multilingual speech recognition, translation, and language identification with batch processing of multiple languages/tasks simultaneously</li>
+  <li>Provides prebuilt Docker containers, transcript exporters for multiple formats (txt, json, tsv, srt, vtt), and word alignment capabilities</li>
+  <li>Actively maintained with regular updates including support for latest Whisper models (Whisper-Large-V3, Distil-Whisper-Large-V2)</li>
+</ul>
+
+<h2>About</h2>
+<div class="about-card">
+  <p><strong>Author:</strong> Shashi Kumar (shashikg)</p>
+  <p><strong>Publication:</strong> GitHub Open Source</p>
+  <p><strong>Published:</strong> 2023-12-17</p>
+</div>
+
+<h2>Sentiment / Tone</h2>
+<p>Professional and positive - presents clear technical achievements with quantified performance improvements and comprehensive feature documentation</p>
+
+<h2>Related Links</h2>
+<ul>
+<li><a href="https://github.com/openai/whisper">OpenAI Whisper - Official Repository</a><br><span class="relevance">The foundational Whisper model that WhisperS2T optimizes</span></li>
+<li><a href="https://openai.com/index/whisper/">OpenAI Whisper Introduction</a><br><span class="relevance">Official documentation of the Whisper model architecture and capabilities</span></li>
+<li><a href="https://github.com/OpenNMT/CTranslate2">CTranslate2 - Fast Inference Engine for Transformers</a><br><span class="relevance">One of the primary inference backends supported by WhisperS2T</span></li>
+<li><a href="https://github.com/NVIDIA/TensorRT-LLM">NVIDIA TensorRT-LLM</a><br><span class="relevance">High-performance inference optimization library integrated as alternative backend</span></li>
+<li><a href="https://hub.docker.com/r/shashikg/whisper_s2t">WhisperS2T Docker Hub</a><br><span class="relevance">Prebuilt Docker images for easy deployment of WhisperS2T</span></li>
+</ul>
+
+<h2>Research Notes</h2>
+<div class="notes">WhisperS2T represents a significant optimization effort for the OpenAI Whisper model, achieving substantial speed improvements primarily through superior pipeline architecture rather than modifications to the underlying inference engines. The project demonstrates thoughtful engineering with features like VAD integration, intelligent batching, and hallucination reduction heuristics. Active maintenance is evident from regular updates supporting new Whisper model versions and backend additions (TensorRT-LLM support added in January 2024). The availability of Docker containers and multiple deployment options makes it accessible for both research and production use. Benchmarks are conducted on A30 GPU hardware; performance may vary on different hardware configurations. The project includes comprehensive comparison tools and is licensed under MIT for open use and modification.</div>
+
+<h2>Topics</h2>
+<div class="topics">
+  <span class="tag">Speech Recognition (ASR)</span>
+  <span class="tag">Automatic Speech Recognition</span>
+  <span class="tag">OpenAI Whisper</span>
+  <span class="tag">Inference Optimization</span>
+  <span class="tag">Machine Learning</span>
+  <span class="tag">Open Source Software</span>
+  <span class="tag">Voice Activity Detection</span>
+  <span class="tag">TensorRT-LLM</span>
+  <span class="tag">CTranslate2</span>
+  <span class="tag">Model Optimization</span>
+</div>
+
+
+</body>
+</html>
