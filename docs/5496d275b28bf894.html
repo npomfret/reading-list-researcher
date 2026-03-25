@@ -1,0 +1,121 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Delta Hedging Made Simple (Sort Of…)</title>
+<style>
+  *, *::before, *::after { box-sizing: border-box; }
+  :root {
+    --bg: #fff; --fg: #1a1a1a; --muted: #666; --border: #e0e0e0;
+    --accent: #0066cc; --tag-bg: #f0f0f0; --tag-fg: #333;
+    --card-bg: #fafafa;
+  }
+  @media (prefers-color-scheme: dark) {
+    :root {
+      --bg: #1a1a1a; --fg: #e0e0e0; --muted: #999; --border: #333;
+      --accent: #4da6ff; --tag-bg: #2a2a2a; --tag-fg: #ccc;
+      --card-bg: #222;
+    }
+  }
+  body {
+    font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif;
+    line-height: 1.6; color: var(--fg); background: var(--bg);
+    max-width: 720px; margin: 0 auto; padding: 2rem 1.5rem;
+  }
+  a { color: var(--accent); text-decoration: none; }
+  a:hover { text-decoration: underline; }
+  h1 { font-size: 1.8rem; line-height: 1.2; margin-bottom: 0.25rem; }
+  .meta { color: var(--muted); font-size: 0.9rem; margin-bottom: 2rem; }
+  .meta a { color: var(--muted); }
+  h2 { font-size: 1.2rem; margin-top: 2rem; margin-bottom: 0.75rem; border-bottom: 1px solid var(--border); padding-bottom: 0.25rem; }
+  .summary { font-size: 1.05rem; }
+  ul { padding-left: 1.25rem; }
+  li { margin-bottom: 0.5rem; }
+  .relevance { color: var(--muted); font-size: 0.85rem; }
+  .topics { display: flex; flex-wrap: wrap; gap: 0.5rem; }
+  .tag {
+    background: var(--tag-bg); color: var(--tag-fg);
+    padding: 0.2rem 0.6rem; border-radius: 1rem; font-size: 0.8rem;
+  }
+  .about-card {
+    background: var(--card-bg); padding: 1rem; border-radius: 0.5rem;
+    border: 1px solid var(--border);
+  }
+  .about-card p { margin: 0.25rem 0; }
+  .notes { white-space: pre-wrap; color: var(--muted); font-size: 0.95rem; }
+  .share-btn {
+    display: inline-block; padding: 0.5rem 1rem; border-radius: 0.5rem;
+    background: var(--accent); color: #fff; font-size: 0.9rem; cursor: pointer;
+    border: none; font-family: inherit;
+  }
+  .share-btn:hover { opacity: 0.85; }
+  .share-section { margin-bottom: 1.5rem; }
+  .share-copied { color: var(--muted); font-size: 0.85rem; margin-left: 0.5rem; }
+</style>
+</head>
+<body>
+
+<h1>Delta Hedging Made Simple (Sort Of…)</h1>
+<div class="meta">
+  <a href="https://volquant.medium.com/delta-hedging-made-simple-sort-of-34441d1d1db8">https://volquant.medium.com/delta-hedging-made-simple-sort-of-34441d1d1db8</a><br>
+  Technical explainer / educational essay on quantitative finance &middot; Researched March 25, 2026
+</div>
+
+<div class="share-section">
+<button class="share-btn" onclick="navigator.clipboard.writeText(window.location.href).then(()=>{document.getElementById('copied').style.display='inline'});window.open('https://notebooklm.google.com','_blank')">
+  Share to NotebookLM
+</button>
+<span id="copied" class="share-copied" style="display:none">URL copied — paste it as a website source in a new notebook</span>
+</div>
+
+<h2>Summary</h2>
+<div class="summary"><p>Harel Jacobson presents an accessible yet rigorous examination of delta hedging in options trading, challenging the notion that this complex process can be made &quot;simple.&quot; The article's central thesis is that because underlying assets follow stochastic processes (Brownian motion), we cannot theoretically determine the optimal frequency at which to rehedge a delta-neutral options position. While delta hedging itself—the practice of dynamically offsetting directional exposure by trading the underlying asset—is conceptually straightforward, its practical implementation involves navigating multiple competing constraints. The article addresses the fundamental problem facing options traders: classical Black-Scholes theory assumes frictionless, continuous rehedging, but in reality, traders must balance the tension between hedging accuracy (achieved through frequent rebalancing) and transaction costs (incurred with each rehedge). This creates a complex optimization problem where the trader must consider market conditions, volatility regimes, position Greeks (particularly gamma, vega, and theta), and their risk tolerance. Jacobson explains how gamma exposure—the rate of change of delta—creates both opportunity and liability: long gamma positions benefit from realized volatility exceeding implied volatility, but require frequent rebalancing to maintain delta neutrality, while short gamma positions bleed losses during volatile periods. The article ultimately illustrates why delta hedging, while conceptually simple, remains an art as much as a science in professional trading.</p></div>
+
+<h2>Key Takeaways</h2>
+<ul>
+  <li>Delta hedging's core challenge is determining optimal rehedging frequency: because asset prices follow stochastic processes, traders cannot know in advance how often they should rebalance to maintain delta neutrality, making the decision context-dependent rather than universal.</li>
+  <li>There is an inherent trade-off between hedging quality and costs—more frequent rehedging reduces hedging error and delta drift but increases transaction costs, creating an optimization problem without a single correct answer.</li>
+  <li>Gamma, the rate of change of delta, is central to understanding real-world hedging: long gamma traders profit when realized volatility exceeds implied volatility but must constantly buy low and sell high to maintain delta neutrality, while short gamma traders face losses during volatile moves.</li>
+  <li>Black-Scholes theory assumes frictionless, continuous rehedging, but real-world traders face bid-ask spreads, commissions, market impact, and liquidity constraints that make truly continuous hedging impossible and force discrete rebalancing decisions.</li>
+  <li>Volatility regimes directly affect rehedging frequency: in high volatility environments, delta changes more rapidly, requiring more frequent adjustments; in low volatility environments, less frequent rehedging may be optimal if transaction costs are significant relative to gamma PnL.</li>
+  <li>The interaction between rehedging frequency and gamma PnL follows a mathematical relationship where more frequent hedging captures more of the 0.5 × Gamma × Move² formula but erodes returns through transaction costs, creating a sweet spot that varies by market conditions.</li>
+  <li>Smile risk adds complexity to delta hedging: as the volatility surface shifts (not just due to underlying price movement), the delta of options changes in ways not captured by simple delta calculations, requiring traders to consider higher-order sensitivities.</li>
+  <li>Professional traders optimize rehedging decisions across multiple dimensions simultaneously: transaction costs, P&amp;L smoothness, volatility regime identification, mean reversion characteristics of the asset, and risk limit constraints, rather than applying a mechanical formula.</li>
+</ul>
+
+<h2>About</h2>
+<div class="about-card">
+  <p><strong>Author:</strong> Harel Jacobson</p>
+  <p><strong>Publication:</strong> Medium</p>
+  <p><strong>Published:</strong> 2021</p>
+</div>
+
+<h2>Sentiment / Tone</h2>
+<p>Pragmatic and intellectually honest with a touch of humor (evidenced by the subtitle's &quot;sort of&quot;). Jacobson presents delta hedging as simultaneously simple in concept yet genuinely difficult in execution, acknowledging the gap between elegant financial theory and messy market reality. The tone is respectfully skeptical of oversimplification—the author doesn't attempt to make the topic artificially simple but instead helps readers understand why apparent simplicity masks real complexity. The writing style is conversational and accessible while remaining rigorous, suggesting confidence in the subject matter; he's writing to help traders think more clearly about their decisions rather than to advocate a specific approach.</p>
+
+<h2>Related Links</h2>
+<ul>
+<li><a href="https://www.investopedia.com/terms/d/deltahedging.asp">Delta Hedging Strategy: Understanding and Implementing Real-World Examples - Investopedia</a><br><span class="relevance">Provides foundational definition and practical examples of delta hedging, complementing Jacobson's more nuanced view with basic frameworks.</span></li>
+<li><a href="https://quant.stackexchange.com/questions/75788/optimal-delta-hedging-frequency-when-gamma-scalping">Optimal delta-hedging frequency when gamma scalping - Quantitative Finance Stack Exchange</a><br><span class="relevance">Directly addresses the mathematical formulation of optimal hedging frequency under transaction costs, showing that as hedging interval approaches zero, costs approach infinity—the core challenge Jacobson identifies.</span></li>
+<li><a href="https://volquant.medium.com/volatility-smile-and-delta-hedging-part-1-getting-intimate-with-the-vol-surface-7bdcafaf8bdf">Volatility Smile and Delta Hedging (Part 1) - Harel Jacobson Medium</a><br><span class="relevance">Jacobson's companion articles on volatility surface dynamics and smile hedging, which extend the delta hedging discussion to show how volatility surface shifts create additional hedging challenges beyond simple delta management.</span></li>
+<li><a href="https://www.strike.money/options/gamma-scalping">Gamma Scalping: Overview, Uses, Implementation, Example, Tools, Risks - Strike.money</a><br><span class="relevance">Comprehensive explanation of gamma scalping strategies that depend entirely on delta hedging decisions, showing how rehedging frequency determines profitability of volatility plays.</span></li>
+<li><a href="https://menthorq.com/guide/delta-hedging-made-simple/">Delta Hedging Made Simple Guide - MenthorQ</a><br><span class="relevance">Another educational resource on delta hedging that illustrates practical examples and the vega-delta trade-off when using options for hedging rather than stock.</span></li>
+</ul>
+
+<h2>Research Notes</h2>
+<div class="notes">Harel Jacobson is a respected voice in quantitative finance with significant credibility: he works as an FX Volatility Trader at Capstone Investment Advisors, a global asset manager specializing in derivatives alpha strategies, and has been in quantitative trading for many years. He maintains an active Medium presence with ~4.5K followers focused on volatility trading, options pricing, and market microstructure. His background as a Python programmer and Bloomberg user suggests hands-on experience implementing these concepts. The article fits into a broader conversation in quantitative finance about reconciling theoretical models with practical trading constraints. Academic research on fractional Brownian motion and dynamic delta hedging (published in peer-reviewed journals like Computational Economics and The North American Journal of Economics and Finance) validates Jacobson's core concern: that standard assumptions about continuous hedging break down in real markets with frictions. The piece is notable for addressing a problem that's frequently glossed over in textbooks—that theoretically elegant solutions (continuous delta hedging) are practically impossible, forcing traders into difficult trade-off decisions. The article appears to have modest but engaged readership in the quant trading community, as evidenced by citations on educational platforms like MenthorQ and reposting on financial blogs. No major criticisms of this specific article were found, though broader discussions on Quantitative Finance Stack Exchange confirm that optimal hedging frequency remains an open, context-dependent problem without universal solutions. The article's value lies in clearly articulating why this problem exists and framing the key trade-offs traders must navigate.</div>
+
+<h2>Topics</h2>
+<div class="topics">
+  <span class="tag">Delta hedging</span>
+  <span class="tag">Gamma scalping</span>
+  <span class="tag">Options Greeks</span>
+  <span class="tag">Quantitative finance</span>
+  <span class="tag">Risk management</span>
+  <span class="tag">Volatility trading</span>
+</div>
+
+
+</body>
+</html>
