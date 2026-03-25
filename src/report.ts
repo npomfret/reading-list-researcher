@@ -98,10 +98,10 @@ function renderReport(data: ResearchOutput, publicUrl?: string): string {
 </div>
 
 ${publicUrl ? `<div class="share-section">
-<button class="share-btn" onclick="navigator.clipboard.writeText('${escapeHtml(publicUrl)}').then(()=>{document.getElementById('copied').style.display='inline'});window.open('https://notebooklm.google.com','_blank')">
+<button class="share-btn" onclick="navigator.clipboard.writeText(window.location.href).then(()=>{document.getElementById('copied').style.display='inline'});window.open('https://notebooklm.google.com','_blank')">
   Share to NotebookLM
 </button>
-<span id="copied" class="share-copied" style="display:none">URL copied — paste it as a website source</span>
+<span id="copied" class="share-copied" style="display:none">URL copied — paste it as a website source in a new notebook</span>
 </div>` : ""}
 
 <h2>Summary</h2>
