@@ -1,0 +1,138 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>How (not) to use Machine Learning for time series forecasting: Avoiding the pitfalls</title>
+<style>
+  *, *::before, *::after { box-sizing: border-box; }
+  :root {
+    --bg: #fff; --fg: #1a1a1a; --muted: #666; --border: #e0e0e0;
+    --accent: #0066cc; --tag-bg: #f0f0f0; --tag-fg: #333;
+    --card-bg: #fafafa;
+  }
+  @media (prefers-color-scheme: dark) {
+    :root {
+      --bg: #1a1a1a; --fg: #e0e0e0; --muted: #999; --border: #333;
+      --accent: #4da6ff; --tag-bg: #2a2a2a; --tag-fg: #ccc;
+      --card-bg: #222;
+    }
+  }
+  body {
+    font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif;
+    line-height: 1.6; color: var(--fg); background: var(--bg);
+    max-width: 720px; margin: 0 auto; padding: 2rem 1.5rem;
+  }
+  a { color: var(--accent); text-decoration: none; }
+  a:hover { text-decoration: underline; }
+  h1 { font-size: 1.8rem; line-height: 1.2; margin-bottom: 0.25rem; }
+  .meta { color: var(--muted); font-size: 0.9rem; margin-bottom: 2rem; }
+  .meta a { color: var(--muted); }
+  h2 { font-size: 1.2rem; margin-top: 2rem; margin-bottom: 0.75rem; border-bottom: 1px solid var(--border); padding-bottom: 0.25rem; }
+  .summary { font-size: 1.05rem; }
+  ul { padding-left: 1.25rem; }
+  li { margin-bottom: 0.5rem; }
+  .relevance { color: var(--muted); font-size: 0.85rem; }
+  .topics { display: flex; flex-wrap: wrap; gap: 0.5rem; }
+  .tag {
+    background: var(--tag-bg); color: var(--tag-fg);
+    padding: 0.2rem 0.6rem; border-radius: 1rem; font-size: 0.8rem;
+  }
+  .about-card {
+    background: var(--card-bg); padding: 1rem; border-radius: 0.5rem;
+    border: 1px solid var(--border);
+  }
+  .about-card p { margin: 0.25rem 0; }
+  .notes { white-space: pre-wrap; color: var(--muted); font-size: 0.95rem; }
+  .share-btn {
+    display: inline-block; padding: 0.5rem 1rem; border-radius: 0.5rem;
+    background: var(--accent); color: #fff; font-size: 0.9rem; cursor: pointer;
+    border: none; font-family: inherit;
+  }
+  .share-btn:hover { opacity: 0.85; }
+  .share-section { margin-bottom: 1.5rem; }
+  .share-copied { color: var(--muted); font-size: 0.85rem; margin-left: 0.5rem; }
+</style>
+</head>
+<body>
+
+<h1>How (not) to use Machine Learning for time series forecasting: Avoiding the pitfalls</h1>
+<div class="meta">
+  <a href="https://towardsdatascience.com/how-not-to-use-machine-learning-for-time-series-forecasting-avoiding-the-pitfalls-19f9d7adf424">https://towardsdatascience.com/how-not-to-use-machine-learning-for-time-series-forecasting-avoiding-the-pitfalls-19f9d7adf424</a><br>
+  Technical practitioner guide with worked example; investigative deep-dive into methodological error &middot; Researched March 25, 2026
+</div>
+
+<div class="share-section">
+<button class="share-btn" onclick="navigator.clipboard.writeText(window.location.href).then(()=>{document.getElementById('copied').style.display='inline'});window.open('https://notebooklm.google.com','_blank')">
+  Share to NotebookLM
+</button>
+<span id="copied" class="share-copied" style="display:none">URL copied — paste it as a website source in a new notebook</span>
+</div>
+
+<h2>Summary</h2>
+<div class="summary"><p>Vegard Flovik's widely-cited article dissects one of the most dangerous pitfalls in machine learning for time series forecasting: evaluating model performance with standard accuracy metrics that hide the complete absence of genuine predictive power. Using a concrete example where data generated from a random walk (a completely unpredictable process) yielded an R² score of 0.89 and appeared accurate when plotted, Flovik demonstrates how data scientists can be misled into deploying models with zero forecasting value.</p>
+<p></p>
+<p>The core problem stems from time series data's inherent autocorrelation: consecutive observations are naturally similar, so models often exploit this temporal dependency rather than learning actual patterns. When an LSTM network predicts time-shifted values, it frequently does nothing more sophisticated than using the previous observation as its prediction for the next step—a &quot;persistence model&quot; or naive forecast. Standard error metrics like R² and MAPE evaluate how well this lagged prediction matches the actual sequence, yielding artificially high accuracy scores.</p>
+<p></p>
+<p>Flovik's critical insight is methodological: differencing the time series (transforming it to show changes rather than absolute values) provides a much stronger test of true predictive power. Since a persistence model can only predict &quot;no change,&quot; differenced data forces the model to demonstrate genuine learning. Applied to the random walk example, the differenced approach reveals zero predictability, as expected. The article advocates for always comparing ML models against baseline forecasts using the persistence method, and warns that failing to do so can result in wasting resources on elaborate models that perform worse than simply predicting &quot;tomorrow will be like today.&quot; Flovik emphasizes adopting scientific skepticism: question whether your time series is actually forecastable before building complex models, and be vigilant against the human mind's tendency to see patterns in noise.</p></div>
+
+<h2>Key Takeaways</h2>
+<ul>
+  <li>Autocorrelation trap: ML models often exploit the natural similarity between consecutive time steps rather than learning predictive patterns, making accuracy metrics misleading. A model predicting that tomorrow's value equals today's value can appear highly accurate while having zero real forecasting power.</li>
+  <li>The persistence model (naive forecast) is a critical baseline: if a simple 'predict tomorrow equals today' model outperforms your sophisticated ML approach, you don't have a forecastable problem—you likely have a random walk or similar unpredictable process.</li>
+  <li>Differencing as a validity test: Converting a time series to show period-to-period changes rather than absolute values eliminates the autocorrelation advantage and forces models to demonstrate genuine predictive learning; if differenced predictions are poor, the series is unpredictable.</li>
+  <li>R² and MAPE are unreliable alone: Standard evaluation metrics on original (non-differenced) data can show 0.89 R² scores for completely random data. These metrics must be paired with proper validation methodology and baseline comparisons.</li>
+  <li>Stationarity matters: Non-stationary time series with trends can appear highly predictable to naive metrics. Testing for stationarity (Augmented Dickey-Fuller test) and differencing data to make it stationary reveals the true forecasting challenge.</li>
+  <li>Train-test split timing is critical: Time series require temporal causality—always split chronologically (training on past data, testing on future data), never randomly. Data leakage occurs when information from test periods inadvertently influences training.</li>
+  <li>Random walk detection: Time series showing strong linear-decay autocorrelation, non-stationarity even after differencing, and persistence model superiority are likely random walks, particularly common in stock prices and financial data.</li>
+  <li>The human pattern-detection bias: Our brains are hardwired to see patterns in noise. A data scientist must adopt scientific skepticism, ask critical questions about data quality and predictability, and never trust initial impressions of accuracy without rigorous validation.</li>
+  <li>Model selection should be conservative: Simpler models (random forests, gradient boosting, linear regressions with lagged features) often outperform complex ones like LSTMs for time series, especially with limited data. Start with baselines before escalating complexity.</li>
+  <li>Production deployment risk: A model that appears accurate in exploratory analysis but relies on autocorrelation exploitation will fail catastrophically in production, where it must actually predict unseen future values. Rigorous evaluation prevents costly mistakes.</li>
+</ul>
+
+<h2>About</h2>
+<div class="about-card">
+  <p><strong>Author:</strong> Vegard Flovik, PhD</p>
+  <p><strong>Publication:</strong> Towards Data Science / KDnuggets</p>
+  <p><strong>Published:</strong> May 2019</p>
+</div>
+
+<h2>Sentiment / Tone</h2>
+<p>Cautiously critical with a scientific, evidence-driven tone. Flovik positions himself as safeguarding practitioners against overconfidence and methodological carelessness rather than dismissing machine learning itself. The writing is somewhat stern (&quot;This is simply WRONG…&quot;) but grounded in reproducible examples. He emphasizes the need for skepticism and scientific rigor while acknowledging legitimate use cases where ML does excel for time series. The overall message is: be intelligent about *when* and *how* to apply these methods, not whether to use them at all. There's an implicit frustration with the hype around deep learning and neural networks, which he suggests are often inappropriately applied to time series problems where simpler methods suffice.</p>
+
+<h2>Related Links</h2>
+<ul>
+<li><a href="https://machinelearningmastery.com/gentle-introduction-random-walk-times-series-forecasting-python/">A Gentle Introduction to the Random Walk for Times Series Forecasting with Python</a><br><span class="relevance">Jason Brownlee's complementary article that Flovik cites; provides practical Python implementation of random walk concepts and detection methods, extending Flovik's theoretical insights with hands-on code.</span></li>
+<li><a href="https://pmc.ncbi.nlm.nih.gov/articles/PMC9718476/">Forecast evaluation for data scientists: common pitfalls and best practices</a><br><span class="relevance">2023 peer-reviewed article validating Flovik's warnings about evaluation metrics (MAPE, R²) and emphasizing the importance of proper train-test splitting and baseline comparisons in time series.</span></li>
+<li><a href="https://arxiv.org/abs/2512.06932">Hidden Leaks in Time Series Forecasting: How Data Leakage Affects LSTM Evaluation Across Configurations</a><br><span class="relevance">December 2024 research demonstrating that data leakage through autocorrelation systematically inflates LSTM performance metrics—a contemporary confirmation of Flovik's core warning with recent experimental evidence.</span></li>
+<li><a href="https://medium.com/data-science/how-not-to-use-machine-learning-for-time-series-forecasting-avoiding-the-pitfalls-19f9d7adf424">How (not) to use Machine Learning for time series forecasting: The sequel</a><br><span class="relevance">Flovik's follow-up article (December 2019) addressing additional pitfalls based on reader feedback, extending the original with new examples and deepening the discussion of train-test methodology.</span></li>
+<li><a href="https://machinelearningmastery.com/findings-comparing-classical-and-machine-learning-methods-for-time-series-forecasting/">Comparing Classical and Machine Learning Algorithms for Time Series Forecasting</a><br><span class="relevance">Empirical comparison showing simple classical methods (linear models, exponential smoothing) outperforming complex approaches like MLPs and LSTMs on benchmark datasets—validates Flovik's skepticism toward deep learning for time series.</span></li>
+</ul>
+
+<h2>Research Notes</h2>
+<div class="notes">**Author Credibility:** Vegard Flovik holds a PhD from Norwegian University of Science and Technology (NTNU) and is currently an AI Research Scientist at DNV (Det Norske Veritas), a major international certification and classification society. His background as a physicist gives him a rigorous, evidence-first approach to data science. He has published multiple articles on ML pitfalls and anomaly detection, and even contributed to a podcast episode (&quot;The Time Series Trap&quot;) about this work. His LinkedIn profile shows 500+ professional connections and positions him as a senior practitioner, not a theoretical researcher.
+
+**Historical Context &amp; Impact:** Published in May 2019, this article proved influential enough to spawn a formal sequel (&quot;How (not) to use Machine Learning for time series forecasting: The sequel&quot; in December 2019), where Flovik explored additional pitfalls based on reader feedback. The original article was widely shared on Towards Data Science, Medium, KDnuggets, and cited in GitHub repositories and ML courses. It aligns with the broader M-competitions finding (M3, M4, M5) that sophisticated methods often underperform simpler statistical baselines for forecasting.
+
+**Validation of Core Claims:** Recent 2024-2025 research confirms Flovik's warnings remain highly relevant. An arxiv paper titled &quot;Hidden Leaks in Time Series Forecasting&quot; (December 2024) documents how data leakage through autocorrelation can inflate LSTM performance metrics, exactly supporting his core argument. Multiple recent articles emphasize the same autocorrelation trap and the importance of persistence model baselines. Jason Brownlee's complementary article on random walks became a foundational resource in this space.
+
+**Potential Limitations:** The article uses a synthetic random-walk example for clarity but could be criticized for not providing more real-world case studies. However, the simplicity is intentional—it forces clarity. Some practitioners might argue that with sufficient data and proper cross-validation, even autocorrelated data can yield useful forecasts (a fair point), but Flovik's core message remains: *you must test this rigorously and understand what your model is actually learning*.
+
+**Broader Conversation:** This article is part of a larger conversation about ML hype and appropriate tool selection. While deep learning has proven powerful in NLP and computer vision, time series forecasting is a domain where classical statistical methods (ARIMA, exponential smoothing, Prophet) still dominate in practice, and Flovik helps explain why. The article implicitly critiques the tendency to apply the most advanced available method to every problem.</div>
+
+<h2>Topics</h2>
+<div class="topics">
+  <span class="tag">Time series forecasting</span>
+  <span class="tag">Machine learning pitfalls</span>
+  <span class="tag">Autocorrelation</span>
+  <span class="tag">Model evaluation metrics</span>
+  <span class="tag">Random walk hypothesis</span>
+  <span class="tag">Data leakage</span>
+  <span class="tag">Persistence baseline</span>
+  <span class="tag">LSTM networks</span>
+  <span class="tag">Stationarity testing</span>
+</div>
+
+
+</body>
+</html>
