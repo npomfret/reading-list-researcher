@@ -1,0 +1,124 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>GLM-OCR: Accurate × Fast × Comprehensive</title>
+<style>
+  *, *::before, *::after { box-sizing: border-box; }
+  :root {
+    --bg: #fff; --fg: #1a1a1a; --muted: #666; --border: #e0e0e0;
+    --accent: #0066cc; --tag-bg: #f0f0f0; --tag-fg: #333;
+    --card-bg: #fafafa;
+  }
+  @media (prefers-color-scheme: dark) {
+    :root {
+      --bg: #1a1a1a; --fg: #e0e0e0; --muted: #999; --border: #333;
+      --accent: #4da6ff; --tag-bg: #2a2a2a; --tag-fg: #ccc;
+      --card-bg: #222;
+    }
+  }
+  body {
+    font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif;
+    line-height: 1.6; color: var(--fg); background: var(--bg);
+    max-width: 720px; margin: 0 auto; padding: 2rem 1.5rem;
+  }
+  a { color: var(--accent); text-decoration: none; }
+  a:hover { text-decoration: underline; }
+  h1 { font-size: 1.8rem; line-height: 1.2; margin-bottom: 0.25rem; }
+  .meta { color: var(--muted); font-size: 0.9rem; margin-bottom: 2rem; }
+  .meta a { color: var(--muted); }
+  h2 { font-size: 1.2rem; margin-top: 2rem; margin-bottom: 0.75rem; border-bottom: 1px solid var(--border); padding-bottom: 0.25rem; }
+  .summary { font-size: 1.05rem; }
+  ul { padding-left: 1.25rem; }
+  li { margin-bottom: 0.5rem; }
+  .relevance { color: var(--muted); font-size: 0.85rem; }
+  .topics { display: flex; flex-wrap: wrap; gap: 0.5rem; }
+  .tag {
+    background: var(--tag-bg); color: var(--tag-fg);
+    padding: 0.2rem 0.6rem; border-radius: 1rem; font-size: 0.8rem;
+  }
+  .about-card {
+    background: var(--card-bg); padding: 1rem; border-radius: 0.5rem;
+    border: 1px solid var(--border);
+  }
+  .about-card p { margin: 0.25rem 0; }
+  .notes { white-space: pre-wrap; color: var(--muted); font-size: 0.95rem; }
+  .share-btn {
+    display: inline-block; padding: 0.5rem 1rem; border-radius: 0.5rem;
+    background: var(--accent); color: #fff; font-size: 0.9rem; cursor: pointer;
+    border: none; font-family: inherit;
+  }
+  .share-btn:hover { opacity: 0.85; }
+  .share-section { margin-bottom: 1.5rem; }
+  .share-copied { color: var(--muted); font-size: 0.85rem; margin-left: 0.5rem; }
+</style>
+</head>
+<body>
+
+<h1>GLM-OCR: Accurate × Fast × Comprehensive</h1>
+<div class="meta">
+  <a href="https://github.com/zai-org/GLM-OCR">https://github.com/zai-org/GLM-OCR</a><br>
+  GitHub Repository with Technical Report &middot; Researched March 25, 2026
+</div>
+
+<div class="share-section">
+<button class="share-btn" onclick="navigator.clipboard.writeText('https://npomfret.github.io/reading-list-researcher/42c77a1f37de15ae.html').then(()=>{document.getElementById('copied').style.display='inline'});window.open('https://notebooklm.google.com','_blank')">
+  Share to NotebookLM
+</button>
+<span id="copied" class="share-copied" style="display:none">URL copied — paste it as a website source</span>
+</div>
+
+<h2>Summary</h2>
+<div class="summary"><p>GLM-OCR is an open-source multimodal optical character recognition (OCR) model developed by Zhipu AI and Tsinghua University researchers. It is a compact 0.9B-parameter model built on the GLM-V encoder-decoder architecture, specifically optimized for complex document understanding across diverse layouts. The model achieves state-of-the-art performance (94.62 on OmniDocBench V1.5 benchmark) while maintaining efficiency for practical deployment. The project includes a comprehensive Python SDK, multiple deployment options (cloud API via Zhipu MaaS, self-hosted with vLLM/SGLang, and Ollama support), and complete documentation with fine-tuning guides and examples.</p>
+<p></p>
+<p>The model integrates a CogViT visual encoder pre-trained on large-scale image-text data with a lightweight cross-modal connector and GLM-0.5B language decoder. It uses a two-stage pipeline combining layout analysis (via PP-DocLayout-V3) with parallel region recognition. The implementation introduces Multi-Token Prediction (MTP) loss and stable full-task reinforcement learning for improved training efficiency and generalization.</p></div>
+
+<h2>Key Takeaways</h2>
+<ul>
+  <li>State-of-the-art OCR performance: Ranks #1 on OmniDocBench V1.5 with 94.62 score, excels at formula recognition, table recognition, and information extraction</li>
+  <li>Compact and efficient: Only 0.9B parameters enabling deployment on edge devices, high-concurrency services, and resource-constrained environments</li>
+  <li>Real-world optimized: Designed for practical business use cases with robust handling of complex tables, code-heavy documents, seals, and diverse document layouts</li>
+  <li>Easy deployment and integration: Offers cloud API access (no GPU needed), self-hosted options via vLLM/SGLang, and comprehensive Python SDK with CLI and Python API</li>
+  <li>Fully open-sourced: Code under Apache License 2.0, model under MIT License, with complete documentation, fine-tuning tutorials, and modular architecture for customization</li>
+  <li>Technical innovations: Introduces Multi-Token Prediction (MTP) loss and stable full-task reinforcement learning for improved training efficiency and generalization</li>
+</ul>
+
+<h2>About</h2>
+<div class="about-card">
+  <p><strong>Author:</strong> Shuaiqi Duan, Yadong Xue, Weihan Wang, Zhe Su, Huan Liu, and team from Zhipu AI and Tsinghua University</p>
+  <p><strong>Publication:</strong> Zhipu AI / GitHub (zai-org)</p>
+  <p><strong>Published:</strong> 2026-03-12</p>
+</div>
+
+<h2>Sentiment / Tone</h2>
+<p>Positive and enthusiastic - the project presentation emphasizes achievements, ease of use, and practical applicability</p>
+
+<h2>Related Links</h2>
+<ul>
+<li><a href="https://arxiv.org/abs/2603.10910">GLM-OCR Technical Report on arXiv</a><br><span class="relevance">Full technical paper describing the model architecture, training methodology, and benchmark results</span></li>
+<li><a href="https://huggingface.co/zai-org/GLM-OCR">GLM-OCR Model on Hugging Face</a><br><span class="relevance">Pre-trained model weights available for download and use in projects</span></li>
+<li><a href="https://docs.z.ai/guides/vlm/glm-ocr">Z.AI Developer Documentation for GLM-OCR</a><br><span class="relevance">Official documentation and API guide for using GLM-OCR cloud services</span></li>
+<li><a href="https://open.bigmodel.cn">Zhipu MaaS API Platform</a><br><span class="relevance">Cloud API service for GLM-OCR offering quick deployment without local GPU requirements</span></li>
+</ul>
+
+<h2>Research Notes</h2>
+<div class="notes">This is a recently released project (March 2026) from Zhipu AI, a prominent Chinese AI research organization. The project represents significant advancement in OCR technology, combining state-of-the-art performance with practical efficiency suitable for production deployment. The release includes comprehensive tooling (Python SDK, CLI, Flask service), multiple deployment options, and strong community engagement through Discord and WeChat communities. The project integrates well with existing tools (vLLM, SGLang, Ollama) and includes detailed documentation for fine-tuning. The technical report is available on arXiv (2603.10910), suggesting rigorous academic validation. The dual licensing approach (Apache 2.0 for code, MIT for model) encourages both research and commercial adoption.</div>
+
+<h2>Topics</h2>
+<div class="topics">
+  <span class="tag">Optical Character Recognition</span>
+  <span class="tag">OCR</span>
+  <span class="tag">Document Understanding</span>
+  <span class="tag">Multimodal AI</span>
+  <span class="tag">Vision-Language Models</span>
+  <span class="tag">Deep Learning</span>
+  <span class="tag">Open Source AI</span>
+  <span class="tag">Natural Language Processing</span>
+  <span class="tag">Computer Vision</span>
+  <span class="tag">Model Deployment</span>
+</div>
+
+
+</body>
+</html>
