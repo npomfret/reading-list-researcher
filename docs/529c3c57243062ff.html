@@ -1,0 +1,139 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Lies We Tell Ourselves to Keep Using Golang</title>
+<style>
+  *, *::before, *::after { box-sizing: border-box; }
+  :root {
+    --bg: #fff; --fg: #1a1a1a; --muted: #666; --border: #e0e0e0;
+    --accent: #0066cc; --tag-bg: #f0f0f0; --tag-fg: #333;
+    --card-bg: #fafafa;
+  }
+  @media (prefers-color-scheme: dark) {
+    :root {
+      --bg: #1a1a1a; --fg: #e0e0e0; --muted: #999; --border: #333;
+      --accent: #4da6ff; --tag-bg: #2a2a2a; --tag-fg: #ccc;
+      --card-bg: #222;
+    }
+  }
+  body {
+    font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif;
+    line-height: 1.6; color: var(--fg); background: var(--bg);
+    max-width: 720px; margin: 0 auto; padding: 2rem 1.5rem;
+  }
+  a { color: var(--accent); text-decoration: none; }
+  a:hover { text-decoration: underline; }
+  h1 { font-size: 1.8rem; line-height: 1.2; margin-bottom: 0.25rem; }
+  .meta { color: var(--muted); font-size: 0.9rem; margin-bottom: 2rem; }
+  .meta a { color: var(--muted); }
+  h2 { font-size: 1.2rem; margin-top: 2rem; margin-bottom: 0.75rem; border-bottom: 1px solid var(--border); padding-bottom: 0.25rem; }
+  .summary { font-size: 1.05rem; }
+  ul { padding-left: 1.25rem; }
+  li { margin-bottom: 0.5rem; }
+  .relevance { color: var(--muted); font-size: 0.85rem; }
+  .topics { display: flex; flex-wrap: wrap; gap: 0.5rem; }
+  .tag {
+    background: var(--tag-bg); color: var(--tag-fg);
+    padding: 0.2rem 0.6rem; border-radius: 1rem; font-size: 0.8rem;
+  }
+  .about-card {
+    background: var(--card-bg); padding: 1rem; border-radius: 0.5rem;
+    border: 1px solid var(--border);
+  }
+  .about-card p { margin: 0.25rem 0; }
+  .notes { white-space: pre-wrap; color: var(--muted); font-size: 0.95rem; }
+  .share-btn {
+    display: inline-block; padding: 0.5rem 1rem; border-radius: 0.5rem;
+    background: var(--accent); color: #fff; font-size: 0.9rem; cursor: pointer;
+    border: none; font-family: inherit;
+  }
+  .share-btn:hover { opacity: 0.85; }
+  .share-section { margin-bottom: 1.5rem; }
+  .share-copied { color: var(--muted); font-size: 0.85rem; margin-left: 0.5rem; }
+</style>
+</head>
+<body>
+
+<h1>Lies We Tell Ourselves to Keep Using Golang</h1>
+<div class="meta">
+  <a href="https://fasterthanli.me/articles/lies-we-tell-ourselves-to-keep-using-golang">https://fasterthanli.me/articles/lies-we-tell-ourselves-to-keep-using-golang</a><br>
+  Long-form technical critique and rebuttal essay &middot; Researched March 25, 2026
+</div>
+
+<div class="share-section">
+<button class="share-btn" onclick="navigator.clipboard.writeText(window.location.href).then(()=>{document.getElementById('copied').style.display='inline'});window.open('https://notebooklm.google.com','_blank')">
+  Share to NotebookLM
+</button>
+<span id="copied" class="share-copied" style="display:none">URL copied — paste it as a website source in a new notebook</span>
+</div>
+
+<h2>Summary</h2>
+<div class="summary"><p>Amos Wenger, an experienced software engineer and language designer, addresses the persistent defensive arguments made by Go supporters whenever his 2020 &quot;I want off Mr Golang's Wild Ride&quot; critique resurfaces on tech discussion forums like HackerNews, Reddit, and Lobsters. The article systematically deconstructs what Wenger calls the &quot;nine lies we tell ourselves&quot; to justify continued Go adoption, acknowledging legitimate strengths of the language while arguing that its fundamental design flaws create compounding problems that become unbearable at scale.</p>
+<p></p>
+<p>Wenger concedes that Go possesses genuine merits: an exceptional async runtime with opinionated defaults, a state-of-the-art garbage collector, tooling that would make C developers envious, and &quot;batteries included&quot; libraries that simplify common tasks. He acknowledges these strengths attracted him and many others to the language initially. However, he contends that Go's philosophical choices—particularly the deliberate rejection of features like sum types, immutable data structures, and proper error handling—reflect an ideology of &quot;anything goes&quot; that merely pushes complexity onto other developers, operations teams, and end-users.</p>
+<p></p>
+<p>A critical argument centers on Go's isolation from the broader ecosystem. As &quot;Plan 9 cinematic universe&quot; software, Go uses custom assembly, linkers, debuggers, and calling conventions, making integration with other languages extraordinarily painful except across network boundaries. The author details how Go's designer decisions around zero values, nil channels, and uninitialized struct fields create subtle bugs that can only be prevented through exhaustive code review and linting rather than compiler enforcement. He argues that because it is impossible to solve every problem through language design is no excuse to avoid solving solvable ones—using the analogy that cars are safer than trains, even though drivers can still crash them.</p>
+<p></p>
+<p>Wenger concludes that Go as a &quot;throwaway&quot; prototyping language is a myth: no organization actually rewrites production systems, so the language persists with all its quirks accumulating over time. Until the industry demands better tools that catch entire categories of errors at compile-time (as Rust demonstrates is possible), developers will continue woken up at night by nil values that should never have existed, perpetuating &quot;the Billion Dollar Mistake&quot; over and over again.</p></div>
+
+<h2>Key Takeaways</h2>
+<ul>
+  <li>Go's async runtime and garbage collector are genuinely excellent, but are packaged alongside deliberate language design choices (no sum types, limited immutability, zero values with unpredictable semantics) that create subtle correctness issues only preventable through constant vigilance rather than compiler enforcement.</li>
+  <li>Go's isolated ecosystem (custom calling conventions, assembly, linkers, debuggers) makes integration with other languages nearly impossible except via RPC, creating lock-in—the only good boundary with Go is a network boundary, making Go an 'island' in the software world.</li>
+  <li>Nil channels blocking forever, nil map access panicking, uninitialized struct fields defaulting to zero, and unclear mutability at callsites are all 'just a thing to be careful about' in isolation, but in aggregate they represent a pattern of pushing human burden onto developers rather than leveraging compiler capabilities.</li>
+  <li>The claim that Go is a simple, easy-to-learn language suitable for beginners is false—it's actually harder for junior developers because the compiler accepts code that is 'very clearly wrong,' requiring deep experiential knowledge about all implicit behaviors to write semi-decent Go.</li>
+  <li>Complex problems that exist only in Go (like the netaddr.IP implementation requiring unsafe pointer games and runtime finalizers) actually demonstrate language design failures, not engineering brilliance—the Tailscale article is 'a compelling argument against using Go' not a success story.</li>
+  <li>Go is not a viable 'throwaway prototyping language' because no organization rewrites production code; once adopted, Go's ecosystem interoperability costs mean continuing with it despite its costs becomes the path of least resistance, perpetuating all its problems indefinitely.</li>
+  <li>Defenders who claim 'you can't solve all problems with language design' commit a logical fallacy by refusing to consider anything except extreme perfection—the point is to solve *solvable* problems, as evidenced by languages like Rust that prevent entire categories of bugs through type systems.</li>
+  <li>Go's error handling (if err != nil pattern everywhere) violates the principle that language features should be 'orthogonal'—designers chose not to care deeply about error handling, leaving developers to add error propagation manually in nearly every function, degrading signal-to-noise ratio in codebases.</li>
+  <li>The Go team explicitly designed a language that 'happened by accident'—they wanted to build an async runtime and web services, not a language, so they borrowed from C, Java, C++, Python without principled coherence, creating a mishmash where zero values mean different things for different types.</li>
+  <li>Criticizing Go's design flaws doesn't require defending Rust as 'perfect'—Rust ships crucial components in Firefox, Android's Bluetooth stack was rewritten in Rust, and these are pragmatic incremental adoptions, not revolutionary replacements; the false dichotomy of 'all-in on one language' is a self-defense tactic used to avoid reconsidering design choices.</li>
+</ul>
+
+<h2>About</h2>
+<div class="about-card">
+  <p><strong>Author:</strong> Amos Wenger</p>
+  <p><strong>Publication:</strong> Fasterthanli.me (personal tech blog)</p>
+  <p><strong>Published:</strong> 2022</p>
+</div>
+
+<h2>Sentiment / Tone</h2>
+<p>Frustrated but measured; technically rigorous; professorial in tone while being emotionally candid about exhaustion from the recurring defensive arguments. Wenger employs satire and analogy (&quot;hitting yourself in the head with a rake&quot;) but backs this up with detailed technical examples. He positions himself as someone genuinely disappointed rather than bitter—someone who wanted Go to work and invested heavily but found the fundamental design philosophy incompatible with building maintainable software at scale. His rhetorical stance is 'I'm not asking for perfection, just for solvable problems to be solved,' which frames his critique as reasonable rather than absolutist. There's clear frustration at what he sees as deliberate bad-faith defensive arguments ('breaking down positions into absurdity'), but he respects the intelligence of other programmers and acknowledges legitimate counterarguments fairly before rebutting them.</p>
+
+<h2>Related Links</h2>
+<ul>
+<li><a href="https://fasterthanli.me/articles/i-want-off-mr-golangs-wild-ride">I Want Off Mr. Golang's Wild Ride</a><br><span class="relevance">Wenger's original 2020 critique that sparked the ongoing discussion; this 2022 article is a direct follow-up addressing responses to that piece.</span></li>
+<li><a href="https://tailscale.com/blog/netaddr-new-ip-type-for-go/">netaddr.IP: A New IP Address Type for Go</a><br><span class="relevance">Tailscale's detailed account of building a custom IP address type because Go's standard library net.IP has fundamental problems; Wenger uses this to show how Go's design flaws force expert teams to build workarounds.</span></li>
+<li><a href="https://go.dev/blog/go1.18">Go 1.18 Release Notes</a><br><span class="relevance">Announcement of generics support added in March 2022, one of the major criticisms Wenger raised; provides context for how Go's evolution responds to these concerns, though Wenger argues it doesn't fully address the root issues.</span></li>
+<li><a href="https://github.com/golang/go/issues/41716">Proposal: Go 2 Sum Types Using Interface Type Lists</a><br><span class="relevance">Official Go GitHub issue discussing sum types, one of the core language features Wenger argues Go lacks; shows ongoing community debate about these design decisions at the language level.</span></li>
+<li><a href="https://go.dev/talks/2012/splash.article">Go at Google: Language Design in the Service of Software Engineering</a><br><span class="relevance">Official explanation of Go's design philosophy emphasizing 'clarity, simplicity and composability'; useful to understand the intended design principles that Wenger argues are undermined by the execution.</span></li>
+</ul>
+
+<h2>Research Notes</h2>
+<div class="notes">Amos Wenger (fasterthanlime) is a highly credible voice in this debate with 12+ years of professional software engineering experience across seven companies, plus a history of language design work (he presented a custom language at OSCON 2009). His original &quot;I want off Mr Golang's Wild Ride&quot; article became a focal point for Go criticism and is frequently resurfaced on tech forums, prompting this follow-up.
+
+The reception of this article was substantially positive in technical communities. On HackerNews, commenters called it &quot;the most cogent critique of Go I've seen yet.&quot; The article generated serious discussions even from Go defenders who acknowledged its validity while disagreeing with its conclusions. On Reddit's r/golang, supporters acknowledged &quot;he's not wrong&quot; while defending Go on other pragmatic grounds (e.g., it works, it's widely adopted, it's better than the alternative of using multiple languages).
+
+Important context: Go 1.18 (March 2022) added generics support—a feature Wenger explicitly requested in his original article. However, Go still lacks sum types, proper immutability control, and union types. The fact that Wenger wrote this 2022 critique even after generics arrived suggests he views these as peripheral improvements to deeper architectural issues rather than solutions to the core problems.
+
+The article's core thesis about Go becoming an &quot;island&quot; that's hard to move away from has only become more relevant post-2022, as Go adoption in infrastructure (Docker, Kubernetes, many cloud-native tools) has locked entire ecosystems into the language. The criticisms about FFI, ecosystem integration, and interoperability have not improved significantly with language updates.
+
+Wenger's specific examples (netaddr.IP's complex workarounds, the zero-value semantics problem) are well-researched and directly sourced from production experiences at companies like Tailscale. His engagement with the counterarguments is fair—he doesn't strawman the 'Go has strengths' position; rather, he acknowledges them and argues they don't justify the design tradeoffs made.
+
+One notable aspect: Wenger explicitly defends Rust against the straw-man that he's arguing &quot;Rust is perfect.&quot; He notes Rust has legitimate shortcomings (build times, complex borrow checker, no GATs at the time of writing) and acknowledges the pragmatic incremental adoption of Rust in projects like Firefox and Android, which is careful rather than revolutionary.</div>
+
+<h2>Topics</h2>
+<div class="topics">
+  <span class="tag">Go language criticism</span>
+  <span class="tag">Programming language design</span>
+  <span class="tag">Type systems and sum types</span>
+  <span class="tag">Error handling</span>
+  <span class="tag">Language ecosystem interoperability</span>
+  <span class="tag">Software engineering trade-offs</span>
+</div>
+
+
+</body>
+</html>
