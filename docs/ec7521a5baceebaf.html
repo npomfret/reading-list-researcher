@@ -1,0 +1,123 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Using Rust at a startup: A cautionary tale</title>
+<style>
+  *, *::before, *::after { box-sizing: border-box; }
+  :root {
+    --bg: #fff; --fg: #1a1a1a; --muted: #666; --border: #e0e0e0;
+    --accent: #0066cc; --tag-bg: #f0f0f0; --tag-fg: #333;
+    --card-bg: #fafafa;
+  }
+  @media (prefers-color-scheme: dark) {
+    :root {
+      --bg: #1a1a1a; --fg: #e0e0e0; --muted: #999; --border: #333;
+      --accent: #4da6ff; --tag-bg: #2a2a2a; --tag-fg: #ccc;
+      --card-bg: #222;
+    }
+  }
+  body {
+    font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif;
+    line-height: 1.6; color: var(--fg); background: var(--bg);
+    max-width: 720px; margin: 0 auto; padding: 2rem 1.5rem;
+  }
+  a { color: var(--accent); text-decoration: none; }
+  a:hover { text-decoration: underline; }
+  h1 { font-size: 1.8rem; line-height: 1.2; margin-bottom: 0.25rem; }
+  .meta { color: var(--muted); font-size: 0.9rem; margin-bottom: 2rem; }
+  .meta a { color: var(--muted); }
+  h2 { font-size: 1.2rem; margin-top: 2rem; margin-bottom: 0.75rem; border-bottom: 1px solid var(--border); padding-bottom: 0.25rem; }
+  .summary { font-size: 1.05rem; }
+  ul { padding-left: 1.25rem; }
+  li { margin-bottom: 0.5rem; }
+  .relevance { color: var(--muted); font-size: 0.85rem; }
+  .topics { display: flex; flex-wrap: wrap; gap: 0.5rem; }
+  .tag {
+    background: var(--tag-bg); color: var(--tag-fg);
+    padding: 0.2rem 0.6rem; border-radius: 1rem; font-size: 0.8rem;
+  }
+  .about-card {
+    background: var(--card-bg); padding: 1rem; border-radius: 0.5rem;
+    border: 1px solid var(--border);
+  }
+  .about-card p { margin: 0.25rem 0; }
+  .notes { white-space: pre-wrap; color: var(--muted); font-size: 0.95rem; }
+  .share-btn {
+    display: inline-block; padding: 0.5rem 1rem; border-radius: 0.5rem;
+    background: var(--accent); color: #fff; font-size: 0.9rem; cursor: pointer;
+    border: none; font-family: inherit;
+  }
+  .share-btn:hover { opacity: 0.85; }
+  .share-section { margin-bottom: 1.5rem; }
+  .share-copied { color: var(--muted); font-size: 0.85rem; margin-left: 0.5rem; }
+</style>
+</head>
+<body>
+
+<h1>Using Rust at a startup: A cautionary tale</h1>
+<div class="meta">
+  <a href="https://mdwdotla.medium.com/using-rust-at-a-startup-a-cautionary-tale-42ab823d9454">https://mdwdotla.medium.com/using-rust-at-a-startup-a-cautionary-tale-42ab823d9454</a><br>
+  Technical opinion essay / industry cautionary tale &middot; Researched March 25, 2026
+</div>
+
+<div class="share-section">
+<button class="share-btn" onclick="navigator.clipboard.writeText(window.location.href).then(()=>{document.getElementById('copied').style.display='inline'});window.open('https://notebooklm.google.com','_blank')">
+  Share to NotebookLM
+</button>
+<span id="copied" class="share-copied" style="display:none">URL copied — paste it as a website source in a new notebook</span>
+</div>
+
+<h2>Summary</h2>
+<div class="summary"><p>Matt Welsh, former Harvard CS professor and founding CEO of Fixie.ai, recounts his firsthand experience adopting Rust for a critical backend service at a startup. Rather than a technical critique of the language itself, the piece is a pragmatic assessment of Rust's fit for the specific constraints of startup development—where velocity, rapid iteration, and team hiring considerations matter as much as code quality. Welsh discovered that while Rust prevented certain memory-safety bugs through strict compile-time checks, the initial productivity gains did not materialize. His team experienced sluggish development velocity, longer feature launch cycles, and struggled with the steep learning curve required to write idiomatic, type-driven Rust code. A secondary but critical issue emerged: the choice of Rust created a &quot;knowledge silo&quot; where only developers with deep Rust expertise could meaningfully contribute to the service, while the rest of the engineering organization was locked out from debugging, extending, or supporting the codebase. This created organizational friction and reduced overall team leverage. Welsh acknowledges Rust's genuine strengths—memory safety, performance, and the correctness guarantees of its type system—but argues these benefits do not offset the context-specific costs in a fast-moving startup environment where time-to-market and team productivity directly impact survival. He frames the decision as one of trade-offs rather than absolute language quality, and advocates for startups to prioritize familiar, widely-understood tools (Java, Go, TypeScript) unless they have mission-critical safety requirements (space systems, medical devices) that justify the productivity tax. The piece concludes with a nuanced call for intentional technology choice rather than hype-driven adoption.</p></div>
+
+<h2>Key Takeaways</h2>
+<ul>
+  <li>Development velocity hit: Welsh's team experienced noticeably sluggish development speed and longer feature launch cycles when using Rust compared to expectations, despite initial hopes that Rust's strictness would improve productivity.</li>
+  <li>Talent scarcity and hiring friction: Finding developers experienced in Rust was 'pretty rare' in 2022, forcing the team to either hire inexperienced developers or prioritize rare Rust specialists, limiting recruitment flexibility—a critical problem for startups in hyper-growth phases.</li>
+  <li>Knowledge silos: Using Rust created an organizational bottleneck where only Rust-experienced engineers could debug, modify, or extend the codebase, preventing other talented engineers in the company from contributing and reducing overall team leverage.</li>
+  <li>Learning curve tax: Rust's novel type system features (lifetimes, affine types, type-driven design patterns) required months of onboarding and mentoring; most developers transitioning from other languages underutilize the type system, paying all of Rust's costs while gaining only 10% of its benefits.</li>
+  <li>Context matters more than language quality: Welsh explicitly states the decision is not 'which language is objectively better' but 'which trade-offs fit your constraints'—startups need speed and team flexibility, not the memory-safety guarantees useful for space probes or surgical robots.</li>
+  <li>Ecosystem maturity timing: The article was written during rough period for Rust async/await libraries (mid-2022), compounding productivity issues; ecosystem volatility made it harder to build on stable, battle-tested foundations.</li>
+  <li>Alternative recommendation: For startups without extreme performance or safety requirements, Welsh recommends languages with wider adoption (Java, C#, Go, TypeScript) that balance code quality with rapid team onboarding and feature velocity.</li>
+  <li>Correctness has a cost: While Rust's compile-time correctness guarantees reduce certain classes of bugs (memory/type safety), Welsh questions whether these benefits justify the overhead for most startup domains, arguing occasional runtime bugs are preferable to systematic velocity loss.</li>
+  <li>Hiring tradeoff: Welsh avoided hiring 'Rust-only' developers, recognizing startups need flexibility, but the scarcity of available Rust talent meant this pragmatism didn't fully solve the hiring constraint.</li>
+  <li>Long-term may differ: Welsh acknowledges that as Rust matures, ecosystem improves, and developer familiarity increases, the calculus could shift—but in 2022, for most startups, it's still the wrong tool for the job.</li>
+</ul>
+
+<h2>About</h2>
+<div class="about-card">
+  <p><strong>Author:</strong> Matt Welsh</p>
+  <p><strong>Publication:</strong> Medium</p>
+  <p><strong>Published:</strong> 2022-10</p>
+</div>
+
+<h2>Sentiment / Tone</h2>
+<p>Measured and thoughtfully critical, without dismissal. Welsh opens by jokingly deflecting &quot;holy war&quot; accusations (mentioning Visual Basic as the best language), signaling humility and inviting dialogue rather than declaring absolutes. His tone is regretful but practical—he's not anti-Rust but anti-hype-driven adoption. He acknowledges genuine strengths (memory safety, performance, correctness) while emphasizing that recognizing these strengths is precisely *why* startups shouldn't use Rust unless truly required. The sentiment is evidence-driven and contextual: 'Rust is awesome, for certain things. But think twice before picking it up for a startup that needs to move fast.' This positions the critique as a cautionary observation from a respected technologist who tried the tool and learned from real constraints, rather than ideological opposition.</p>
+
+<h2>Related Links</h2>
+<ul>
+<li><a href="https://www.usenix.org/publications/loginonline/interview-matt-welsh">Interview with Matt Welsh (USENIX)</a><br><span class="relevance">Extended Q&amp;A where Welsh elaborates on the original blog post, discusses hiring constraints, Rust ecosystem immaturity, and his broader philosophy on startup technology choices vs. absolute language quality.</span></li>
+<li><a href="https://lobste.rs/s/8beouf/using_rust_at_startup_cautionary_tale">Lobsters Discussion: Using Rust at a startup: A cautionary tale</a><br><span class="relevance">Technical community discussion featuring nuanced counterarguments from experienced Rust developers who argue that proper type-driven development and mentorship change the productivity calculus; illustrates the ecosystem's own debates about Welsh's critique.</span></li>
+<li><a href="https://blog.jetbrains.com/rust/2025/06/12/rust-vs-go/">Rust vs Go: Which One to Choose in 2025 (JetBrains RustRover Blog)</a><br><span class="relevance">Contemporary comparison showing Rust's learning curve and compilation overhead vs. Go's rapid onboarding—directly supports Welsh's point about trade-offs in startup velocity contexts.</span></li>
+<li><a href="https://www.zenrows.com/blog/rust-popularity">Is Rust Still Surging in 2026? Usage and Ecosystem Insights</a><br><span class="relevance">Current adoption and productivity data showing ~53% of developers now productive in Rust (up from 47%), suggesting ecosystem improvements have partially addressed Welsh's 2022 concerns.</span></li>
+<li><a href="https://en.wikipedia.org/wiki/Matt_Welsh_(computer_scientist)">Matt Welsh (computer scientist) - Wikipedia</a><br><span class="relevance">Biographical context on Welsh's career trajectory and credentials, establishing his authority to make pragmatic technology recommendations for startups.</span></li>
+</ul>
+
+<h2>Research Notes</h2>
+<div class="notes">**Author credibility:** Matt Welsh is a distinguished computer scientist with academic pedigree (PhD UC Berkeley, BS Cornell), 15+ years in systems research, a former tenured professor at Harvard (Gordon McKay Professor of Computer Science), and deep practical experience at scale (Google as engineering director, Apple engineer, startup founder). His 2022 blog post was written while serving as CEO of Fixie.ai, a well-funded AI startup where he directly experienced the consequences of his Rust decision. In 2024, he became Head of AI Systems at Palantir, and notably published a 2026 follow-up article (&quot;Revisiting Rust in 2026&quot;) where he reconsiders the question through the lens of LLM-assisted development—acknowledging that coding agents may change the onboarding and productivity calculus he described in 2022. **Reception and discourse:** The article generated substantial discussion on technical forums (Lobsters, Reddit, Slashdot, Hacker News). Some responses offered nuanced counterarguments, particularly from experienced Rust developers who argued that (a) proper type-driven development *does* yield productivity gains, but requires 2-3 month learning curves; (b) the issue was not Rust itself but insufficient mentorship and architectural guidance for Rust onboarding; (c) the 2022 ecosystem was rougher than 2024+. A Lobsters commenter with production Rust experience argued convincingly that the *style* of Rust development matters enormously—teams that embrace type-driven design patterns (encoding invariants in types) see faster velocity after the ramp, while teams that write Java-style code in Rust face all costs with minimal benefits. **Industry context:** Welsh's critique resonated during a period of explosive Rust hype (2021-2023), when some companies and startups adopted Rust without sufficient justification. Recent data (2023-2026) shows Rust adoption has continued growing but stabilized at ~45% of organizations (up from 29.7% in 2022), suggesting the cautionary perspective helped temper unrealistic expectations. 2024 State of Rust Survey data indicates 53% of surveyed developers now consider themselves productive in Rust (up from 47% in 2023), suggesting the ecosystem and community experience have improved. **Important nuance:** Welsh's critique was specifically about a *general-purpose backend service*, not systems programming, embedded systems, or security-critical code where Rust shines. His argument is orthogonal to the fact that Rust prevents ~67% of C/C++ memory-safety bugs; he concedes this but argues startups rarely operate in domains where that matters. **Follow-up trajectory:** The 2026 revisit by Welsh himself is significant—he notes the blog post has been viewed ~100,000 times and asks whether LLMs and coding agents change his calculus. While Medium's Cloudflare blocking prevented direct confirmation, the search results suggest he takes a more balanced stance now, implying the productivity critique may be less salient in an AI-assisted development world.</div>
+
+<h2>Topics</h2>
+<div class="topics">
+  <span class="tag">Rust adoption</span>
+  <span class="tag">startup engineering</span>
+  <span class="tag">developer productivity</span>
+  <span class="tag">programming language trade-offs</span>
+  <span class="tag">team hiring and scaling</span>
+  <span class="tag">system design decisions</span>
+</div>
+
+
+</body>
+</html>
