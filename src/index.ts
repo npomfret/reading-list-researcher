@@ -10,82 +10,101 @@ import { generateIndex } from "./report-index.js";
 import { notify } from "./utils/notify.js";
 import { deployReport, deployIndex, pushDeploy } from "./deploy.js";
 
-logger.info("Reading List Researcher starting up");
+const POLL_INTERVAL_MS = 5 * 60 * 1000; // 5 minutes
 
-const entries = parseReadingList(config.bookmarksPlist);
-
-if (entries.length === 0) {
-  logger.info("No reading list entries found");
-  process.exit(0);
+function sleep(ms: number): Promise<void> {
+  return new Promise((resolve) => setTimeout(resolve, ms));
 }
 
-const state = loadState();
+async function processOne(): Promise<boolean> {
+  const entries = parseReadingList(config.bookmarksPlist);
 
-// Find the first item not already in state
-const newEntry = entries.find((e) => !state.items[e.url]);
-
-if (!newEntry) {
-  logger.info("No new items to process");
-  process.exit(0);
-}
-
-addItem(state, newEntry.url, newEntry.title, newEntry.dateAdded);
-saveState(state);
-
-logger.info(`Processing: "${newEntry.title}"`, { url: newEntry.url });
-
-// Update status to researching
-state.items[newEntry.url].status = "researching";
-saveState(state);
-
-try {
-  const output = await runResearch(newEntry.url, newEntry.title);
-
-  // Save research output
-  if (!fs.existsSync(config.researchDir)) {
-    fs.mkdirSync(config.researchDir, { recursive: true });
+  if (entries.length === 0) {
+    return false;
   }
 
-  const hash = crypto.createHash("sha256").update(newEntry.url).digest("hex").slice(0, 16);
-  const outputPath = `${config.researchDir}/${hash}.json`;
-  fs.writeFileSync(outputPath, JSON.stringify(output, null, 2));
+  const state = loadState();
+  const newEntry = entries.find((e) => !state.items[e.url]);
 
-  logger.info(`Research saved to ${outputPath}`);
+  if (!newEntry) {
+    return false;
+  }
 
-  // Generate HTML report
-  state.items[newEntry.url].status = "generating_report";
+  addItem(state, newEntry.url, newEntry.title, newEntry.dateAdded);
   saveState(state);
 
-  let reportPath = generateReport(output, hash);
-  generateIndex();
+  logger.info(`Processing: "${newEntry.title}"`, { url: newEntry.url });
 
-  // Deploy to GitHub Pages
-  if (config.deployEnabled) {
-    try {
-      const publicUrl = deployReport(reportPath, hash);
-      state.items[newEntry.url].publicUrl = publicUrl;
+  state.items[newEntry.url].status = "researching";
+  saveState(state);
 
-      // Re-generate report + index with share button now that we have the public URL
-      reportPath = generateReport(output, hash, publicUrl);
-      deployReport(reportPath, hash);
-      deployIndex();
-      pushDeploy();
+  try {
+    const output = await runResearch(newEntry.url, newEntry.title);
 
-      logger.info(`Deployed to ${publicUrl}`);
-    } catch (deployErr: any) {
-      logger.warn(`Deploy failed (non-fatal): ${deployErr.message}`);
+    if (!fs.existsSync(config.researchDir)) {
+      fs.mkdirSync(config.researchDir, { recursive: true });
     }
+
+    const hash = crypto.createHash("sha256").update(newEntry.url).digest("hex").slice(0, 16);
+    const outputPath = `${config.researchDir}/${hash}.json`;
+    fs.writeFileSync(outputPath, JSON.stringify(output, null, 2));
+
+    logger.info(`Research saved to ${outputPath}`);
+
+    state.items[newEntry.url].status = "generating_report";
+    saveState(state);
+
+    let reportPath = generateReport(output, hash);
+    generateIndex();
+
+    if (config.deployEnabled) {
+      try {
+        const publicUrl = deployReport(reportPath, hash);
+        state.items[newEntry.url].publicUrl = publicUrl;
+
+        reportPath = generateReport(output, hash, publicUrl);
+        deployReport(reportPath, hash);
+        deployIndex();
+        pushDeploy();
+
+        logger.info(`Deployed to ${publicUrl}`);
+      } catch (deployErr: any) {
+        logger.warn(`Deploy failed (non-fatal): ${deployErr.message}`);
+      }
+    }
+
+    state.items[newEntry.url].status = "complete";
+    saveState(state);
+
+    notify(`Research complete: "${output.title}"`);
+    logger.info(`Done: "${newEntry.title}" — report: ${reportPath}`);
+  } catch (err: any) {
+    logger.error(`Research failed for "${newEntry.title}": ${err.message}`);
+    state.items[newEntry.url].status = "failed";
+    saveState(state);
+    notify(`Research failed: "${newEntry.title}"`, "Research Agent");
   }
 
-  state.items[newEntry.url].status = "complete";
-  saveState(state);
-
-  notify(`Research complete: "${output.title}"`);
-  logger.info(`Done: "${newEntry.title}" — report: ${reportPath}`);
-} catch (err: any) {
-  logger.error(`Research failed: ${err.message}`);
-  state.items[newEntry.url].status = "failed";
-  saveState(state);
-  notify(`Research failed: "${newEntry.title}"`, "Research Agent");
-  process.exit(1);
+  return true;
 }
+
+async function main(): Promise<void> {
+  logger.info("Reading List Researcher starting up (continuous mode)");
+
+  while (true) {
+    // Drain all pending items
+    let processed = 0;
+    while (await processOne()) {
+      processed++;
+    }
+
+    if (processed > 0) {
+      logger.info(`Processed ${processed} item(s)`);
+    }
+
+    logger.info(`Polling again in ${POLL_INTERVAL_MS / 1000 / 60} minutes...`);
+    await sleep(POLL_INTERVAL_MS);
+  }
+}
+
+main();
