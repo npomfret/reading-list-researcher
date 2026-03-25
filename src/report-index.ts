@@ -57,15 +57,20 @@ function loadResearchEntries(): IndexEntry[] {
 }
 
 function renderIndex(entries: IndexEntry[]): string {
-  const rows = entries
+  const cards = entries
     .map(
       (e) => `
-    <tr>
-      <td><a href="${e.hash}.html">${escapeHtml(e.title)}</a></td>
-      <td>${escapeHtml(e.contentType)}</td>
-      <td>${e.datePublished ? escapeHtml(e.datePublished) : "&mdash;"}</td>
-      <td class="topics">${e.topics.map((t) => `<span class="tag">${escapeHtml(t)}</span>`).join(" ")}</td>
-    </tr>`
+    <a href="${e.hash}.html" class="card">
+      <div class="card-type">${escapeHtml(e.contentType)}</div>
+      <h2 class="card-title">${escapeHtml(e.title)}</h2>
+      <div class="card-meta">
+        ${e.datePublished ? escapeHtml(e.datePublished) : ""}
+      </div>
+      <div class="card-topics">
+        ${e.topics.map((t) => `<span class="tag">${escapeHtml(t)}</span>`).join(" ")}
+      </div>
+      <div class="card-url">${escapeHtml(new URL(e.url).hostname)}</div>
+    </a>`
     )
     .join("\n");
 
@@ -78,57 +83,74 @@ function renderIndex(entries: IndexEntry[]): string {
 <style>
   *, *::before, *::after { box-sizing: border-box; }
   :root {
-    --bg: #fff; --fg: #1a1a1a; --muted: #666; --border: #e0e0e0;
-    --accent: #0066cc; --tag-bg: #f0f0f0; --tag-fg: #333;
-    --card-bg: #fafafa;
+    --bg: #f5f5f7; --fg: #1a1a1a; --muted: #86868b; --border: #d2d2d7;
+    --accent: #0066cc; --tag-bg: #e8e8ed; --tag-fg: #1d1d1f;
+    --card-bg: #fff; --card-shadow: 0 1px 3px rgba(0,0,0,0.08), 0 1px 2px rgba(0,0,0,0.06);
+    --card-hover-shadow: 0 10px 30px rgba(0,0,0,0.1), 0 1px 8px rgba(0,0,0,0.06);
   }
   @media (prefers-color-scheme: dark) {
     :root {
-      --bg: #1a1a1a; --fg: #e0e0e0; --muted: #999; --border: #333;
+      --bg: #111; --fg: #f5f5f7; --muted: #86868b; --border: #333;
       --accent: #4da6ff; --tag-bg: #2a2a2a; --tag-fg: #ccc;
-      --card-bg: #222;
+      --card-bg: #1c1c1e; --card-shadow: 0 1px 3px rgba(0,0,0,0.3);
+      --card-hover-shadow: 0 10px 30px rgba(0,0,0,0.4);
     }
   }
   body {
-    font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif;
+    font-family: -apple-system, BlinkMacSystemFont, "SF Pro Display", "Segoe UI", Roboto, Helvetica, Arial, sans-serif;
     line-height: 1.6; color: var(--fg); background: var(--bg);
-    max-width: 900px; margin: 0 auto; padding: 2rem 1.5rem;
+    max-width: 960px; margin: 0 auto; padding: 3rem 1.5rem;
   }
-  a { color: var(--accent); text-decoration: none; }
-  a:hover { text-decoration: underline; }
-  h1 { font-size: 1.8rem; margin-bottom: 0.5rem; }
-  .subtitle { color: var(--muted); margin-bottom: 2rem; }
-  table { width: 100%; border-collapse: collapse; }
-  th, td { text-align: left; padding: 0.75rem 0.5rem; border-bottom: 1px solid var(--border); }
-  th { font-size: 0.85rem; text-transform: uppercase; color: var(--muted); }
+  .header { text-align: center; margin-bottom: 3rem; }
+  h1 { font-size: 2.4rem; font-weight: 700; margin-bottom: 0.25rem; letter-spacing: -0.02em; }
+  .subtitle { color: var(--muted); font-size: 1.1rem; }
+  .grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(280px, 1fr));
+    gap: 1.25rem;
+  }
+  .card {
+    display: flex; flex-direction: column;
+    background: var(--card-bg); border-radius: 12px;
+    padding: 1.5rem; text-decoration: none; color: var(--fg);
+    box-shadow: var(--card-shadow);
+    transition: box-shadow 0.2s ease, transform 0.2s ease;
+    border: 1px solid var(--border);
+  }
+  .card:hover {
+    box-shadow: var(--card-hover-shadow);
+    transform: translateY(-2px);
+    text-decoration: none;
+  }
+  .card-type {
+    font-size: 0.7rem; font-weight: 600; text-transform: uppercase;
+    letter-spacing: 0.05em; color: var(--accent); margin-bottom: 0.5rem;
+  }
+  .card-title {
+    font-size: 1.1rem; font-weight: 600; line-height: 1.3;
+    margin: 0 0 0.75rem 0; flex-grow: 1;
+  }
+  .card-meta { font-size: 0.85rem; color: var(--muted); margin-bottom: 0.75rem; }
+  .card-topics { display: flex; flex-wrap: wrap; gap: 0.35rem; margin-bottom: 0.75rem; }
   .tag {
     background: var(--tag-bg); color: var(--tag-fg);
-    padding: 0.15rem 0.5rem; border-radius: 1rem; font-size: 0.75rem;
-    display: inline-block; margin: 0.1rem;
+    padding: 0.2rem 0.6rem; border-radius: 1rem; font-size: 0.7rem;
+    font-weight: 500;
   }
-  .topics { max-width: 300px; }
-  @media (max-width: 600px) {
-    table, thead, tbody, th, td, tr { display: block; }
-    thead { display: none; }
-    td { padding: 0.25rem 0; border: none; }
-    td:first-child { font-weight: 600; padding-top: 1rem; }
-    tr { border-bottom: 1px solid var(--border); padding-bottom: 0.75rem; }
-  }
+  .card-url { font-size: 0.8rem; color: var(--muted); }
+  .empty { text-align: center; color: var(--muted); padding: 4rem 0; font-size: 1.1rem; }
 </style>
 </head>
 <body>
 
-<h1>Research Index</h1>
-<p class="subtitle">${entries.length} item${entries.length !== 1 ? "s" : ""} researched</p>
+<div class="header">
+  <h1>Research</h1>
+  <p class="subtitle">${entries.length} item${entries.length !== 1 ? "s" : ""} researched</p>
+</div>
 
-${entries.length === 0 ? "<p>No research reports yet.</p>" : `<table>
-<thead>
-  <tr><th>Title</th><th>Type</th><th>Published</th><th>Topics</th></tr>
-</thead>
-<tbody>
-${rows}
-</tbody>
-</table>`}
+${entries.length === 0 ? `<p class="empty">No research reports yet.</p>` : `<div class="grid">
+${cards}
+</div>`}
 
 </body>
 </html>`;
