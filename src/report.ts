@@ -85,7 +85,7 @@ function renderReport(data: ResearchOutput, publicUrl?: string): string {
     border: none; font-family: inherit;
   }
   .share-btn:hover { opacity: 0.85; }
-  .share-section { margin-top: 2rem; padding-top: 1rem; border-top: 1px solid var(--border); }
+  .share-section { margin-bottom: 1.5rem; }
   .share-copied { color: var(--muted); font-size: 0.85rem; margin-left: 0.5rem; }
 </style>
 </head>
@@ -96,6 +96,13 @@ function renderReport(data: ResearchOutput, publicUrl?: string): string {
   <a href="${escapeHtml(data.url)}">${escapeHtml(data.url)}</a><br>
   ${escapeHtml(data.contentType)} &middot; Researched ${dateResearched}
 </div>
+
+${publicUrl ? `<div class="share-section">
+<button class="share-btn" onclick="navigator.clipboard.writeText('${escapeHtml(publicUrl)}').then(()=>{document.getElementById('copied').style.display='inline'});window.open('https://notebooklm.google.com','_blank')">
+  Share to NotebookLM
+</button>
+<span id="copied" class="share-copied" style="display:none">URL copied — paste it as a website source</span>
+</div>` : ""}
 
 <h2>Summary</h2>
 <div class="summary">${data.summary.split("\n").map((p) => `<p>${escapeHtml(p)}</p>`).join("\n")}</div>
@@ -126,12 +133,6 @@ ${data.researchNotes ? `<h2>Research Notes</h2>
 ${data.topics.map((t) => `  <span class="tag">${escapeHtml(t)}</span>`).join("\n")}
 </div>
 
-${publicUrl ? `<div class="share-section">
-<button class="share-btn" onclick="navigator.clipboard.writeText('${escapeHtml(publicUrl)}').then(()=>{document.getElementById('copied').style.display='inline'});window.open('https://notebooklm.google.com','_blank')">
-  Share to NotebookLM
-</button>
-<span id="copied" class="share-copied" style="display:none">URL copied — paste it as a website source</span>
-</div>` : ""}
 
 </body>
 </html>`;

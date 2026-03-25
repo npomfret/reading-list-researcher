@@ -6,7 +6,7 @@
   "main": "index.js",
   "scripts": {
     "start": "tsx src/index.ts",
-    "reset": "rm -rf ~/.reading-list-agent/state.json ~/.reading-list-agent/research",
+    "reset": "rm -rf ~/.reading-list-agent/state.json ~/.reading-list-agent/research docs/ ~/Library/Mobile\\ Documents/com~apple~CloudDocs/ResearchPods/*.html",
     "typecheck": "tsc --noEmit",
     "research-mcp": "tsx src/research-mcp.ts"
   },

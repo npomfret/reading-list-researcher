@@ -8,7 +8,7 @@ import { runResearch } from "./researcher.js";
 import { generateReport } from "./report.js";
 import { generateIndex } from "./report-index.js";
 import { notify } from "./utils/notify.js";
-import { deployReport, deployIndex } from "./deploy.js";
+import { deployReport, deployIndex, pushDeploy } from "./deploy.js";
 
 logger.info("Reading List Researcher starting up");
 
@@ -69,8 +69,9 @@ try {
       reportPath = generateReport(output, hash, publicUrl);
       deployReport(reportPath, hash);
       deployIndex();
+      pushDeploy();
 
-      logger.info(`Report copied to docs/ — push to deploy (${publicUrl})`);
+      logger.info(`Deployed to ${publicUrl}`);
     } catch (deployErr: any) {
       logger.warn(`Deploy failed (non-fatal): ${deployErr.message}`);
     }
