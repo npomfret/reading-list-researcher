@@ -25,35 +25,33 @@ function loadResearchEntries(): IndexEntry[] {
   if (!fs.existsSync(config.researchDir)) return [];
 
   const files = fs.readdirSync(config.researchDir).filter((f) => f.endsWith(".json"));
-  const entries: IndexEntry[] = [];
+  const entries: { entry: IndexEntry; createdAt: number }[] = [];
 
   for (const file of files) {
     try {
-      const data: ResearchOutput = JSON.parse(
-        fs.readFileSync(path.join(config.researchDir, file), "utf-8")
-      );
+      const filePath = path.join(config.researchDir, file);
+      const data: ResearchOutput = JSON.parse(fs.readFileSync(filePath, "utf-8"));
+      const stat = fs.statSync(filePath);
       entries.push({
-        hash: file.replace(".json", ""),
-        title: data.title,
-        topics: data.topics,
-        contentType: data.contentType,
-        datePublished: data.datePublished,
-        url: data.url,
+        entry: {
+          hash: file.replace(".json", ""),
+          title: data.title,
+          topics: data.topics,
+          contentType: data.contentType,
+          datePublished: data.datePublished,
+          url: data.url,
+        },
+        createdAt: stat.birthtimeMs || stat.mtimeMs,
       });
     } catch {
       logger.warn(`Skipping malformed research file: ${file}`);
     }
   }
 
-  // Sort by datePublished (newest first), nulls last
-  entries.sort((a, b) => {
-    if (!a.datePublished && !b.datePublished) return 0;
-    if (!a.datePublished) return 1;
-    if (!b.datePublished) return -1;
-    return new Date(b.datePublished).getTime() - new Date(a.datePublished).getTime();
-  });
+  // Sort by file creation time (newest first), limit to 100
+  entries.sort((a, b) => b.createdAt - a.createdAt);
 
-  return entries;
+  return entries.slice(0, 100).map((e) => e.entry);
 }
 
 function renderIndex(entries: IndexEntry[]): string {
