@@ -1,0 +1,139 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Scaling PostgreSQL to power 800 million ChatGPT users</title>
+<style>
+  *, *::before, *::after { box-sizing: border-box; }
+  :root {
+    --bg: #fff; --fg: #1a1a1a; --muted: #666; --border: #e0e0e0;
+    --accent: #0066cc; --tag-bg: #f0f0f0; --tag-fg: #333;
+    --card-bg: #fafafa;
+  }
+  @media (prefers-color-scheme: dark) {
+    :root {
+      --bg: #1a1a1a; --fg: #e0e0e0; --muted: #999; --border: #333;
+      --accent: #4da6ff; --tag-bg: #2a2a2a; --tag-fg: #ccc;
+      --card-bg: #222;
+    }
+  }
+  body {
+    font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif;
+    line-height: 1.6; color: var(--fg); background: var(--bg);
+    max-width: 720px; margin: 0 auto; padding: 2rem 1.5rem;
+  }
+  a { color: var(--accent); text-decoration: none; }
+  a:hover { text-decoration: underline; }
+  h1 { font-size: 1.8rem; line-height: 1.2; margin-bottom: 0.25rem; }
+  .meta { color: var(--muted); font-size: 0.9rem; margin-bottom: 2rem; }
+  .meta a { color: var(--muted); }
+  h2 { font-size: 1.2rem; margin-top: 2rem; margin-bottom: 0.75rem; border-bottom: 1px solid var(--border); padding-bottom: 0.25rem; }
+  .summary { font-size: 1.05rem; }
+  ul { padding-left: 1.25rem; }
+  li { margin-bottom: 0.5rem; }
+  .relevance { color: var(--muted); font-size: 0.85rem; }
+  .topics { display: flex; flex-wrap: wrap; gap: 0.5rem; }
+  .tag {
+    background: var(--tag-bg); color: var(--tag-fg);
+    padding: 0.2rem 0.6rem; border-radius: 1rem; font-size: 0.8rem;
+  }
+  .about-card {
+    background: var(--card-bg); padding: 1rem; border-radius: 0.5rem;
+    border: 1px solid var(--border);
+  }
+  .about-card p { margin: 0.25rem 0; }
+  .notes { white-space: pre-wrap; color: var(--muted); font-size: 0.95rem; }
+  .share-btn {
+    display: inline-block; padding: 0.5rem 1rem; border-radius: 0.5rem;
+    background: var(--accent); color: #fff; font-size: 0.9rem; cursor: pointer;
+    border: none; font-family: inherit;
+  }
+  .share-btn:hover { opacity: 0.85; }
+  .share-section { margin-bottom: 1.5rem; }
+  .share-copied { color: var(--muted); font-size: 0.85rem; margin-left: 0.5rem; }
+</style>
+</head>
+<body>
+
+<h1>Scaling PostgreSQL to power 800 million ChatGPT users</h1>
+<div class="meta">
+  <a href="https://openai.com/index/scaling-postgresql/">https://openai.com/index/scaling-postgresql/</a><br>
+  Technical engineering case study &middot; Researched March 25, 2026
+</div>
+
+<div class="share-section">
+<button class="share-btn" onclick="navigator.clipboard.writeText(window.location.href).then(()=>{document.getElementById('copied').style.display='inline'});window.open('https://notebooklm.google.com','_blank')">
+  Share to NotebookLM
+</button>
+<span id="copied" class="share-copied" style="display:none">URL copied — paste it as a website source in a new notebook</span>
+</div>
+
+<h2>Summary</h2>
+<div class="summary"><p>OpenAI's engineering blog reveals how the company scaled PostgreSQL to support 800 million ChatGPT users—a scale that conventional database wisdom suggests is impossible for a single-primary architecture. The article challenges the prevailing belief that massive scale requires either distributed databases or complex sharding strategies. Instead, OpenAI maintains one Azure PostgreSQL Flexible Server as the primary write instance, supported by nearly 50 geo-distributed read replicas, handling millions of queries per second with low double-digit millisecond p99 latency and five-nines (99.999%) availability.</p>
+<p></p>
+<p>The team's approach centers on three core pillars: aggressively reducing write pressure on the primary, ruthless query optimization and resource management, and multi-layer operational resilience. On the write side, they migrate write-heavy workloads that can be horizontally partitioned to sharded systems (Azure Cosmos DB), optimize application-level writes through careful code review to eliminate redundant operations, and implement lazy writes to smooth traffic spikes. For queries, they break up expensive multi-table joins (one problematic query joined 12 tables), review all ORM-generated SQL, and enforce connection pooling with PgBouncer to reduce connection overhead from 50ms to 5ms. Operationally, they implement cache-locking to prevent &quot;thundering herd&quot; problems, multi-layer rate limiting, and workload isolation that separates high-priority user-facing traffic from low-priority analytics to prevent the noisy neighbor effect.</p>
+<p></p>
+<p>This success came through systematic optimization rather than architectural magic. Over the past year, the database load grew more than 10x while the team avoided sharding, which would have required months or years to modify hundreds of application endpoints. The approach only works because ChatGPT's workload is heavily read-oriented (70-95% of traffic), and because PostgreSQL's design, while challenging under heavy writes due to Multi-Version Concurrency Control (MVCC), remains highly efficient for read-heavy workloads when properly tuned. The article emphasizes that the decision not to shard was pragmatic: given the workload characteristics and current optimizations providing sufficient capacity, sharding remains a future consideration rather than an immediate necessity. This case study implicitly challenges the industry tendency to over-engineer solutions prematurely, demonstrating that mastering fundamentals—query discipline, connection pooling, read offloading, and operational safeguards—can take proven systems much further than commonly assumed.</p></div>
+
+<h2>Key Takeaways</h2>
+<ul>
+  <li>OpenAI runs ChatGPT for 800 million users on a single-primary PostgreSQL instance with ~50 read replicas—not a distributed database or sharded cluster. This single-writer architecture avoids the operational complexity of sharding but requires accepting write bottlenecks as a tradeoff.</li>
+  <li>PostgreSQL's write-heavy workload challenges are addressed by explicitly migrating shardable write-intensive workloads to Azure Cosmos DB, while keeping relational data requiring strong consistency on PostgreSQL. This hybrid approach allows selective scaling rather than wholesale re-architecture.</li>
+  <li>Connection pooling with PgBouncer reduced connection setup latency from 50 milliseconds to 5 milliseconds by reusing database connections across the application layer, directly improving throughput and preventing connection exhaustion under spike loads.</li>
+  <li>OpenAI implements cache-locking and leasing mechanisms where only one request acquires the lock to fetch from the database on cache miss, preventing 'cache miss storms' where multiple simultaneous cache misses trigger cascading database overload from the same miss pattern.</li>
+  <li>Workload isolation splits traffic into high-priority (live user queries, payments) and low-priority (analytics, batch jobs) categories, routing them to separate database instances so that inefficient new features or analytics spikes cannot degrade core product performance.</li>
+  <li>The team identified and eliminated expensive multi-table join patterns by moving some computation to the application layer—one problematic query joined 12 tables and regularly triggered incidents; breaking it into simpler queries reduced primary load.</li>
+  <li>Rate limiting is implemented at multiple layers (application, connection pooler, proxy, query level) to prevent sudden traffic spikes from overwhelming the database and triggering cascading failures through exponential retry storms.</li>
+  <li>PostgreSQL's Multi-Version Concurrency Control (MVCC) creates write amplification because updating a single field requires rewriting the entire row, causing index bloat and vacuum overhead. OpenAI mitigates this by minimizing unnecessary writes and migrating write-heavy workloads elsewhere.</li>
+  <li>Schema evolution constraints are enforced rigorously: only lightweight changes permitted, 5-second timeout on all schema operations, concurrent index creation required, and new tables must use alternative systems. This prevents schema changes from blocking replica replay and causing replication lag spikes.</li>
+  <li>Over 12 months, database load grew 10x while OpenAI maintained only one SEV-0 PostgreSQL incident (during the ChatGPT ImageGen viral launch when write traffic surged 10x over a week), demonstrating that single-primary architecture can handle enormous growth when carefully optimized.</li>
+</ul>
+
+<h2>About</h2>
+<div class="about-card">
+  <p><strong>Author:</strong> Bohan Zhang, with contributions from Jon Lee, Sicheng Liu, Chaomin Yu, and Chenglong Hao</p>
+  <p><strong>Publication:</strong> OpenAI Engineering Blog</p>
+  <p><strong>Published:</strong> February 2026</p>
+</div>
+
+<h2>Sentiment / Tone</h2>
+<p>Pragmatic, evidence-driven, and somewhat defensive about unconventional choices. The authors acknowledge that their approach contradicts conventional wisdom (which says sharding or distributed databases are necessary at their scale) but present it as a deliberate, workload-appropriate choice rather than a limitation. The tone is confident and slightly self-aware—they explain why they made this choice and what it cost (accepting write bottlenecks), positioning it as disciplined engineering trade-offs rather than architectural success. There's an underlying &quot;we're happy with PostgreSQL for what we do&quot; confidence, with detailed technical accounting of the optimizations that made it work.</p>
+
+<h2>Related Links</h2>
+<ul>
+<li><a href="https://blog.bytebytego.com/p/how-openai-scaled-to-800-million">ByteByteGo deep dive on OpenAI's PostgreSQL scaling</a><br><span class="relevance">Comprehensive technical breakdown of OpenAI's architecture, covering the three pillars of their strategy (write pressure reduction, query optimization, operational resilience) with concrete diagrams and examples.</span></li>
+<li><a href="https://venturebeat.com/data/how-openai-is-scaling-the-postgresql-database-to-800-million-users">VentureBeat: How OpenAI is scaling PostgreSQL to 800 million users and what it means for enterprise</a><br><span class="relevance">Enterprise-focused analysis emphasizing practical lessons for organizations: architectural decisions should be driven by workload patterns, not scale panic. Covers the hybrid strategy of keeping PostgreSQL for relational data while migrating write-heavy workloads elsewhere.</span></li>
+<li><a href="https://engrlog.substack.com/p/openai-serves-800m-users-with-one">EngrLog: OpenAI Serves 800M Users with One Postgres Database</a><br><span class="relevance">Advanced technical guide by Tirtha Sarker on read replica strategies at scale, covering read-after-write consistency problems, lag management, four routing strategies, the WAL distribution bandwidth challenge, and production landmines specific to replica deployments.</span></li>
+<li><a href="https://www.infoq.com/news/2026/02/openai-runs-chatgpt-postgres/">InfoQ: OpenAI Scales Single Primary PostgreSQL Instance to Millions of QPS</a><br><span class="relevance">Technology news coverage highlighting OpenAI's achievement and the collaborative work with Azure PostgreSQL team. Summarizes cascading replication strategy for future scaling and Microsoft's role in enabling the infrastructure.</span></li>
+<li><a href="https://www.microsoft.com/en-us/startups/blog/openai-and-postgresql-scaling-with-microsoft-azure/">Microsoft for Startups: OpenAI and PostgreSQL scaling with Azure</a><br><span class="relevance">Azure's perspective on the collaboration, emphasizing managed database services benefits: ease of scaling, high availability, automated backups, and the elasticity needed to support rapidly growing AI workloads without managing low-level database operations.</span></li>
+</ul>
+
+<h2>Research Notes</h2>
+<div class="notes">Bohan Zhang, the lead author, brings significant credibility to this work. He co-founded OtterTune, an AI-powered database optimization startup, and conducted database research at Carnegie Mellon under Prof. Andy Pavlo. He has spoken at multiple PostgreSQL conferences (PostgresConf 2024, PGConf.Dev 2025, POSETTE 2025), indicating deep expertise in the PostgreSQL community and active engagement with the ecosystem.
+
+The article generated substantial discussion across the tech community. On Hacker News and Reddit, reactions were predominantly positive, with many noting that the &quot;PostgreSQL can't scale&quot; myth has been thoroughly debunked. However, critics noted important caveats: this success is highly specific to read-heavy workloads, and the engineering discipline required is not typical. Some observers pointed out that the approach essentially pushes write scaling to other systems (Azure Cosmos DB), rather than truly solving it within PostgreSQL.
+
+The piece is part of a broader trend of companies publishing detailed scaling case studies. Notion explicitly states they wish they had sharded earlier (480 logical shards), while Instagram scaled to 500M users with custom-sharded PostgreSQL. OpenAI's position of deliberately not sharding despite 800M users illustrates how different workload patterns lead to radically different architectural choices.
+
+Key limitations to understand: (1) This approach is optimized for read-heavy workloads where 70-95% of traffic is reads. OLTP systems with balanced read/write patterns would hit write bottlenecks sooner. (2) The single-primary remains a single point of failure for writes—if it fails, write operations fail entirely. Hot standby with failover mitigates risk but doesn't eliminate it. (3) As the number of replicas increases, replication lag management becomes challenging. OpenAI is experimenting with cascading replication (intermediate replicas relaying WAL) to scale beyond ~50 replicas, but this adds operational complexity. (4) The &quot;boring-but-brilliant engineering&quot; required is substantial: this approach works because of rigorous optimization at every layer, careful monitoring, and operational discipline that many teams lack.
+
+Microsoft's Azure PostgreSQL team was closely involved in this effort, suggesting that managed database services with tight vendor collaboration can push scale boundaries. The novelty here is not in exotic technology but in execution discipline—the tools (read replicas, connection pooling, rate limiting) are decades old, but applying them systematically at this scale is rare.
+
+The timing of this publication (February 2026, several weeks after ChatGPT's explosive growth) serves a secondary purpose: demonstrating that PostgreSQL and cloud managed services can handle unprecedented scale, countering narratives that exotic or expensive infrastructure is required for AI platform operations.</div>
+
+<h2>Topics</h2>
+<div class="topics">
+  <span class="tag">PostgreSQL scaling</span>
+  <span class="tag">Database architecture</span>
+  <span class="tag">Read replicas</span>
+  <span class="tag">Single-primary databases</span>
+  <span class="tag">Connection pooling</span>
+  <span class="tag">Query optimization</span>
+  <span class="tag">Workload isolation</span>
+  <span class="tag">MVCC and write amplification</span>
+</div>
+
+
+</body>
+</html>
