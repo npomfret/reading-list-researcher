@@ -1,0 +1,141 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Fractional differentiation and its use in machine learning</title>
+<style>
+  *, *::before, *::after { box-sizing: border-box; }
+  :root {
+    --bg: #fff; --fg: #1a1a1a; --muted: #666; --border: #e0e0e0;
+    --accent: #0066cc; --tag-bg: #f0f0f0; --tag-fg: #333;
+    --card-bg: #fafafa;
+  }
+  @media (prefers-color-scheme: dark) {
+    :root {
+      --bg: #1a1a1a; --fg: #e0e0e0; --muted: #999; --border: #333;
+      --accent: #4da6ff; --tag-bg: #2a2a2a; --tag-fg: #ccc;
+      --card-bg: #222;
+    }
+  }
+  body {
+    font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif;
+    line-height: 1.6; color: var(--fg); background: var(--bg);
+    max-width: 720px; margin: 0 auto; padding: 2rem 1.5rem;
+  }
+  a { color: var(--accent); text-decoration: none; }
+  a:hover { text-decoration: underline; }
+  h1 { font-size: 1.8rem; line-height: 1.2; margin-bottom: 0.25rem; }
+  .meta { color: var(--muted); font-size: 0.9rem; margin-bottom: 2rem; }
+  .meta a { color: var(--muted); }
+  h2 { font-size: 1.2rem; margin-top: 2rem; margin-bottom: 0.75rem; border-bottom: 1px solid var(--border); padding-bottom: 0.25rem; }
+  .summary { font-size: 1.05rem; }
+  ul { padding-left: 1.25rem; }
+  li { margin-bottom: 0.5rem; }
+  .relevance { color: var(--muted); font-size: 0.85rem; }
+  .topics { display: flex; flex-wrap: wrap; gap: 0.5rem; }
+  .tag {
+    background: var(--tag-bg); color: var(--tag-fg);
+    padding: 0.2rem 0.6rem; border-radius: 1rem; font-size: 0.8rem;
+  }
+  .about-card {
+    background: var(--card-bg); padding: 1rem; border-radius: 0.5rem;
+    border: 1px solid var(--border);
+  }
+  .about-card p { margin: 0.25rem 0; }
+  .notes { white-space: pre-wrap; color: var(--muted); font-size: 0.95rem; }
+  .share-btn {
+    display: inline-block; padding: 0.5rem 1rem; border-radius: 0.5rem;
+    background: var(--accent); color: #fff; font-size: 0.9rem; cursor: pointer;
+    border: none; font-family: inherit;
+  }
+  .share-btn:hover { opacity: 0.85; }
+  .share-section { margin-bottom: 1.5rem; }
+  .share-copied { color: var(--muted); font-size: 0.85rem; margin-left: 0.5rem; }
+</style>
+</head>
+<body>
+
+<h1>Fractional differentiation and its use in machine learning</h1>
+<div class="meta">
+  <a href="https://link.springer.com/article/10.1007/s12572-021-00299-5">https://link.springer.com/article/10.1007/s12572-021-00299-5</a><br>
+  Empirical technical research article with experimental validation &middot; Researched March 25, 2026
+</div>
+
+<div class="share-section">
+<button class="share-btn" onclick="navigator.clipboard.writeText(window.location.href).then(()=>{document.getElementById('copied').style.display='inline'});window.open('https://notebooklm.google.com','_blank')">
+  Share to NotebookLM
+</button>
+<span id="copied" class="share-copied" style="display:none">URL copied — paste it as a website source in a new notebook</span>
+</div>
+
+<h2>Summary</h2>
+<div class="summary"><p>This paper addresses a fundamental challenge in financial machine learning: the &quot;stationarity versus memory dilemma.&quot; Most supervised ML algorithms require stationary time series (where mean, variance, and covariance are constant over time), but standard approaches to achieve stationarity—particularly integer-order differencing—destroy the temporal memory and autocorrelation that enables predictive power. The authors propose and validate fractional (non-integer order) differentiation as a solution, applying it to stock price prediction using artificial neural networks.</p>
+<p></p>
+<p>The mathematical framework extends classical differencing through binomial expansion, allowing the differencing parameter d to take non-integer values (e.g., d=0.3 instead of just d=0 or d=1). This creates smooth weight decay across past observations rather than sharp truncation, preserving more historical context while still achieving stationarity. The authors apply this technique to four major international stock indexes (WIG 20, S&amp;P 500, DAX, and Nikkei 225) spanning June 2010 to June 2020, finding optimal d values between 0.12 and 0.43 that achieve statistical stationarity (confirmed via Augmented Dickey-Fuller testing) while maintaining correlations above 0.99 with the original series—demonstrating exceptional memory preservation.</p>
+<p></p>
+<p>The practical validation uses feedforward neural networks to predict next-day closing prices using previous day's high, low, open, and close prices. When data is preprocessed using fractional differentiation rather than standard first-order differencing, the resulting neural networks show consistent improvements in both Root Mean Square Error (RMSE) and Mean Absolute Error (MAE) metrics across all four indexes tested. This empirical evidence demonstrates that fractional differentiation offers a middle ground: stationary features suitable for ML algorithms while retaining predictive information that would be lost through conventional differencing.</p>
+<p></p>
+<p>The work builds directly on Marcos López de Prado's &quot;Advances in Financial Machine Learning&quot; framework, which popularized this technique in financial circles, and traces its mathematical origins to Hosking's 1981 paper on fractional differencing in Biometrika. By providing concrete empirical validation on real financial data with practical neural network implementations, the paper bridges theoretical statistics and applied machine learning, offering practitioners a more nuanced preprocessing approach for financial time series modeling.</p></div>
+
+<h2>Key Takeaways</h2>
+<ul>
+  <li>Fractional differentiation solves the stationarity-memory tradeoff by allowing d to take non-integer values (e.g., d=0.3), creating gradual weight decay across past observations rather than sharp cutoff, preserving memory while achieving stationarity.</li>
+  <li>On real stock data (WIG20, S&amp;P 500, DAX, Nikkei 225 from 2010-2020), optimal d values ranged from 0.1 to 0.43, achieving statistical stationarity (ADF test) with correlation &gt;0.99 to original series—demonstrating exceptional memory preservation impossible with integer differencing.</li>
+  <li>Mathematical foundation uses binomial expansion to extend (1-B)^d operator to non-integer d, generating weights ω_k = -ω_{k-1} × (d-k+1)/k that decay smoothly rather than terminating abruptly as in integer cases.</li>
+  <li>Neural networks trained on fractionally differentiated data consistently outperformed those using first-order differentiation across all four indexes on RMSE and MAE metrics, validating practical ML benefit.</li>
+  <li>The technique originates from Hosking (1981) on fractional differencing in time series analysis, was popularized for finance by López de Prado in 'Advances in Financial Machine Learning' (2018), and is now implemented in widely-used Python libraries (mlfinlab, fracdiff).</li>
+  <li>Fractional differentiation is mathematically equivalent to ARFIMA (Autoregressive Fractionally Integrated Moving Average) modeling, providing theoretical grounding in long-memory time series processes.</li>
+  <li>Data normalized with min-max scaling and split 70/30 (1681 training days, 813 test days); feedforward networks used hyperbolic tangent activation functions and gradient descent optimization via Keras framework.</li>
+  <li>This work has generated significant practical adoption in quantitative finance and algorithmic trading communities, with multiple open-source implementations and extensions addressing adaptive parameter selection and hybrid approaches (2024-2025).</li>
+  <li>The technique addresses a key limitation in financial ML: achieving stationarity without sacrificing the temporal dependencies and trends that drive market predictability, making it especially valuable for trend-following strategies.</li>
+  <li>Results on international indexes from different economies (Poland, USA, Germany, Japan) suggest the technique is robust and broadly applicable across diverse market conditions and regional stock indices.</li>
+</ul>
+
+<h2>About</h2>
+<div class="about-card">
+  <p><strong>Author:</strong> Rafał Walasek and Janusz Gajda</p>
+  <p><strong>Publication:</strong> International Journal of Advances in Engineering Sciences and Applied Mathematics</p>
+  <p><strong>Published:</strong> 2021-08-25</p>
+</div>
+
+<h2>Sentiment / Tone</h2>
+<p>Methodical and evidence-driven with a practical optimization focus. The authors adopt a neutral, technical tone characteristic of applied research papers, presenting the technique as an elegant mathematical solution to a well-known problem. They avoid overselling claims, clearly stating that the goal is feature preprocessing (not overall model performance evaluation), and systematically validate their approach through statistical tests (ADF, KPSS, Pearson correlation) and empirical comparison. The work conveys cautious confidence: the fractional differentiation approach is presented as a refinement solving a recognized dilemma rather than a revolutionary breakthrough, but the consistent improvements across multiple datasets and error metrics suggest genuine practical value. The authors demonstrate academic rigor by testing on international markets and acknowledging the limitations of their specific neural network architecture.</p>
+
+<h2>Related Links</h2>
+<ul>
+<li><a href="https://github.com/fracdiff/fracdiff">fracdiff Python library - Open-source implementation of fractional differentiation</a><br><span class="relevance">Direct practical implementation of the core technique; widely used in financial ML production systems with significant community adoption and performance optimizations.</span></li>
+<li><a href="https://www.mlfinlab.com/en/latest/feature_engineering/frac_diff.html">MLFinLab documentation on fractionally differentiated features</a><br><span class="relevance">Reference implementation building directly on López de Prado's framework; includes practical examples and integration with broader financial ML feature engineering pipeline.</span></li>
+<li><a href="https://academic.oup.com/biomet/article-abstract/68/1/165/237536">Hosking, J.R.M. (1981) 'Fractional differencing' in Biometrika</a><br><span class="relevance">Original mathematical foundation for fractional differentiation; establishes the theoretical basis that both López de Prado and Walasek/Gajda build upon.</span></li>
+<li><a href="https://hudsonthames.org/fractional-differentiation/">Hudson &amp; Thames - Fractional Differentiation tutorial</a><br><span class="relevance">Educational resource explaining the technique with practical implementation guidance; includes visualization of weight decay and stationarity testing approaches used in the paper.</span></li>
+<li><a href="https://en.wikipedia.org/wiki/Autoregressive_fractionally_integrated_moving_average">ARFIMA models on Wikipedia</a><br><span class="relevance">Provides broader statistical context for fractional differencing as part of long-memory time series modeling framework; connects the preprocessing technique to established econometric theory.</span></li>
+</ul>
+
+<h2>Research Notes</h2>
+<div class="notes">**Author Background &amp; Credibility:** Rafał Walasek and Janusz Gajda are researchers at the Faculty of Economic Sciences, University of Warsaw, with expertise in statistics and econometrics. This paper represents a formalization of their 2020 working paper (WP 2020-32), suggesting peer review and iterative refinement. Janusz Gajda has an established research presence in time series econometrics and financial analysis. While not affiliated with a top-tier global finance institution, their institutional credibility in statistical methodology and econometric application is solid.
+
+**Broader Context &amp; Reception:** This work arrived at an optimal moment in the financial ML community. López de Prado's 2018 &quot;Advances in Financial Machine Learning&quot; had generated significant interest, but rigorous empirical validation was limited. Walasek and Gajda provided exactly what was needed—statistical validation using major international stock indexes. The paper has accrued citations and spawned multiple independent implementations (notably the fracdiff GitHub library), indicating genuine impact. The technique is now established in quantitative finance, referenced in trading systems and algorithmic strategy development.
+
+**Strengths of the Work:** Methodological rigor stands out: multiple stationarity tests (ADF and KPSS), validation across four independent international markets, proper train-test splits, and measurement of realistic ML outcomes. The mathematical exposition is lucid with explicit weight formulas. Measuring correlation to the original series (&gt;0.99) is particularly insightful—it quantifies memory preservation, not merely stationarity achievement. The choice of four geographically and economically diverse stock indices strengthens generalizability claims.
+
+**Limitations &amp; Caveats:** (1) The paper focuses exclusively on feature preprocessing quality, not end-to-end trading strategy performance—improved RMSE doesn't guarantee profitability. (2) Validation limited to feedforward neural networks; benefits to other algorithms (SVMs, gradient boosting, tree ensembles) remain unexplored. (3) Testing covers 2010-2020, largely a bull market; behavior during crises or extreme volatility regimes is untested. (4) No principled guidance for selecting d—practitioners must perform hyperparameter search. Recent extensions (2024-2025) address this with Adaptive Fractional Differencing using Hurst exponent analysis and cross-validation.
+
+**How It Fits Broader Conversation:** The paper occupies the intersection of classical econometrics (stationarity, ARFIMA), modern ML (feature engineering), and quantitative finance (stock prediction). It represents financial ML maturation—moving beyond &quot;apply deep learning to prices&quot; toward principled feature engineering grounded in statistical and financial theory. The rapid adoption and implementation proliferation demonstrates it solved a genuine industry pain point.
+
+**Notable Follow-up Work:** The open-source community embraced the technique rapidly. The fracdiff library achieved significant adoption. Recent work (2024-2025) proposes Adaptive Fractional Differencing methods automatically selecting d via Hurst exponent and cross-validation, and extends the approach to hybrid two-stage procedures. Modern implementations address the paper's hyperparameter selection limitation. The technique now appears standard in quantitative finance ML systems.
+
+**Potential Biases &amp; Gaps:** Stock price selection may bias toward liquid, efficient markets where patterns are subtle. Cryptocurrency, commodities, or illiquid equity securities might exhibit different dynamics. Testing limited to closing price prediction; intraday volatility or portfolio optimization applications unexplored. Simple neural architecture tested; whether benefits persist with modern deep architectures (transformers, attention mechanisms) remains unclear. The 2010-2020 period had favorable market conditions; crisis periods warrant separate validation.</div>
+
+<h2>Topics</h2>
+<div class="topics">
+  <span class="tag">Fractional differentiation</span>
+  <span class="tag">Time series stationarity</span>
+  <span class="tag">Financial machine learning preprocessing</span>
+  <span class="tag">Artificial neural networks for stock prediction</span>
+  <span class="tag">ARFIMA models and long-memory processes</span>
+  <span class="tag">Financial feature engineering</span>
+</div>
+
+
+</body>
+</html>
