@@ -7,91 +7,145 @@
 <style>
   *, *::before, *::after { box-sizing: border-box; }
   :root {
-    --bg: #fff; --fg: #1a1a1a; --muted: #666; --border: #e0e0e0;
-    --accent: #0066cc; --tag-bg: #f0f0f0; --tag-fg: #333;
-    --card-bg: #fafafa;
+    --bg: #f5f5f7; --fg: #1a1a1a; --muted: #86868b; --border: #d2d2d7;
+    --accent: #0066cc; --tag-bg: #e8e8ed; --tag-fg: #1d1d1f;
+    --card-bg: #fff; --card-shadow: 0 1px 3px rgba(0,0,0,0.08), 0 1px 2px rgba(0,0,0,0.06);
+    --card-hover-shadow: 0 10px 30px rgba(0,0,0,0.1), 0 1px 8px rgba(0,0,0,0.06);
   }
   @media (prefers-color-scheme: dark) {
     :root {
-      --bg: #1a1a1a; --fg: #e0e0e0; --muted: #999; --border: #333;
+      --bg: #111; --fg: #f5f5f7; --muted: #86868b; --border: #333;
       --accent: #4da6ff; --tag-bg: #2a2a2a; --tag-fg: #ccc;
-      --card-bg: #222;
+      --card-bg: #1c1c1e; --card-shadow: 0 1px 3px rgba(0,0,0,0.3);
+      --card-hover-shadow: 0 10px 30px rgba(0,0,0,0.4);
     }
   }
   body {
-    font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif;
+    font-family: -apple-system, BlinkMacSystemFont, "SF Pro Display", "Segoe UI", Roboto, Helvetica, Arial, sans-serif;
     line-height: 1.6; color: var(--fg); background: var(--bg);
-    max-width: 900px; margin: 0 auto; padding: 2rem 1.5rem;
+    max-width: 960px; margin: 0 auto; padding: 3rem 1.5rem;
   }
-  a { color: var(--accent); text-decoration: none; }
-  a:hover { text-decoration: underline; }
-  h1 { font-size: 1.8rem; margin-bottom: 0.5rem; }
-  .subtitle { color: var(--muted); margin-bottom: 2rem; }
-  table { width: 100%; border-collapse: collapse; }
-  th, td { text-align: left; padding: 0.75rem 0.5rem; border-bottom: 1px solid var(--border); }
-  th { font-size: 0.85rem; text-transform: uppercase; color: var(--muted); }
+  .header { text-align: center; margin-bottom: 3rem; }
+  h1 { font-size: 2.4rem; font-weight: 700; margin-bottom: 0.25rem; letter-spacing: -0.02em; }
+  .subtitle { color: var(--muted); font-size: 1.1rem; }
+  .grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(280px, 1fr));
+    gap: 1.25rem;
+  }
+  .card {
+    display: flex; flex-direction: column;
+    background: var(--card-bg); border-radius: 12px;
+    padding: 1.5rem; text-decoration: none; color: var(--fg);
+    box-shadow: var(--card-shadow);
+    transition: box-shadow 0.2s ease, transform 0.2s ease;
+    border: 1px solid var(--border);
+  }
+  .card:hover {
+    box-shadow: var(--card-hover-shadow);
+    transform: translateY(-2px);
+    text-decoration: none;
+  }
+  .card-type {
+    font-size: 0.7rem; font-weight: 600; text-transform: uppercase;
+    letter-spacing: 0.05em; color: var(--accent); margin-bottom: 0.5rem;
+  }
+  .card-title {
+    font-size: 1.1rem; font-weight: 600; line-height: 1.3;
+    margin: 0 0 0.75rem 0; flex-grow: 1;
+  }
+  .card-meta { font-size: 0.85rem; color: var(--muted); margin-bottom: 0.75rem; }
+  .card-topics { display: flex; flex-wrap: wrap; gap: 0.35rem; margin-bottom: 0.75rem; }
   .tag {
     background: var(--tag-bg); color: var(--tag-fg);
-    padding: 0.15rem 0.5rem; border-radius: 1rem; font-size: 0.75rem;
-    display: inline-block; margin: 0.1rem;
+    padding: 0.2rem 0.6rem; border-radius: 1rem; font-size: 0.7rem;
+    font-weight: 500;
   }
-  .topics { max-width: 300px; }
-  @media (max-width: 600px) {
-    table, thead, tbody, th, td, tr { display: block; }
-    thead { display: none; }
-    td { padding: 0.25rem 0; border: none; }
-    td:first-child { font-weight: 600; padding-top: 1rem; }
-    tr { border-bottom: 1px solid var(--border); padding-bottom: 0.75rem; }
-  }
+  .card-url { font-size: 0.8rem; color: var(--muted); }
+  .empty { text-align: center; color: var(--muted); padding: 4rem 0; font-size: 1.1rem; }
 </style>
 </head>
 <body>
 
-<h1>Research Index</h1>
-<p class="subtitle">5 items researched</p>
+<div class="header">
+  <h1>Research</h1>
+  <p class="subtitle">6 items researched</p>
+</div>
 
-<table>
-<thead>
-  <tr><th>Title</th><th>Type</th><th>Published</th><th>Topics</th></tr>
-</thead>
-<tbody>
+<div class="grid">
 
-    <tr>
-      <td><a href="b526db1f1e597ead.html">We broke the frontier in agent memory: Introducing ~99% SOTA memory system (ASMR)</a></td>
-      <td>Technical announcement / Research highlight (blog post and social media)</td>
-      <td>2026-03-21</td>
-      <td class="topics"><span class="tag">AI Memory Systems</span> <span class="tag">Agent Architecture</span> <span class="tag">Multi-Agent Systems</span> <span class="tag">LLM Benchmarking</span> <span class="tag">Retrieval-Augmented Generation (RAG)</span> <span class="tag">Temporal Reasoning</span> <span class="tag">LongMemEval Benchmark</span> <span class="tag">AI Research</span> <span class="tag">Production-Grade AI Systems</span></td>
-    </tr>
+    <a href="b526db1f1e597ead.html" class="card">
+      <div class="card-type">Technical announcement / Research highlight (blog post and social media)</div>
+      <h2 class="card-title">We broke the frontier in agent memory: Introducing ~99% SOTA memory system (ASMR)</h2>
+      <div class="card-meta">
+        2026-03-21
+      </div>
+      <div class="card-topics">
+        <span class="tag">AI Memory Systems</span> <span class="tag">Agent Architecture</span> <span class="tag">Multi-Agent Systems</span> <span class="tag">LLM Benchmarking</span> <span class="tag">Retrieval-Augmented Generation (RAG)</span> <span class="tag">Temporal Reasoning</span> <span class="tag">LongMemEval Benchmark</span> <span class="tag">AI Research</span> <span class="tag">Production-Grade AI Systems</span>
+      </div>
+      <div class="card-url">x.com</div>
+    </a>
 
-    <tr>
-      <td><a href="b3482f79ec698a56.html">Multimodal OCR: Parse Anything from Documents</a></td>
-      <td>Research Paper (arXiv preprint)</td>
-      <td>2026-03-13</td>
-      <td class="topics"><span class="tag">Optical Character Recognition (OCR)</span> <span class="tag">Document Parsing</span> <span class="tag">Multimodal Learning</span> <span class="tag">Computer Vision</span> <span class="tag">Natural Language Processing</span> <span class="tag">Document Understanding</span> <span class="tag">Graphics Recognition</span> <span class="tag">Structured Output Generation</span></td>
-    </tr>
+    <a href="b3482f79ec698a56.html" class="card">
+      <div class="card-type">Research Paper (arXiv preprint)</div>
+      <h2 class="card-title">Multimodal OCR: Parse Anything from Documents</h2>
+      <div class="card-meta">
+        2026-03-13
+      </div>
+      <div class="card-topics">
+        <span class="tag">Optical Character Recognition (OCR)</span> <span class="tag">Document Parsing</span> <span class="tag">Multimodal Learning</span> <span class="tag">Computer Vision</span> <span class="tag">Natural Language Processing</span> <span class="tag">Document Understanding</span> <span class="tag">Graphics Recognition</span> <span class="tag">Structured Output Generation</span>
+      </div>
+      <div class="card-url">huggingface.co</div>
+    </a>
 
-    <tr>
-      <td><a href="42c77a1f37de15ae.html">GLM-OCR: Accurate × Fast × Comprehensive</a></td>
-      <td>GitHub Repository with Technical Report</td>
-      <td>2026-03-12</td>
-      <td class="topics"><span class="tag">Optical Character Recognition</span> <span class="tag">OCR</span> <span class="tag">Document Understanding</span> <span class="tag">Multimodal AI</span> <span class="tag">Vision-Language Models</span> <span class="tag">Deep Learning</span> <span class="tag">Open Source AI</span> <span class="tag">Natural Language Processing</span> <span class="tag">Computer Vision</span> <span class="tag">Model Deployment</span></td>
-    </tr>
+    <a href="42c77a1f37de15ae.html" class="card">
+      <div class="card-type">GitHub Repository with Technical Report</div>
+      <h2 class="card-title">GLM-OCR: Accurate × Fast × Comprehensive</h2>
+      <div class="card-meta">
+        2026-03-12
+      </div>
+      <div class="card-topics">
+        <span class="tag">Optical Character Recognition</span> <span class="tag">OCR</span> <span class="tag">Document Understanding</span> <span class="tag">Multimodal AI</span> <span class="tag">Vision-Language Models</span> <span class="tag">Deep Learning</span> <span class="tag">Open Source AI</span> <span class="tag">Natural Language Processing</span> <span class="tag">Computer Vision</span> <span class="tag">Model Deployment</span>
+      </div>
+      <div class="card-url">github.com</div>
+    </a>
 
-    <tr>
-      <td><a href="af85fd5529ca24cc.html">WhisperS2T ⚡ - An Optimized Speech-to-Text Pipeline for Whisper</a></td>
-      <td>Open Source Software Project Repository</td>
-      <td>2023-12-17</td>
-      <td class="topics"><span class="tag">Speech Recognition (ASR)</span> <span class="tag">Automatic Speech Recognition</span> <span class="tag">OpenAI Whisper</span> <span class="tag">Inference Optimization</span> <span class="tag">Machine Learning</span> <span class="tag">Open Source Software</span> <span class="tag">Voice Activity Detection</span> <span class="tag">TensorRT-LLM</span> <span class="tag">CTranslate2</span> <span class="tag">Model Optimization</span></td>
-    </tr>
+    <a href="7fef4b7f183c9ff6.html" class="card">
+      <div class="card-type">Social media post / Technical announcement</div>
+      <h2 class="card-title">Chrome's AI Agent Browser Feature Enables Authenticated Automation</h2>
+      <div class="card-meta">
+        2026-03
+      </div>
+      <div class="card-topics">
+        <span class="tag">AI Browser Automation</span> <span class="tag">Chrome Browser Updates</span> <span class="tag">Model Context Protocol (MCP)</span> <span class="tag">AI Agents</span> <span class="tag">Web Automation</span> <span class="tag">Google OAuth</span> <span class="tag">Authentication</span> <span class="tag">Chrome DevTools</span> <span class="tag">Gemini AI Integration</span>
+      </div>
+      <div class="card-url">x.com</div>
+    </a>
 
-    <tr>
-      <td><a href="e703ccbf9c190674.html">Overview of Parse</a></td>
-      <td>Technical documentation / Product overview</td>
-      <td>&mdash;</td>
-      <td class="topics"><span class="tag">Document Parsing</span> <span class="tag">Large Language Models (LLMs)</span> <span class="tag">Optical Character Recognition (OCR)</span> <span class="tag">Data Processing</span> <span class="tag">AI/Generative AI</span> <span class="tag">Knowledge Management</span> <span class="tag">Enterprise Data Integration</span> <span class="tag">Structured Data Extraction</span></td>
-    </tr>
-</tbody>
-</table>
+    <a href="af85fd5529ca24cc.html" class="card">
+      <div class="card-type">Open Source Software Project Repository</div>
+      <h2 class="card-title">WhisperS2T ⚡ - An Optimized Speech-to-Text Pipeline for Whisper</h2>
+      <div class="card-meta">
+        2023-12-17
+      </div>
+      <div class="card-topics">
+        <span class="tag">Speech Recognition (ASR)</span> <span class="tag">Automatic Speech Recognition</span> <span class="tag">OpenAI Whisper</span> <span class="tag">Inference Optimization</span> <span class="tag">Machine Learning</span> <span class="tag">Open Source Software</span> <span class="tag">Voice Activity Detection</span> <span class="tag">TensorRT-LLM</span> <span class="tag">CTranslate2</span> <span class="tag">Model Optimization</span>
+      </div>
+      <div class="card-url">github.com</div>
+    </a>
+
+    <a href="e703ccbf9c190674.html" class="card">
+      <div class="card-type">Technical documentation / Product overview</div>
+      <h2 class="card-title">Overview of Parse</h2>
+      <div class="card-meta">
+        
+      </div>
+      <div class="card-topics">
+        <span class="tag">Document Parsing</span> <span class="tag">Large Language Models (LLMs)</span> <span class="tag">Optical Character Recognition (OCR)</span> <span class="tag">Data Processing</span> <span class="tag">AI/Generative AI</span> <span class="tag">Knowledge Management</span> <span class="tag">Enterprise Data Integration</span> <span class="tag">Structured Data Extraction</span>
+      </div>
+      <div class="card-url">developers.llamaindex.ai</div>
+    </a>
+</div>
 
 </body>
 </html>
