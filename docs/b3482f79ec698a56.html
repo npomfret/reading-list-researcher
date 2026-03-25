@@ -1,0 +1,119 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Multimodal OCR: Parse Anything from Documents</title>
+<style>
+  *, *::before, *::after { box-sizing: border-box; }
+  :root {
+    --bg: #fff; --fg: #1a1a1a; --muted: #666; --border: #e0e0e0;
+    --accent: #0066cc; --tag-bg: #f0f0f0; --tag-fg: #333;
+    --card-bg: #fafafa;
+  }
+  @media (prefers-color-scheme: dark) {
+    :root {
+      --bg: #1a1a1a; --fg: #e0e0e0; --muted: #999; --border: #333;
+      --accent: #4da6ff; --tag-bg: #2a2a2a; --tag-fg: #ccc;
+      --card-bg: #222;
+    }
+  }
+  body {
+    font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif;
+    line-height: 1.6; color: var(--fg); background: var(--bg);
+    max-width: 720px; margin: 0 auto; padding: 2rem 1.5rem;
+  }
+  a { color: var(--accent); text-decoration: none; }
+  a:hover { text-decoration: underline; }
+  h1 { font-size: 1.8rem; line-height: 1.2; margin-bottom: 0.25rem; }
+  .meta { color: var(--muted); font-size: 0.9rem; margin-bottom: 2rem; }
+  .meta a { color: var(--muted); }
+  h2 { font-size: 1.2rem; margin-top: 2rem; margin-bottom: 0.75rem; border-bottom: 1px solid var(--border); padding-bottom: 0.25rem; }
+  .summary { font-size: 1.05rem; }
+  ul { padding-left: 1.25rem; }
+  li { margin-bottom: 0.5rem; }
+  .relevance { color: var(--muted); font-size: 0.85rem; }
+  .topics { display: flex; flex-wrap: wrap; gap: 0.5rem; }
+  .tag {
+    background: var(--tag-bg); color: var(--tag-fg);
+    padding: 0.2rem 0.6rem; border-radius: 1rem; font-size: 0.8rem;
+  }
+  .about-card {
+    background: var(--card-bg); padding: 1rem; border-radius: 0.5rem;
+    border: 1px solid var(--border);
+  }
+  .about-card p { margin: 0.25rem 0; }
+  .notes { white-space: pre-wrap; color: var(--muted); font-size: 0.95rem; }
+  .share-btn {
+    display: inline-block; padding: 0.5rem 1rem; border-radius: 0.5rem;
+    background: var(--accent); color: #fff; font-size: 0.9rem; cursor: pointer;
+    border: none; font-family: inherit;
+  }
+  .share-btn:hover { opacity: 0.85; }
+  .share-section { margin-bottom: 1.5rem; }
+  .share-copied { color: var(--muted); font-size: 0.85rem; margin-left: 0.5rem; }
+</style>
+</head>
+<body>
+
+<h1>Multimodal OCR: Parse Anything from Documents</h1>
+<div class="meta">
+  <a href="https://huggingface.co/papers/2603.13032">https://huggingface.co/papers/2603.13032</a><br>
+  Research Paper (arXiv preprint) &middot; Researched March 25, 2026
+</div>
+
+<div class="share-section">
+<button class="share-btn" onclick="navigator.clipboard.writeText('https://npomfret.github.io/reading-list-researcher/b3482f79ec698a56.html').then(()=>{document.getElementById('copied').style.display='inline'});window.open('https://notebooklm.google.com','_blank')">
+  Share to NotebookLM
+</button>
+<span id="copied" class="share-copied" style="display:none">URL copied — paste it as a website source</span>
+</div>
+
+<h2>Summary</h2>
+<div class="summary"><p>This paper introduces Multimodal OCR (MOCR), a novel document parsing paradigm that jointly parses both text and graphics into unified textual representations. Unlike conventional OCR systems that recognize only text and treat graphical regions as discarded pixels, MOCR treats visual elements such as charts, diagrams, tables, icons, and UI components as first-class parsing targets. The approach enables structured document reconstruction with semantic relationships preserved between visual and textual components. The authors train a compact 3B-parameter model using a comprehensive data engine built from PDFs, rendered webpages, and native SVG assets, employing staged pretraining and supervised fine-tuning. The model achieves competitive results, ranking second only to Gemini 3 Pro on the OCR Arena Elo leaderboard and achieving state-of-the-art performance (83.9) on olmOCR Bench. On structured graphics parsing, dots.mocr surpasses even Gemini 3 Pro on image-to-SVG benchmarks.</p></div>
+
+<h2>Key Takeaways</h2>
+<ul>
+  <li>Jointly parses text and graphics into unified representations, preserving semantic relationships across document elements</li>
+  <li>Reconstructs both text and graphics as structured outputs, enabling faithful document reconstruction and end-to-end training</li>
+  <li>Converts previously discarded graphics into reusable code-level supervision, creating multimodal training data from existing documents</li>
+  <li>Achieves state-of-the-art results: 83.9 on olmOCR Bench and ranks second only to Gemini 3 Pro on OCR Arena Elo leaderboard</li>
+  <li>Outperforms Gemini 3 Pro on image-to-SVG conversion benchmarks for charts, UI layouts, scientific figures, and chemical diagrams</li>
+  <li>Compact 3B-parameter model demonstrates that effective multimodal document parsing is achievable at smaller scales</li>
+</ul>
+
+<h2>About</h2>
+<div class="about-card">
+  <p><strong>Author:</strong> Handong Zheng, Yumeng Li, Kaile Zhang, Liang Xin, Guangwei Zhao, and 16+ co-authors</p>
+  <p><strong>Publication:</strong> arXiv</p>
+  <p><strong>Published:</strong> 2026-03-13</p>
+</div>
+
+<h2>Sentiment / Tone</h2>
+<p>Positive and informative. The paper presents significant technical advances with strong experimental results and is framed as an important contribution to document parsing.</p>
+
+<h2>Related Links</h2>
+<ul>
+<li><a href="https://arxiv.org/abs/2603.13032">Multimodal OCR arXiv Abstract</a><br><span class="relevance">Full abstract and metadata on arXiv</span></li>
+<li><a href="https://github.com/rednote-hilab/dots.mocr">dots.mocr GitHub Repository</a><br><span class="relevance">Official implementation and models discussed in the paper</span></li>
+<li><a href="https://arxiv.org/html/2603.13032v1">Multimodal OCR arXiv HTML Version</a><br><span class="relevance">Full paper content in accessible HTML format</span></li>
+</ul>
+
+<h2>Research Notes</h2>
+<div class="notes">This is a very recent paper (published March 13, 2026) that addresses a significant gap in OCR systems by treating graphical elements as first-class citizens rather than discarding them. The work is particularly notable for achieving competitive results with a relatively compact 3B-parameter model, suggesting the approach is practical and scalable. The paper demonstrates strong performance on both text recognition and graphics-to-code conversion (image-to-SVG), with open-source code and models available. The 20+ author collaboration suggests this is a substantial effort from a well-resourced team. The paper's emphasis on converting graphics into reusable training data represents an innovative approach to building large-scale multimodal training corpora.</div>
+
+<h2>Topics</h2>
+<div class="topics">
+  <span class="tag">Optical Character Recognition (OCR)</span>
+  <span class="tag">Document Parsing</span>
+  <span class="tag">Multimodal Learning</span>
+  <span class="tag">Computer Vision</span>
+  <span class="tag">Natural Language Processing</span>
+  <span class="tag">Document Understanding</span>
+  <span class="tag">Graphics Recognition</span>
+  <span class="tag">Structured Output Generation</span>
+</div>
+
+
+</body>
+</html>
