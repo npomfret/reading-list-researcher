@@ -1,0 +1,136 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Hackers in Arbitrum's Inbox: The Story of Wiped Storage and a $250M Vulnerability</title>
+<style>
+  *, *::before, *::after { box-sizing: border-box; }
+  :root {
+    --bg: #fff; --fg: #1a1a1a; --muted: #666; --border: #e0e0e0;
+    --accent: #0066cc; --tag-bg: #f0f0f0; --tag-fg: #333;
+    --card-bg: #fafafa;
+  }
+  @media (prefers-color-scheme: dark) {
+    :root {
+      --bg: #1a1a1a; --fg: #e0e0e0; --muted: #999; --border: #333;
+      --accent: #4da6ff; --tag-bg: #2a2a2a; --tag-fg: #ccc;
+      --card-bg: #222;
+    }
+  }
+  body {
+    font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif;
+    line-height: 1.6; color: var(--fg); background: var(--bg);
+    max-width: 720px; margin: 0 auto; padding: 2rem 1.5rem;
+  }
+  a { color: var(--accent); text-decoration: none; }
+  a:hover { text-decoration: underline; }
+  h1 { font-size: 1.8rem; line-height: 1.2; margin-bottom: 0.25rem; }
+  .meta { color: var(--muted); font-size: 0.9rem; margin-bottom: 2rem; }
+  .meta a { color: var(--muted); }
+  h2 { font-size: 1.2rem; margin-top: 2rem; margin-bottom: 0.75rem; border-bottom: 1px solid var(--border); padding-bottom: 0.25rem; }
+  .summary { font-size: 1.05rem; }
+  ul { padding-left: 1.25rem; }
+  li { margin-bottom: 0.5rem; }
+  .relevance { color: var(--muted); font-size: 0.85rem; }
+  .topics { display: flex; flex-wrap: wrap; gap: 0.5rem; }
+  .tag {
+    background: var(--tag-bg); color: var(--tag-fg);
+    padding: 0.2rem 0.6rem; border-radius: 1rem; font-size: 0.8rem;
+  }
+  .about-card {
+    background: var(--card-bg); padding: 1rem; border-radius: 0.5rem;
+    border: 1px solid var(--border);
+  }
+  .about-card p { margin: 0.25rem 0; }
+  .notes { white-space: pre-wrap; color: var(--muted); font-size: 0.95rem; }
+  .share-btn {
+    display: inline-block; padding: 0.5rem 1rem; border-radius: 0.5rem;
+    background: var(--accent); color: #fff; font-size: 0.9rem; cursor: pointer;
+    border: none; font-family: inherit;
+  }
+  .share-btn:hover { opacity: 0.85; }
+  .share-section { margin-bottom: 1.5rem; }
+  .share-copied { color: var(--muted); font-size: 0.85rem; margin-left: 0.5rem; }
+</style>
+</head>
+<body>
+
+<h1>Hackers in Arbitrum's Inbox: The Story of Wiped Storage and a $250M Vulnerability</h1>
+<div class="meta">
+  <a href="https://medium.com/@0xriptide/hackers-in-arbitrums-inbox-ca23272641a2">https://medium.com/@0xriptide/hackers-in-arbitrums-inbox-ca23272641a2</a><br>
+  Technical security vulnerability writeup / bug bounty disclosure &middot; Researched March 25, 2026
+</div>
+
+<div class="share-section">
+<button class="share-btn" onclick="navigator.clipboard.writeText(window.location.href).then(()=>{document.getElementById('copied').style.display='inline'});window.open('https://notebooklm.google.com','_blank')">
+  Share to NotebookLM
+</button>
+<span id="copied" class="share-copied" style="display:none">URL copied — paste it as a website source in a new notebook</span>
+</div>
+
+<h2>Summary</h2>
+<div class="summary"><p>0xriptide's technical deep-dive reveals a critical vulnerability discovered in Arbitrum's Nitro upgrade that could have allowed attackers to steal all incoming ETH deposits through the Ethereum-to-Arbitrum bridge. The vulnerability stemmed from a well-intentioned gas optimization during the Nitro upgrade (launched August 31, 2022) that inadvertently removed a critical re-initialization protection from the Inbox contract.</p>
+<p></p>
+<p>The core issue involves the `postUpgradeInit` function, which wiped certain storage slots (0, 1, and 2) during the upgrade to reset contract state. However, this function failed to properly reinitialize the `sequencerInbox` variable, leaving critical slots empty. Because the Delayed Inbox contract lacked a proper re-initialization guard (the `AlreadyInit` check was removed for gas optimization), any attacker could call the `initialize()` function with their own malicious bridge address as a parameter, effectively hijacking the contract.</p>
+<p></p>
+<p>Once an attacker successfully re-initialized the contract with their address, they could intercept all subsequent ETH deposits flowing from Ethereum into Arbitrum. The vulnerability was particularly severe because the Inbox contract processed 1,000-5,000 ETH daily, with historical peak deposits reaching 168,000 ETH (~$250 million). An attacker could have either selectively targeted large deposits to avoid detection or systematically drained the entire incoming deposit stream. 0xriptide discovered the vulnerability during the Nitro launch period and responsibly disclosed it to Arbitrum through ImmuneFi, earning a 400 ETH (~$530,000) bug bounty. The fix required only one line of code: either restoring the initializer check or removing the initializer modifier entirely.</p>
+<p></p>
+<p>The article serves as a case study in how blockchain security can be compromised by the intersection of gas optimization priorities and insufficient code review processes, particularly in high-stakes infrastructure like cross-chain bridges where billions of dollars flow daily.</p></div>
+
+<h2>Key Takeaways</h2>
+<ul>
+  <li>A gas optimization during Arbitrum's Nitro upgrade removed the `AlreadyInit()` re-initialization check from the Inbox contract, leaving it vulnerable to re-initialization attacks that could hijack the entire bridge</li>
+  <li>The `postUpgradeInit` function wiped storage slots 0, 1, and 2 but failed to properly reinitialize the `sequencerInbox` variable, leaving critical contract state uninitialized despite the contract actively processing deposits</li>
+  <li>An attacker could call `initialize()` with their own bridge address to hijack the contract and redirect all incoming ETH deposits directly to themselves, with no record on Arbitrum's side</li>
+  <li>The vulnerability affected $250-470 million in active deposits, with the Inbox contract processing 1,000-5,000 ETH daily (~$300,000-1.5 million at 2022 prices), making it a catastrophic risk</li>
+  <li>0xriptide discovered the vulnerability during the Nitro launch window and responsibly disclosed it, receiving a 400 ETH bounty (~$530,000) but later argued it should have qualified for the maximum $2 million bounty</li>
+  <li>The fix required only a single line of code—either restoring the `AlreadyInit` check or removing the initializer modifier—yet the vulnerability passed through both ConsenSys Diligence audits and code review</li>
+  <li>Bridge vulnerabilities represent systemic risk: $1 billion was stolen from bridge exploits in 2022 alone, making this class of infrastructure a primary attack target for sophisticated threat actors</li>
+  <li>0xriptide is a dedicated pseudonymous security researcher who focuses specifically on cross-chain projects because of their complexity and concentration of high-value assets, dedicating 7 days a week to learning Solidity security</li>
+</ul>
+
+<h2>About</h2>
+<div class="about-card">
+  <p><strong>Author:</strong> 0xriptide (pseudonymous)</p>
+  <p><strong>Publication:</strong> Medium</p>
+  <p><strong>Published:</strong> 2022-09-20</p>
+</div>
+
+<h2>Sentiment / Tone</h2>
+<p>Technical and measured, with underlying frustration about undercompensation. 0xriptide presents the vulnerability analysis in a professional, educational tone suitable for a sophisticated technical audience, explaining the gas optimization trade-offs that created the vulnerability without overt blame. However, the sentiment shifts when discussing the bounty: while publicly appreciative of Arbitrum's response, 0xriptide's subsequent Twitter commentary reveals frustration that a $250-470 million vulnerability was compensated at only 400 ETH instead of the maximum bounty, sending a signal to the security community that critical bridge vulnerabilities may be systematically undervalued. The overall tone positions 0xriptide as an experienced white hat educator teaching the community how critical flaws hide in plain sight despite well-intentioned optimizations and professional audits.</p>
+
+<h2>Related Links</h2>
+<ul>
+<li><a href="https://www.coindesk.com/tech/2022/09/21/push-to-cut-ethereum-network-fees-opens-funds-draining-bug-in-scaling-tool-arbitrum">CoinDesk: Push to Cut Ethereum Network Fees Opens Funds-Draining Bug in Scaling Tool Arbitrum</a><br><span class="relevance">Comprehensive news coverage explaining the vulnerability's technical details and implications, with author Shaurya Malwa providing context on how gas optimization removed critical checks</span></li>
+<li><a href="https://www.theblock.co/post/171585/arbitrum-announces-400-eth-bug-bounty-payout">The Block: Arbitrum announces 400 ETH bug bounty payout</a><br><span class="relevance">Official confirmation of bounty details and technical explanation of how storage slots were wiped and exploitable, providing primary source documentation of the vulnerability</span></li>
+<li><a href="https://decrypt.co/110238/hacker-abritrum-ethereum-draining-bug-nitro">Decrypt: Hacker Saves Arbitrum From Ethereum-Draining Bug in Nitro Upgrade</a><br><span class="relevance">Provides critical context on bridge vulnerabilities in crypto ecosystem and comparison to other major bridge exploits (Ronin, Harmony), showing why this vulnerability class is so dangerous</span></li>
+<li><a href="https://docs.arbitrum.io/assets/files/2024_06_24_consensys_diligence_security_audit_nitro_contracts-b89f0db3702d3eec15a9211233ace9a6.pdf">ConsenSys Diligence: Arbitrum Nitro Smart Contracts Security Audit</a><br><span class="relevance">Post-discovery security audit that explicitly noted the `AlreadyInit` check was obsolete and recommended either removing the initializer or the check—technical documentation of the fix</span></li>
+<li><a href="https://beincrypto.com/white-hat-hacker-saves-day-revealing-vulnerability-arbitrum/">BeInCrypto: Another White Hat Hacker Saves the Day After Revealing Arbitrum Vulnerability</a><br><span class="relevance">In-depth profile of 0xriptide and discussion of vulnerability severity relative to bounty compensation, highlighting the gap between actual risk and financial reward</span></li>
+</ul>
+
+<h2>Research Notes</h2>
+<div class="notes">0xriptide is a pseudonymous but highly credible Solidity security researcher who focuses specifically on cross-chain bridge projects. According to available background information, he committed to full-time security research and spent 7 days a week studying smart contract code, audit reports, hack post-mortems, Solidity books, and assembly programming—indicating someone with genuine depth of expertise rather than casual bug hunting.
+
+The vulnerability's discovery timing is significant: 0xriptide actively monitored the Arbitrum Nitro upgrade launch and caught the bug during a critical early window before it could be exploited at scale. The fact that such a severe vulnerability existed in a high-profile upgrade despite passing ConsenSys Diligence audits highlights a persistent challenge in blockchain security: complex interactions between competing priorities (gas efficiency vs. security safeguards) create blind spots even for experienced auditors.
+
+The bounty controversy warrants attention: Arbitrum paid 400 ETH (~$530,000 at 2022 rates), but 0xriptide publicly argued the vulnerability should have qualified for Arbitrum's $2 million maximum bounty. This signals potential misalignment in how protocols value vulnerability severity, and may reflect broader patterns where major bridges undercompensate relative to the risk posed. For context, bridge exploits collectively stole ~$1 billion in 2022 alone (Ronin: $622M, Harmony: $100M, and others).
+
+The vulnerability class (re-initialization attacks) remains relevant to bridge security and any upgradeable contracts using initializer patterns. The lesson—that a single line of code can mean the difference between safety and a $250M+ vulnerability—has become a teaching point throughout the DeFi security community since publication and influenced how protocols approach gas optimization in critical infrastructure.
+
+0xriptide has maintained credibility and visibility within the security community, with apparent continued focus on cross-chain bridge vulnerabilities, making him a respected voice on infrastructure security specifically.</div>
+
+<h2>Topics</h2>
+<div class="topics">
+  <span class="tag">Arbitrum Nitro upgrade</span>
+  <span class="tag">Smart contract vulnerability</span>
+  <span class="tag">Cross-chain bridge security</span>
+  <span class="tag">Gas optimization trade-offs</span>
+  <span class="tag">Re-initialization attacks</span>
+  <span class="tag">Bug bounty</span>
+  <span class="tag">Solidity security patterns</span>
+</div>
+
+
+</body>
+</html>
