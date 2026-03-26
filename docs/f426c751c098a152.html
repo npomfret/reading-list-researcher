@@ -1,0 +1,128 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Running a 35B AI Agent on a $600 Mac mini at 30 Tokens/Second via Apple Silicon Flash-Paging</title>
+<style>
+  *, *::before, *::after { box-sizing: border-box; }
+  :root {
+    --bg: #fff; --fg: #1a1a1a; --muted: #666; --border: #e0e0e0;
+    --accent: #0066cc; --tag-bg: #f0f0f0; --tag-fg: #333;
+    --card-bg: #fafafa;
+  }
+  @media (prefers-color-scheme: dark) {
+    :root {
+      --bg: #1a1a1a; --fg: #e0e0e0; --muted: #999; --border: #333;
+      --accent: #4da6ff; --tag-bg: #2a2a2a; --tag-fg: #ccc;
+      --card-bg: #222;
+    }
+  }
+  body {
+    font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif;
+    line-height: 1.6; color: var(--fg); background: var(--bg);
+    max-width: 720px; margin: 0 auto; padding: 2rem 1.5rem;
+  }
+  a { color: var(--accent); text-decoration: none; }
+  a:hover { text-decoration: underline; }
+  h1 { font-size: 1.8rem; line-height: 1.2; margin-bottom: 0.25rem; }
+  .meta { color: var(--muted); font-size: 0.9rem; margin-bottom: 2rem; }
+  .meta a { color: var(--muted); }
+  h2 { font-size: 1.2rem; margin-top: 2rem; margin-bottom: 0.75rem; border-bottom: 1px solid var(--border); padding-bottom: 0.25rem; }
+  .summary { font-size: 1.05rem; }
+  ul { padding-left: 1.25rem; }
+  li { margin-bottom: 0.5rem; }
+  .relevance { color: var(--muted); font-size: 0.85rem; }
+  .topics { display: flex; flex-wrap: wrap; gap: 0.5rem; }
+  .tag {
+    background: var(--tag-bg); color: var(--tag-fg);
+    padding: 0.2rem 0.6rem; border-radius: 1rem; font-size: 0.8rem;
+  }
+  .about-card {
+    background: var(--card-bg); padding: 1rem; border-radius: 0.5rem;
+    border: 1px solid var(--border);
+  }
+  .about-card p { margin: 0.25rem 0; }
+  .notes { white-space: pre-wrap; color: var(--muted); font-size: 0.95rem; }
+  .share-btn {
+    display: inline-block; padding: 0.5rem 1rem; border-radius: 0.5rem;
+    background: var(--accent); color: #fff; font-size: 0.9rem; cursor: pointer;
+    border: none; font-family: inherit;
+  }
+  .share-btn:hover { opacity: 0.85; }
+  .share-section { margin-bottom: 1.5rem; }
+  .share-copied { color: var(--muted); font-size: 0.85rem; margin-left: 0.5rem; }
+</style>
+</head>
+<body>
+
+<h1>Running a 35B AI Agent on a $600 Mac mini at 30 Tokens/Second via Apple Silicon Flash-Paging</h1>
+<div class="meta">
+  <a href="https://x.com/thestreamingdev/status/2036852898827821150">https://x.com/thestreamingdev/status/2036852898827821150</a><br>
+  Technical product announcement / open-source project showcase with performance benchmarks and implementation details &middot; Researched March 26, 2026
+</div>
+
+<div class="share-section">
+<button class="share-btn" onclick="navigator.clipboard.writeText(window.location.href).then(()=>{document.getElementById('copied').style.display='inline'});window.open('https://notebooklm.google.com','_blank')">
+  Share to NotebookLM
+</button>
+<span id="copied" class="share-copied" style="display:none">URL copied — paste it as a website source in a new notebook</span>
+</div>
+
+<h2>Summary</h2>
+<div class="summary"><p>Walter Grace announced the &quot;mac-code&quot; project, demonstrating the ability to run a 35-billion-parameter AI model (Qwen3.5-35B-A3B) as a coding agent on a $600 Mac mini M4 with only 16GB of unified memory at 30 tokens per second—completely free with no cloud dependencies or API keys required. The breakthrough leverages Apple Silicon's unified memory architecture combined with SSD paging to work around RAM limitations, achieving 18.6x faster throughput compared to NVIDIA GPUs attempting the same SSD paging approach (1.6 tok/s vs 30 tok/s). This demonstrates a fundamental architectural advantage: Apple's unified memory allows seamless data movement between GPU, RAM, and NVMe storage, making large model inference on consumer hardware practical and cost-effective for local development and agentic work.</p>
+<p></p>
+<p>The mac-code project extends beyond simple model serving by introducing a sophisticated routing architecture where the LLM classifies its own intent as &quot;search,&quot; &quot;shell,&quot; or &quot;chat&quot; using plain text classification rather than JSON function calling—enabling tool use at only 2.6 bits per weight, unusually efficient for such aggressive quantization (IQ2_M). The project includes two deployment options: a llama.cpp backend offering 30 tok/s with a 35B Mixture-of-Experts model, and an MLX backend supporting 9B models with 64K context via KV cache quantization and persistent context storage across sessions. Additional breakthroughs include TurboQuant achieving 4x KV cache compression (26.6 MB → 6.7 MB at 0.993 cosine similarity) and context persistence that reloads from SSD in 0.0003 seconds or syncs across devices via Cloudflare R2.</p>
+<p></p>
+<p>The work positions Apple Silicon as a serious alternative for AI developers seeking control, privacy, and zero operational costs, challenging the assumption that large model development requires cloud GPU access. The project has gained attention in the LocalLLaMA community, where users have independently verified similar performance metrics with the Qwen3.5-35B-A3B model and discussed its viability as a game-changer for local agentic coding systems.</p></div>
+
+<h2>Key Takeaways</h2>
+<ul>
+  <li>A 35-billion-parameter Qwen3.5-35B-A3B MoE model can run locally on a 16GB Mac mini M4 at 30 tokens/second by leveraging Apple Silicon's unified memory to page model weights from SSD, achieving 18.6x faster throughput than NVIDIA GPUs running the same paging strategy (30 tok/s vs 1.6 tok/s).</li>
+  <li>The 10.6GB model (compressed to 2.6 bits per weight using IQ2_M quantization) doesn't fit in RAM but functions as a practical coding agent with web search, shell command execution, and file operations—all zero-cost on consumer hardware.</li>
+  <li>Tool routing via LLM self-classification (predicting 'search', 'shell', or 'chat' as plain text) achieves perfect accuracy (8/8 correct) despite 2.6 bpw quantization, eliminating the need for JSON function calling that typically breaks at extreme compression levels.</li>
+  <li>MLX backend variant supports 64K context on 9B models through per-group 4-bit quantization of KV cache states, with TurboQuant compression reducing storage from 26.6 MB to 6.7 MB (4x compression at 0.993 cosine similarity) and context loading in 0.0003 seconds.</li>
+  <li>Mac-code project enables persistent context storage with instant resume from SSD and cross-device sync via Cloudflare R2, allowing developers to process codebases once and resume work from different machines or recover context in milliseconds.</li>
+  <li>The $600 hardware cost ($0/month operational cost) contrasts sharply with cloud API pricing for equivalent capability, positioning local Apple Silicon development as cost-effective for intensive agentic work despite being 18-21% slower than MLX for some reasoning tasks.</li>
+  <li>Apple Silicon's unified memory architecture proves more efficient than discrete GPU approaches for SSD-paged inference due to transparent memory management and the 200 GB/s bandwidth between GPU, CPU, and unified memory pools.</li>
+  <li>Qwen3.5-35B-A3B's MoE (Mixture of Experts) design with only 3.5B active parameters out of 35B total enables reasonable performance on consumer hardware, differentiating it from dense-only alternatives like Llama that require more compute.</li>
+  <li>The project ships as open-source with CLI tools (/search, /bench, /stats, /model switching) and a retro Mac web UI, allowing developers to benchmark, switch between 9B and 35B variants, and track cost savings versus cloud alternatives.</li>
+  <li>Community validation shows Qwen3.5-35B-A3B achieving 60+ tok/s on higher-end Apple Silicon (Mac Studio M1 Ultra) and even 3.5 tok/s on Raspberry Pi 5, confirming the model's efficiency across the hardware spectrum from servers to edge devices.</li>
+</ul>
+
+<h2>About</h2>
+<div class="about-card">
+  <p><strong>Author:</strong> Walter Grace (@thestreamingdev)</p>
+  <p><strong>Publication:</strong> X (Twitter)</p>
+  <p><strong>Published:</strong> 2025 (recent)</p>
+</div>
+
+<h2>Sentiment / Tone</h2>
+<p>Enthusiastic and technically celebratory. The author presents the achievement as a significant breakthrough in consumer-level AI capability, emphasizing practical outcomes over hype. The tone is confident but not hyperbolic—the 18.6x faster claim is framed within the specific technical context of SSD paging comparisons. There's an undertone of liberation from cloud dependency (&quot;no cloud, no API keys, $0/month&quot;), positioned as both cost-effective and privacy-preserving. The author demonstrates deep technical credibility by discussing implementation specifics (quantization levels, bits per weight, KV cache compression) rather than making vague claims, which reinforces the authority of the benchmark claims.</p>
+
+<h2>Related Links</h2>
+<ul>
+<li><a href="https://github.com/walter-grace/mac-code">mac-code GitHub Repository</a><br><span class="relevance">The complete open-source implementation of the project announced in the tweet, including llama.cpp and MLX backends, CLI agent, KV cache compression, and deployment guides</span></li>
+<li><a href="https://huggingface.co/Qwen/Qwen3.5-35B-A3B">Qwen3.5-35B-A3B Model on Hugging Face</a><br><span class="relevance">The base model being run locally; shows model architecture, quantization options, and community discussion of the 35B MoE variant's capabilities</span></li>
+<li><a href="https://github.com/ggml-org/llama.cpp">llama.cpp GitHub Repository</a><br><span class="relevance">The inference engine powering the 35B MoE backend in mac-code; essential for SSD paging and Apple Metal GPU optimization</span></li>
+<li><a href="https://aipmbriefs.substack.com/p/why-the-apple-m4-mac-mini-is-a-perfect">Why the Apple M4 Mac Mini Is Perfect for Running Local LLMs</a><br><span class="relevance">Broader context on Apple Silicon's performance per watt and why M4 hardware is suitable for local LLM inference at scale</span></li>
+<li><a href="https://www.reddit.com/r/LocalLLaMA/comments/1qnrzm0/i_benchmarked_a_bunch_of_open_weight_llms_on/">LocalLLaMA Benchmarks on Different Macs</a><br><span class="relevance">Independent community validation of Qwen and other model performance across Mac hardware, providing broader context for mac-code's 30 tok/s claim</span></li>
+<li><a href="https://machinelearning.apple.com/research/exploring-llms-mlx-m5">Apple MLX Research: Exploring LLMs with M5 GPU</a><br><span class="relevance">Official Apple research on local LLM performance with MLX framework and neural accelerators, showing M5's 30B MoE performance under 3 seconds for time-to-first-token</span></li>
+</ul>
+
+<h2>Research Notes</h2>
+<div class="notes">Walter Grace is a prolific GitHub developer (65+ repositories) who presents himself as an &quot;Utopian coder&quot; with apparent focus on infrastructure and inference optimization. The mac-code project builds on established techniques—Apple's \&quot;LLM in a Flash\&quot; research (unified memory paging), Google's TurboQuant (KV cache compression), and MLX (Apple's native ML framework)—but combines them into a cohesive, user-friendly package. The project has generated legitimate interest in the LocalLLaMA community on Reddit, where independent users have validated similar performance metrics with the Qwen3.5-35B-A3B model and discussed its viability for local coding assistance. The 30 tok/s benchmark for 35B with paging is genuinely impressive given the hardware constraints; typical M4 Mac mini achieves 18-35 tok/s for much smaller 7-8B models in RAM. The 18.6x faster claim requires context: it specifically compares SSD paging performance on Apple Silicon vs NVIDIA, a technically valid but somewhat narrow comparison—the real advantage is that Apple Silicon makes paging viable at reasonable speeds where NVIDIA's architecture makes it prohibitively slow. Community discussions highlight that Qwen3.5 models (especially the IQ2_M quantization variants) have earned respect for quality-to-size ratios, with users noting \&quot;really, really good\&quot; performance. The cost comparison ($0/month local vs cloud API pricing) is legitimate but doesn't account for development time, since local inference requires setup and troubleshooting. This work is part of a broader 2025 trend validating Apple Silicon for AI workloads, with Apple's own MLX research and M5 benchmarks showing under-3-second time-to-first-token for 30B MoE models. The project's potential impact is moderate but real: it significantly lowers the barrier for developers wanting to prototype agentic AI systems without API costs or privacy concerns, though performance remains behind high-end GPU clusters for production inference.&quot;</div>
+
+<h2>Topics</h2>
+<div class="topics">
+  <span class="tag">Apple Silicon LLM inference</span>
+  <span class="tag">Local AI models</span>
+  <span class="tag">SSD paging and unified memory</span>
+  <span class="tag">Quantization and compression</span>
+  <span class="tag">MoE (Mixture of Experts)</span>
+  <span class="tag">Agentic AI systems</span>
+</div>
+
+
+</body>
+</html>
