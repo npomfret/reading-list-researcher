@@ -1,5 +1,7 @@
 # Reading List Researcher
 
+**Live reports:** https://npomfret.github.io/reading-list-researcher
+
 Automatically researches every article in your Safari Reading List using AI, generates detailed HTML reports, and deploys them to GitHub Pages for easy sharing with NotebookLM.
 
 ## How it works
