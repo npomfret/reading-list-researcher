@@ -1,0 +1,139 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Best GitHub repos for Claude Code that will 10x your next project</title>
+<style>
+  *, *::before, *::after { box-sizing: border-box; }
+  :root {
+    --bg: #fff; --fg: #1a1a1a; --muted: #666; --border: #e0e0e0;
+    --accent: #0066cc; --tag-bg: #f0f0f0; --tag-fg: #333;
+    --card-bg: #fafafa;
+  }
+  @media (prefers-color-scheme: dark) {
+    :root {
+      --bg: #1a1a1a; --fg: #e0e0e0; --muted: #999; --border: #333;
+      --accent: #4da6ff; --tag-bg: #2a2a2a; --tag-fg: #ccc;
+      --card-bg: #222;
+    }
+  }
+  body {
+    font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif;
+    line-height: 1.6; color: var(--fg); background: var(--bg);
+    max-width: 720px; margin: 0 auto; padding: 2rem 1.5rem;
+  }
+  a { color: var(--accent); text-decoration: none; }
+  a:hover { text-decoration: underline; }
+  h1 { font-size: 1.8rem; line-height: 1.2; margin-bottom: 0.25rem; }
+  .meta { color: var(--muted); font-size: 0.9rem; margin-bottom: 2rem; }
+  .meta a { color: var(--muted); }
+  h2 { font-size: 1.2rem; margin-top: 2rem; margin-bottom: 0.75rem; border-bottom: 1px solid var(--border); padding-bottom: 0.25rem; }
+  .summary { font-size: 1.05rem; }
+  ul { padding-left: 1.25rem; }
+  li { margin-bottom: 0.5rem; }
+  .relevance { color: var(--muted); font-size: 0.85rem; }
+  .topics { display: flex; flex-wrap: wrap; gap: 0.5rem; }
+  .tag {
+    background: var(--tag-bg); color: var(--tag-fg);
+    padding: 0.2rem 0.6rem; border-radius: 1rem; font-size: 0.8rem;
+  }
+  .about-card {
+    background: var(--card-bg); padding: 1rem; border-radius: 0.5rem;
+    border: 1px solid var(--border);
+  }
+  .about-card p { margin: 0.25rem 0; }
+  .notes { white-space: pre-wrap; color: var(--muted); font-size: 0.95rem; }
+  .share-btn {
+    display: inline-block; padding: 0.5rem 1rem; border-radius: 0.5rem;
+    background: var(--accent); color: #fff; font-size: 0.9rem; cursor: pointer;
+    border: none; font-family: inherit;
+  }
+  .share-btn:hover { opacity: 0.85; }
+  .share-section { margin-bottom: 1.5rem; }
+  .share-copied { color: var(--muted); font-size: 0.85rem; margin-left: 0.5rem; }
+</style>
+</head>
+<body>
+
+<h1>Best GitHub repos for Claude Code that will 10x your next project</h1>
+<div class="meta">
+  <a href="https://x.com/jahirsheikh8/status/2037835111358669307?s=12">https://x.com/jahirsheikh8/status/2037835111358669307?s=12</a><br>
+  Social media curation post—a curated list recommendation designed for rapid consumption and sharing within developer communities &middot; Researched March 30, 2026
+</div>
+
+<div class="share-section">
+<button class="share-btn" onclick="navigator.clipboard.writeText(window.location.href).then(()=>{document.getElementById('copied').style.display='inline'});window.open('https://notebooklm.google.com','_blank')">
+  Share to NotebookLM
+</button>
+<span id="copied" class="share-copied" style="display:none">URL copied — paste it as a website source in a new notebook</span>
+</div>
+
+<h2>Summary</h2>
+<div class="summary"><p>Jahir Sheikh curates a list of five high-impact GitHub repositories specifically optimized for Claude Code, Anthropic's new AI-assisted development tool. The post positions these projects as essential infrastructure for developers looking to dramatically increase productivity with Claude Code. The five repositories are: (1) Supabase CLI, which enables local development of the entire Supabase backend stack; (2) Skill Creator, an interactive tool for building reusable AI agent skills that extend Claude Code's capabilities; (3) Get Sh*t Done (GSD), a meta-prompting and spec-driven development framework that solves context window degradation through structured workflows and atomic git commits; (4) NotebookLM (Python), an unofficial Python API providing programmatic access to Google's NotebookLM features for research automation; and (5) Obsidian, with multiple Claude Code integrations that establish a persistent context layer for architectural decisions and project knowledge. Each repository addresses a specific productivity bottleneck in AI-assisted development: database operations, skill extensibility, context management, knowledge synthesis, and persistent memory. Together, they represent an emerging consensus in the Claude Code community about which external tools create the most tangible productivity multipliers when integrated into the development workflow.</p></div>
+
+<h2>Key Takeaways</h2>
+<ul>
+  <li>Supabase CLI enables local development of entire backend infrastructure, with dedicated Claude Code skills for database operations, authentication, file storage, and edge function deployment without manual intervention.</li>
+  <li>Skill Creator repositories (from Anthropic's official skills and community forks) provide interactive, guided frameworks for building reusable agent skills that work across Claude Code, Cursor, Copilot, and other AI development tools from a single installation point.</li>
+  <li>Get Sh*t Done (GSD) is a context engineering layer that splits large projects into small, atomic tasks with fresh context windows per task, creating bisectable git commits that prevent 'agent chaos' and improve reliability of AI-generated code at scale.</li>
+  <li>NotebookLM Python API (notebooklm-py) exposes programmatic access to features like podcast generation, note synthesis, and citation-backed answers that the web UI doesn't provide, enabling automated research pipelines through Python/CLI.</li>
+  <li>Obsidian + Claude Code integrations (MCP connections, native plugins, full PKM setups) create a persistent memory layer where architectural decisions, team patterns, and project context persist across sessions, transforming Claude from generic to domain-specific assistant.</li>
+  <li>The combined Obsidian + NotebookLM + Claude Code workflow is gaining recognition in the community as 'GOD MODE' for research-heavy projects, enabling citation-backed answers with persistent knowledge graphs.</li>
+  <li>Community reports document productivity gains of 10x-50x for specific tasks when these repositories are properly integrated into Claude Code workflows, with strongest gains in database operations and knowledge-intensive tasks.</li>
+  <li>CLAUDE.md files (persistent context files) are emerging as essential infrastructure equivalent to .gitignore, containing build rules, code style, architecture decisions, and gotchas that Claude Code references automatically.</li>
+  <li>Supabase CLI integration with Claude Code requires careful security configuration and knowledge of MCP authentication patterns; community members warn against connecting Claude Code to production databases without explicit safeguards.</li>
+  <li>These five repositories represent an ecosystem approach rather than standalone tools—their power multiplies when combined, and the community is actively documenting workflows that chain them together for maximum leverage.</li>
+</ul>
+
+<h2>About</h2>
+<div class="about-card">
+  <p><strong>Author:</strong> Jahir Sheikh</p>
+  <p><strong>Publication:</strong> X (Twitter)</p>
+  <p><strong>Published:</strong> 2026 (recent)</p>
+</div>
+
+<h2>Sentiment / Tone</h2>
+<p>Enthusiastic and practical, with implicit confidence in the &quot;10x productivity&quot; promise backed by community validation. The tone is minimalist and direct—no hype language, just five repository links with clean formatting. This restraint actually amplifies credibility; the author isn't selling, just pointing. The underlying sentiment is &quot;here's what the community has converged on as genuinely useful,&quot; treated as established fact rather than opinion. There's an implicit belief that readers of Claude Code posts understand the context enough that bare repository names need no explanation.</p>
+
+<h2>Related Links</h2>
+<ul>
+<li><a href="https://agentnativedev.medium.com/get-sh-t-done-meta-prompting-and-spec-driven-development-for-claude-code-and-codex-d1cde082e103">GET SH*T DONE: Meta-prompting and Spec-driven Development for Claude Code and Codex</a><br><span class="relevance">Deep technical dive into the GSD framework, explaining context engineering patterns, the 'discuss phase' for locking product decisions, and the Nyquist validation layer that prevents agent failures</span></li>
+<li><a href="https://github.com/teng-lin/notebooklm-py">NotebookLM Python API (notebooklm-py)</a><br><span class="relevance">The actual open-source repository providing programmatic access to NotebookLM, including full automation examples for research workflows mentioned in the post</span></li>
+<li><a href="https://github.com/supabase/agent-skills">Supabase Agent Skills Repository</a><br><span class="relevance">Official Supabase skills for Claude Code, Cursor, and other AI agents, demonstrating the database integration patterns recommended in the post</span></li>
+<li><a href="https://www.xda-developers.com/claude-code-inside-obsidian-and-it-was-eye-opening/">I put Claude Code inside Obsidian, and it was awesome</a><br><span class="relevance">Practical walkthrough of setting up Claude Code with Obsidian skills, showing how the persistent memory layer works in practice</span></li>
+<li><a href="https://www.morphllm.com/claude-code-best-practices">Claude Code Best Practices: The 2026 Guide to 10x Productivity</a><br><span class="relevance">Comprehensive guide confirming CLAUDE.md as essential infrastructure and contextualizing how these repositories fit into broader best practices for Claude Code workflows</span></li>
+<li><a href="https://github.com/anthropics/skills">Anthropic's Official Agent Skills Repository</a><br><span class="relevance">Official source for the Skill Creator tool and example skills across multiple domains, providing authoritative patterns for the skill-building recommendation</span></li>
+<li><a href="https://www.reddit.com/r/ClaudeCode/comments/1qr19df/claude_code_obsidian_how_i_use_it_short_guide/">Claude Code + Obsidian - Community Guide on Reddit</a><br><span class="relevance">Community discussion demonstrating real-world Obsidian + Claude Code setups, including MCP connection strategies and workflow patterns</span></li>
+</ul>
+
+<h2>Research Notes</h2>
+<div class="notes">This post is part of a significant trend in early 2026 where Claude Code is being repositioned from a novel curiosity to essential developer infrastructure. Multiple similar &quot;10x your Claude Code&quot; posts have emerged, including video tutorials on YouTube, Medium guides by engineers like Mejba Ahmed, and extensive Reddit discussions. The post's timing (March 2026) places it at a moment when Claude Code adoption has crossed into mainstream developer practices.
+
+Jahir Sheikh appears to be an active voice in the emerging Claude Code community, though limited public biographical information is available. His posting pattern suggests regular engagement with AI development tools and frameworks. The recommendations themselves reflect genuine technical validation—each repository cited is actively maintained, has community discussion, and is frequently cited together in productivity workflows.
+
+The &quot;10x&quot; framing, while common in tech marketing, appears grounded in measurable outcomes. Community members report documented productivity gains ranging from 10x-50x for specific task categories (particularly database operations and knowledge synthesis tasks). However, gains are task-dependent; not all work benefits equally.
+
+A notable pattern: these five repositories work together synergistically. Supabase + Obsidian + NotebookLM + GSD + Skill Creator form a complete ecosystem where each component strengthens others. The community has documented this &quot;GOD MODE&quot; stack in multiple guides, suggesting this isn't arbitrary list-making but rather convergence on an optimal configuration for research-heavy and backend-heavy projects.
+
+Security caveat: Multiple community members warn that while Supabase CLI integration is powerful, connecting Claude Code directly to production databases requires explicit safeguards. The post doesn't address this risk, which would be critical context for junior developers.
+
+The post also somewhat conflates different types of tools—some (Supabase CLI, Obsidian) are primary development tools, while others (Skill Creator, GSD, NotebookLM-py) are integration layers or frameworks. This distinction doesn't reduce the value of the list but helps explain why some require more setup work than others. The recommendations appear optimized for mid-to-advanced Claude Code users rather than absolute beginners.</div>
+
+<h2>Topics</h2>
+<div class="topics">
+  <span class="tag">Claude Code productivity</span>
+  <span class="tag">AI-assisted development</span>
+  <span class="tag">GitHub repositories and integrations</span>
+  <span class="tag">Supabase backend infrastructure</span>
+  <span class="tag">Agent skills and extensibility</span>
+  <span class="tag">Persistent context layers</span>
+  <span class="tag">NotebookLM research automation</span>
+  <span class="tag">Obsidian workflows</span>
+  <span class="tag">Context window management</span>
+  <span class="tag">Developer productivity</span>
+</div>
+
+
+</body>
+</html>
