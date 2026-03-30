@@ -1,0 +1,133 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Tom Dörr shares &quot;Podcasts&quot; - A PDF-to-AI Podcast Generator</title>
+<style>
+  *, *::before, *::after { box-sizing: border-box; }
+  :root {
+    --bg: #fff; --fg: #1a1a1a; --muted: #666; --border: #e0e0e0;
+    --accent: #0066cc; --tag-bg: #f0f0f0; --tag-fg: #333;
+    --card-bg: #fafafa;
+  }
+  @media (prefers-color-scheme: dark) {
+    :root {
+      --bg: #1a1a1a; --fg: #e0e0e0; --muted: #999; --border: #333;
+      --accent: #4da6ff; --tag-bg: #2a2a2a; --tag-fg: #ccc;
+      --card-bg: #222;
+    }
+  }
+  body {
+    font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif;
+    line-height: 1.6; color: var(--fg); background: var(--bg);
+    max-width: 720px; margin: 0 auto; padding: 2rem 1.5rem;
+  }
+  a { color: var(--accent); text-decoration: none; }
+  a:hover { text-decoration: underline; }
+  h1 { font-size: 1.8rem; line-height: 1.2; margin-bottom: 0.25rem; }
+  .meta { color: var(--muted); font-size: 0.9rem; margin-bottom: 2rem; }
+  .meta a { color: var(--muted); }
+  h2 { font-size: 1.2rem; margin-top: 2rem; margin-bottom: 0.75rem; border-bottom: 1px solid var(--border); padding-bottom: 0.25rem; }
+  .summary { font-size: 1.05rem; }
+  ul { padding-left: 1.25rem; }
+  li { margin-bottom: 0.5rem; }
+  .relevance { color: var(--muted); font-size: 0.85rem; }
+  .topics { display: flex; flex-wrap: wrap; gap: 0.5rem; }
+  .tag {
+    background: var(--tag-bg); color: var(--tag-fg);
+    padding: 0.2rem 0.6rem; border-radius: 1rem; font-size: 0.8rem;
+  }
+  .about-card {
+    background: var(--card-bg); padding: 1rem; border-radius: 0.5rem;
+    border: 1px solid var(--border);
+  }
+  .about-card p { margin: 0.25rem 0; }
+  .notes { white-space: pre-wrap; color: var(--muted); font-size: 0.95rem; }
+  .share-btn {
+    display: inline-block; padding: 0.5rem 1rem; border-radius: 0.5rem;
+    background: var(--accent); color: #fff; font-size: 0.9rem; cursor: pointer;
+    border: none; font-family: inherit;
+  }
+  .share-btn:hover { opacity: 0.85; }
+  .share-section { margin-bottom: 1.5rem; }
+  .share-copied { color: var(--muted); font-size: 0.85rem; margin-left: 0.5rem; }
+</style>
+</head>
+<body>
+
+<h1>Tom Dörr shares &quot;Podcasts&quot; - A PDF-to-AI Podcast Generator</h1>
+<div class="meta">
+  <a href="https://x.com/tom_doerr/status/2038418352842940770?s=12">https://x.com/tom_doerr/status/2038418352842940770?s=12</a><br>
+  Social media tool recommendation / open-source software curation &middot; Researched March 30, 2026
+</div>
+
+<div class="share-section">
+<button class="share-btn" onclick="navigator.clipboard.writeText(window.location.href).then(()=>{document.getElementById('copied').style.display='inline'});window.open('https://notebooklm.google.com','_blank')">
+  Share to NotebookLM
+</button>
+<span id="copied" class="share-copied" style="display:none">URL copied — paste it as a website source in a new notebook</span>
+</div>
+
+<h2>Summary</h2>
+<div class="summary"><p>Tom Dörr, a well-known AI tools curator and researcher, shared a link to the open-source GitHub project &quot;Podcasts&quot; (github.com/hoxigo/Podcasts), a tool that converts PDF documents into AI-generated podcast episodes. The tool is branded as &quot;The purr-fect AI podcast generator&quot; and leverages Google's Gemini AI to transform static PDF content into engaging multi-speaker podcast conversations with synthesized audio.</p>
+<p></p>
+<p>This post exemplifies a broader trend emerging in early 2026 where document-to-audio conversion tools are becoming increasingly mainstream and accessible. The Podcasts project specifically uses Gemini AI's text-to-speech and dialogue generation capabilities to read PDF files, extract their content, generate natural conversational scripts between multiple speakers, and produce high-quality audio output. This addresses a practical need for making lengthy documents (research papers, business reports, technical documentation) accessible in audio format for consumption during commutes, exercise, or other multitasking scenarios.</p>
+<p></p>
+<p>The post itself is minimal—just a text description and a link—but it's part of Tom Dörr's consistent pattern of surfacing innovative open-source AI tools to his audience of AI researchers, developers, and enthusiasts. His curated recommendations carry weight in the developer community, and this particular share highlights how PDF-to-podcast conversion has evolved from niche experiments (like Google's NotebookLM Audio Overviews) into a crowded field of competing solutions backed by both major tech companies and independent developers.</p>
+<p></p>
+<p>The significance of this post lies not in breaking news about a revolutionary technology, but rather in documenting the democratization of AI-powered content transformation. A year ago, creating AI podcast summaries of documents required specialized knowledge; by early 2026, multiple open-source projects and commercial services make this accessible to anyone. Tom Dörr's post serves as a data point in tracking this acceleration of AI tool accessibility and the race among different platforms (Google, Adobe, open-source communities) to capture this emerging use case.</p></div>
+
+<h2>Key Takeaways</h2>
+<ul>
+  <li>Tom Dörr is a prominent AI tools curator on X with 288 GitHub repositories and a devoted following seeking recommendations on GitHub projects, DSPy, and AI agents</li>
+  <li>The 'Podcasts' tool by hoxigo converts any PDF document into a multi-speaker podcast using Google's Gemini AI for dialogue generation and text-to-speech audio synthesis</li>
+  <li>PDF-to-podcast conversion is a major 2026 trend, with Adobe Acrobat launching 'Generate Podcast' in January 2026 and multiple platforms (Monica.im, NoteGPT, Wondercraft, NVIDIA) offering similar capabilities</li>
+  <li>Google pioneered this category with NotebookLM's Audio Overviews, which demonstrated strong user demand for converting long-form documents into engaging conversational audio</li>
+  <li>The open-source ecosystem is rapidly iterating on this concept, with multiple projects on GitHub offering PDF-to-podcast generation using various AI APIs (Gemini, OpenAI, Eleven Labs)</li>
+  <li>This technology addresses a real accessibility need by making lengthy documents consumable during multitasking scenarios (commuting, exercise, household chores)</li>
+  <li>Tom Dörr's curation style focuses on sharing minimal descriptions with direct GitHub links, trusting his audience to explore projects that align with AI research and development interests</li>
+  <li>The broader significance is the rapid transition of advanced AI capabilities from experimental prototypes to widely available tools that individual developers can fork, modify, and deploy</li>
+</ul>
+
+<h2>About</h2>
+<div class="about-card">
+  <p><strong>Author:</strong> Tom Dörr (@tom_doerr)</p>
+  <p><strong>Publication:</strong> X (formerly Twitter)</p>
+  <p><strong>Published:</strong> March 2026</p>
+</div>
+
+<h2>Sentiment / Tone</h2>
+<p>Straightforward and enthusiastic curation without unnecessary commentary. Tom Dörr's post style is characteristically minimalist—a simple description paired with a repository link—suggesting confidence that his audience will recognize the value of the tool without overselling it. The tone is matter-of-fact rather than promotional, reflecting his role as a neutral information source rather than an advocate. The playful branding of the tool itself (&quot;purr-fect AI podcast generator&quot;) adds a light touch, suggesting the open-source community is not taking itself too seriously while building genuinely useful infrastructure. Overall, the sentiment reflects confidence in the maturity of AI tooling and an assumption that the developer community is ready to integrate such capabilities into their workflows.</p>
+
+<h2>Related Links</h2>
+<ul>
+<li><a href="https://github.com/hoxigo/Podcasts">hoxigo/Podcasts - The original GitHub project shared in Tom Dörr's post</a><br><span class="relevance">Direct source: the exact tool being promoted in the X post</span></li>
+<li><a href="https://notebooklm.google.com/">Google NotebookLM - The pioneer of AI podcast generation from documents</a><br><span class="relevance">NotebookLM's Audio Overviews feature established the user demand and baseline quality expectations for document-to-podcast conversion</span></li>
+<li><a href="https://blog.adobe.com/en/publish/2026/01/21/work-smarter-acrobat-turn-docs-presentations-podcasts-edit-pdfs-ai">Adobe Blog: Adobe Acrobat Adds Podcast Generation (January 2026)</a><br><span class="relevance">Shows how major enterprises are adopting podcast generation as a core feature, validating the trend that Tom Dörr is highlighting</span></li>
+<li><a href="https://www.theverge.com/news/864811/adobe-acrobat-studio-generate-podcast-presentation">The Verge: Adobe Acrobat Uses AI to Turn PDFs into Podcasts</a><br><span class="relevance">Mainstream media coverage of the PDF-to-podcast trend, providing context for why such tools matter beyond niche developer communities</span></li>
+<li><a href="https://cloud.google.com/blog/products/ai-machine-learning/learn-how-to-build-a-podcast-with-gemini-1-5-pro">Google Cloud Blog: Build a Podcast with Gemini 1.5 Pro</a><br><span class="relevance">Technical documentation on implementing podcast generation using Gemini APIs, representing the infrastructure underlying tools like hoxigo's Podcasts</span></li>
+</ul>
+
+<h2>Research Notes</h2>
+<div class="notes">Tom Dörr has become a recognized figure in the AI developer community since joining Twitter/X in November 2020. His account (@tom_doerr) has evolved into a curated feed of innovative open-source projects, with a specific focus on GitHub repositories related to AI, agents, and language models. His bio explicitly invites developers to share their projects via DM, indicating he functions as a de facto community curator. With 288 repositories of his own and a large following, his recommendations carry significant weight—when he shares a project, it often experiences increased GitHub stars and community attention.
+
+The broader context for this post is the explosive growth of AI-powered document processing tools in early 2026. Major companies have recognized this opportunity: Adobe integrated podcast generation into Acrobat Studio, Google continues refining NotebookLM's Audio Overviews, and NVIDIA created a reference architecture for the pattern. Simultaneously, dozens of open-source and commercial projects are competing to capture different market segments (free tools, enterprise solutions, specialized features). This creates a &quot;thick middle&quot; of viable options, making it less about which tool is best and more about which fits specific use cases, budgets, and integration requirements.
+
+The specific tool being shared—hoxigo's Podcasts project—represents the open-source approach: leveraging public APIs (Gemini) and providing free, self-hostable software. This is attractive to developers who want control over their data, customization options, and no subscription costs. The fact that Dörr shares such projects suggests confidence in the quality and relevance of open-source implementations in this space.
+
+Potential limitations to consider: (1) Not all PDFs convert well to podcast format (technical documents with heavy mathematics, tables, or dense code may lose fidelity); (2) Multi-speaker dialogue generation can sometimes feel artificial or miss nuance; (3) The comparison to NotebookLM (Google's branded product) may set high expectations for open-source alternatives; (4) Gemini API costs and rate limits may constrain batch-processing of large document collections. However, these are implementation details rather than fundamental problems with the approach, and the trend shows rapid improvement across all these dimensions.</div>
+
+<h2>Topics</h2>
+<div class="topics">
+  <span class="tag">AI podcast generation</span>
+  <span class="tag">PDF document transformation</span>
+  <span class="tag">Gemini API capabilities</span>
+  <span class="tag">text-to-speech synthesis</span>
+  <span class="tag">open-source AI tools</span>
+  <span class="tag">content accessibility</span>
+</div>
+
+
+</body>
+</html>
