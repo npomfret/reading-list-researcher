@@ -1,0 +1,137 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Someone Finally Documented How to Actually Use Claude Code: 22K+ Star Best Practices Repository from Boris Cherny and Team</title>
+<style>
+  *, *::before, *::after { box-sizing: border-box; }
+  :root {
+    --bg: #fff; --fg: #1a1a1a; --muted: #666; --border: #e0e0e0;
+    --accent: #0066cc; --tag-bg: #f0f0f0; --tag-fg: #333;
+    --card-bg: #fafafa;
+  }
+  @media (prefers-color-scheme: dark) {
+    :root {
+      --bg: #1a1a1a; --fg: #e0e0e0; --muted: #999; --border: #333;
+      --accent: #4da6ff; --tag-bg: #2a2a2a; --tag-fg: #ccc;
+      --card-bg: #222;
+    }
+  }
+  body {
+    font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif;
+    line-height: 1.6; color: var(--fg); background: var(--bg);
+    max-width: 720px; margin: 0 auto; padding: 2rem 1.5rem;
+  }
+  a { color: var(--accent); text-decoration: none; }
+  a:hover { text-decoration: underline; }
+  h1 { font-size: 1.8rem; line-height: 1.2; margin-bottom: 0.25rem; }
+  .meta { color: var(--muted); font-size: 0.9rem; margin-bottom: 2rem; }
+  .meta a { color: var(--muted); }
+  h2 { font-size: 1.2rem; margin-top: 2rem; margin-bottom: 0.75rem; border-bottom: 1px solid var(--border); padding-bottom: 0.25rem; }
+  .summary { font-size: 1.05rem; }
+  ul { padding-left: 1.25rem; }
+  li { margin-bottom: 0.5rem; }
+  .relevance { color: var(--muted); font-size: 0.85rem; }
+  .topics { display: flex; flex-wrap: wrap; gap: 0.5rem; }
+  .tag {
+    background: var(--tag-bg); color: var(--tag-fg);
+    padding: 0.2rem 0.6rem; border-radius: 1rem; font-size: 0.8rem;
+  }
+  .about-card {
+    background: var(--card-bg); padding: 1rem; border-radius: 0.5rem;
+    border: 1px solid var(--border);
+  }
+  .about-card p { margin: 0.25rem 0; }
+  .notes { white-space: pre-wrap; color: var(--muted); font-size: 0.95rem; }
+  .share-btn {
+    display: inline-block; padding: 0.5rem 1rem; border-radius: 0.5rem;
+    background: var(--accent); color: #fff; font-size: 0.9rem; cursor: pointer;
+    border: none; font-family: inherit;
+  }
+  .share-btn:hover { opacity: 0.85; }
+  .share-section { margin-bottom: 1.5rem; }
+  .share-copied { color: var(--muted); font-size: 0.85rem; margin-left: 0.5rem; }
+</style>
+</head>
+<body>
+
+<h1>Someone Finally Documented How to Actually Use Claude Code: 22K+ Star Best Practices Repository from Boris Cherny and Team</h1>
+<div class="meta">
+  <a href="https://x.com/technmak/status/2037788648691884207?s=12">https://x.com/technmak/status/2037788648691884207?s=12</a><br>
+  Community resource highlight / Best practices documentation compendium &middot; Researched March 30, 2026
+</div>
+
+<div class="share-section">
+<button class="share-btn" onclick="navigator.clipboard.writeText(window.location.href).then(()=>{document.getElementById('copied').style.display='inline'});window.open('https://notebooklm.google.com','_blank')">
+  Share to NotebookLM
+</button>
+<span id="copied" class="share-copied" style="display:none">URL copied — paste it as a website source in a new notebook</span>
+</div>
+
+<h2>Summary</h2>
+<div class="summary"><p>Tech with Mak highlights a major open-source documentation effort—the &quot;claude-code-best-practice&quot; repository on GitHub that has accumulated over 22,000 stars. The repository, curated by contributions from Boris Cherny (creator of Claude Code at Anthropic) and his team, represents the most comprehensive guide to using Claude Code effectively in real-world production environments. Rather than being promotional material, this is a crowd-sourced collection of 86+ specific tips and patterns extracted from how the Anthropic team actually uses Claude Code internally.</p>
+<p></p>
+<p>The post encapsulates the repository's core thesis: developers are vastly underutilizing Claude Code's capabilities and patterns, operating with incomplete or incorrect mental models about how to structure work, delegate tasks to agents, and organize code context. The repository addresses this by documenting patterns across 10+ categories: planning, memory management (CLAUDE.md files), agents, commands, skills, hooks, workflows, debugging, git practices, and daily habits.</p>
+<p></p>
+<p>Specific practices highlighted include: always using plan mode to let Claude think through architecture before implementation; leveraging AskUserQuestion tool to let Claude interview the user and eliminate ambiguity upfront; using Git Worktrees to enable parallel development across isolated branches; structuring CLAUDE.md files to stay under 200 lines per file (to prevent Claude from ignoring instructions in longer files); building feature-specific subagents with progressive disclosure skills rather than generic &quot;QA&quot; or &quot;backend&quot; agents; using /loop for scheduling recurring tasks up to 3 days locally; and employing cross-model code review (running one model for planning/implementation and a different model for QA to catch bugs the original missed).</p>
+<p></p>
+<p>The repository also catalogs community workflows that have gained traction (Superpowers with 122K stars, Everything Claude Code with 116K stars, Spec Kit with 83K stars), identifies key architectural questions the community is still debating (&quot;Why does Claude ignore CLAUDE.md instructions?&quot; &quot;When to use commands vs. agents vs. skills?&quot;), and documents daily habits like updating Claude Code daily and following r/ClaudeAI and r/ClaudeCode communities for new patterns.</p></div>
+
+<h2>Key Takeaways</h2>
+<ul>
+  <li>Always use plan mode for non-trivial tasks and give Claude a way to verify the plan works before full implementation—Boris runs 5-10 parallel Claude Code instances simultaneously (one per git worktree) to enable true parallelism and reduce context bloat</li>
+  <li>Use AskUserQuestion tool to have Claude interview you at the start of projects; this eliminates ambiguity and reduces rework by forcing specificity upfront before moving to execution in a fresh session</li>
+  <li>CLAUDE.md file size matters critically—target under 200 lines per file, use wrapping tags like &lt;important if=&quot;...&quot;&gt; to prevent instructions from being ignored as context grows, and split large instructions across multiple files in .claude/rules/</li>
+  <li>Build feature-specific subagents with progressive-disclosure skills (not generic 'QA engineer' or 'backend engineer' agents)—this keeps main context focused, enables test-time compute (separate windows catch bugs the original agent missed), and lets you 'throw more compute' at problems when needed</li>
+  <li>Git Worktrees enable parallel development with isolated branches per agent; keep PRs small (~p50 of 118 lines), squash merge for clean linear history, and commit often (aim for at least one commit per hour as soon as a task completes)</li>
+  <li>Use /loop for local recurring tasks (up to 3 days) and /schedule for cloud-based tasks that run even when your machine is off; pipe terminal output directly into SKILL.md files using !`command` syntax so Claude only sees computed results, not raw logs</li>
+  <li>Cross-model QA (e.g., Claude Opus for planning, Claude Sonnet for implementation, Codex for review) outperforms single-model approaches; sessions degrade due to context bloat, so use /clear and start fresh rather than trying to fix in the same session when going off-track</li>
+  <li>The repository identifies 'billion-dollar questions' still unanswered: Can you convert entire codebases to specs and regenerate them from specs alone? Why does Claude sometimes ignore CLAUDE.md instructions? When exactly should you use commands vs. agents vs. skills?</li>
+  <li>Common debugging patterns: always take screenshots and share with Claude when stuck; use MCP to let Claude see Chrome console logs directly; ask Claude to run long-running terminal commands as background tasks; use /doctor to diagnose configuration issues</li>
+  <li>Daily habit: update Claude Code every morning, read the changelog, and follow r/ClaudeAI, r/ClaudeCode, and core contributors like Boris, Thariq, Cat, Lydia—the tool evolves monthly with new features (voice input, scheduled tasks, agent teams, browser automation) making stale knowledge costly</li>
+</ul>
+
+<h2>About</h2>
+<div class="about-card">
+  <p><strong>Author:</strong> Tech with Mak (@techNmak)</p>
+  <p><strong>Publication:</strong> X (Twitter)</p>
+  <p><strong>Published:</strong> March 2026</p>
+</div>
+
+<h2>Sentiment / Tone</h2>
+<p>Enthusiastically informative with an &quot;I just discovered a treasure map&quot; tone. The post reads as a curated highlight reel of practical wisdom distilled from production usage. Tech with Mak positions the repository as a long-overdue documentation effort, implying that developers have been using Claude Code suboptimally without clear guidance. The tone is neither hype-driven nor overly technical—it's the voice of someone who found a resource so valuable they felt compelled to amplify it. The emoji usage (🚫👶 for &quot;don't micromanage,&quot; → for progressive lists) keeps it accessible and even playful, but the underlying message is serious: this represents hard-won patterns that can dramatically improve productivity.</p>
+
+<h2>Related Links</h2>
+<ul>
+<li><a href="https://github.com/shanraisshan/claude-code-best-practice">claude-code-best-practice GitHub Repository</a><br><span class="relevance">The primary source material—the 22K+ star repository containing 86 tips, workflow patterns, and community best practices for Claude Code. Includes links to Boris Cherny's original tweets and interviews.</span></li>
+<li><a href="https://code.claude.com/docs/en/best-practices">Official Claude Code Best Practices Documentation</a><br><span class="relevance">Anthropic's official guidance on using Claude Code, providing the authoritative reference that the GitHub repo builds upon and extends with community patterns.</span></li>
+<li><a href="https://howborisusesclaudecode.com/">How Boris Uses Claude Code</a><br><span class="relevance">Interactive guide documenting Boris Cherny's specific 13-step workflow, including his 5-terminal-tab setup, use of git worktrees, and plan-mode-first approach—the foundation for much of the best practices repo.</span></li>
+<li><a href="https://newsletter.pragmaticenginger.com/p/building-claude-code-with-boris-cherny">Building Claude Code with Boris Cherny - Pragmatic Engineer Newsletter</a><br><span class="relevance">In-depth interview with Boris Cherny covering how he built Claude Code, his design philosophy, and how the tool has evolved—provides credibility and deeper context for the best practices outlined in the Twitter post.</span></li>
+<li><a href="https://www.lennysnewsletter.com/p/head-of-claude-code-what-happens">Head of Claude Code: What Happens After Coding is Solved - Lenny's Podcast</a><br><span class="relevance">Podcast interview with Boris Cherny discussing the future of Claude Code, the economics of AI development tools, and the vision beyond 'solving' code generation—contextualizes why best practices matter as the tool matures.</span></li>
+</ul>
+
+<h2>Research Notes</h2>
+<div class="notes">**Author Context:** Tech with Mak (@techNmak) is a tech educator with 24K followers who regularly posts breakdowns of technical concepts (MongoDB, serverless, ML systems). This post is in character—distilling complex systems into digestible summaries. The repository itself is maintained by shanraisshan on GitHub and appears to be a community effort that synthesized ideas from Boris Cherny's public tweets and interviews.
+
+**Boris Cherny's Credibility:** Cherny is the creator and lead engineer of Claude Code at Anthropic (joined Sept 2024). He's disclosed that Claude Code represented ~12% of Anthropic's ARR by end of 2025, growing past $1B in ARR. He's given multiple interviews (Pragmatic Engineer newsletter, Lenny's Podcast, Y Combinator) and has posted extensively on his workflow. His advice carries weight because he observes how Anthropic's internal teams (even sales) use Claude Code at scale.
+
+**Repository's Scale &amp; Impact:** The claude-code-best-practice repo hitting 22K stars (and trending on GitHub monthly since at least March 2026) indicates significant developer hunger for structured guidance. The linked community workflows (Superpowers 122K stars, Everything Claude Code 116K stars) suggest a thriving ecosystem of builders extending Claude Code patterns.
+
+**Broader Context:** This resource arrives at a moment when Claude Code is rapidly evolving—features like /schedule (cloud-based cron), agent teams, voice dictation (/voice), browser automation, and MCP server connections are being added at high velocity. The best practices doc serves as a stabilizing reference point, helping developers not get lost in the feature explosion. Reddit communities (r/ClaudeAI, r/ClaudeCode) report daily discussions of patterns and &quot;gotchas.&quot;
+
+**Potential Limitations:** The repository emphasizes Anthropic's internal workflow (Boris's setup with 5-10 parallel instances, heavy reliance on plan mode, use of all advanced features). Smaller teams or solo developers may find some patterns overkill. The &quot;billion-dollar questions&quot; section reveals that even the core team doesn't have answers to some fundamental questions (e.g., can you fully specify code and regenerate it later?), suggesting the field is still exploratory. Some tips conflict with stated Anthropic best practices (e.g., &quot;don't put 'NEVER add Co-Authored-By' in CLAUDE.md&quot; vs. using settings.json), indicating evolving guidance.</div>
+
+<h2>Topics</h2>
+<div class="topics">
+  <span class="tag">Claude Code</span>
+  <span class="tag">LLM Workflow Optimization</span>
+  <span class="tag">AI-Assisted Development</span>
+  <span class="tag">Prompt Engineering</span>
+  <span class="tag">Agent Systems</span>
+  <span class="tag">Best Practices Documentation</span>
+</div>
+
+
+</body>
+</html>
