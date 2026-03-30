@@ -1,0 +1,131 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Claude Code + Google Stitch 2.0: The Complete AI App Design &amp; Development Workflow</title>
+<style>
+  *, *::before, *::after { box-sizing: border-box; }
+  :root {
+    --bg: #fff; --fg: #1a1a1a; --muted: #666; --border: #e0e0e0;
+    --accent: #0066cc; --tag-bg: #f0f0f0; --tag-fg: #333;
+    --card-bg: #fafafa;
+  }
+  @media (prefers-color-scheme: dark) {
+    :root {
+      --bg: #1a1a1a; --fg: #e0e0e0; --muted: #999; --border: #333;
+      --accent: #4da6ff; --tag-bg: #2a2a2a; --tag-fg: #ccc;
+      --card-bg: #222;
+    }
+  }
+  body {
+    font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif;
+    line-height: 1.6; color: var(--fg); background: var(--bg);
+    max-width: 720px; margin: 0 auto; padding: 2rem 1.5rem;
+  }
+  a { color: var(--accent); text-decoration: none; }
+  a:hover { text-decoration: underline; }
+  h1 { font-size: 1.8rem; line-height: 1.2; margin-bottom: 0.25rem; }
+  .meta { color: var(--muted); font-size: 0.9rem; margin-bottom: 2rem; }
+  .meta a { color: var(--muted); }
+  h2 { font-size: 1.2rem; margin-top: 2rem; margin-bottom: 0.75rem; border-bottom: 1px solid var(--border); padding-bottom: 0.25rem; }
+  .summary { font-size: 1.05rem; }
+  ul { padding-left: 1.25rem; }
+  li { margin-bottom: 0.5rem; }
+  .relevance { color: var(--muted); font-size: 0.85rem; }
+  .topics { display: flex; flex-wrap: wrap; gap: 0.5rem; }
+  .tag {
+    background: var(--tag-bg); color: var(--tag-fg);
+    padding: 0.2rem 0.6rem; border-radius: 1rem; font-size: 0.8rem;
+  }
+  .about-card {
+    background: var(--card-bg); padding: 1rem; border-radius: 0.5rem;
+    border: 1px solid var(--border);
+  }
+  .about-card p { margin: 0.25rem 0; }
+  .notes { white-space: pre-wrap; color: var(--muted); font-size: 0.95rem; }
+  .share-btn {
+    display: inline-block; padding: 0.5rem 1rem; border-radius: 0.5rem;
+    background: var(--accent); color: #fff; font-size: 0.9rem; cursor: pointer;
+    border: none; font-family: inherit;
+  }
+  .share-btn:hover { opacity: 0.85; }
+  .share-section { margin-bottom: 1.5rem; }
+  .share-copied { color: var(--muted); font-size: 0.85rem; margin-left: 0.5rem; }
+</style>
+</head>
+<body>
+
+<h1>Claude Code + Google Stitch 2.0: The Complete AI App Design &amp; Development Workflow</h1>
+<div class="meta">
+  <a href="https://x.com/prajwaltomar_/status/2037104246647382058?s=12">https://x.com/prajwaltomar_/status/2037104246647382058?s=12</a><br>
+  Technical long-form tutorial / practitioner's guide; detailed thread demonstrating a complete, tested workflow &middot; Researched March 30, 2026
+</div>
+
+<div class="share-section">
+<button class="share-btn" onclick="navigator.clipboard.writeText(window.location.href).then(()=>{document.getElementById('copied').style.display='inline'});window.open('https://notebooklm.google.com','_blank')">
+  Share to NotebookLM
+</button>
+<span id="copied" class="share-copied" style="display:none">URL copied — paste it as a website source in a new notebook</span>
+</div>
+
+<h2>Summary</h2>
+<div class="summary"><p>Prajwal Tomar, founder of IgnytLabs (an AI-first MVP agency), presents a comprehensive workflow for building and designing production-ready applications using Google Stitch 2.0 and Claude Code. The core thesis is that &quot;AI slop&quot; design isn't an AI problem—it's a workflow problem. The author addresses a fundamental pain point in AI-assisted development: consistency degradation. When solo builders or teams use AI to generate features individually, each prompt operates in isolation, leading to drifting colors, inconsistent typography, and disjointed user experiences.</p>
+<p></p>
+<p>Tomar's solution centers on a single markdown file called &quot;design.md&quot; that acts as a design system specification. Stitch 2.0 automatically generates this file by extracting typography scales, color palettes, component rules, and design tokens from AI-generated designs. When developers feed this design.md into Claude Code at the start of each session, the AI coding agent maintains design consistency across every screen and feature—solving what has been an intractable problem in AI-generated applications. The workflow starts with design (using Stitch's visual tools), documents it systematically (design.md), then implements it with architectural consistency (Claude Code with MCP access).</p>
+<p></p>
+<p>The post walks through the exact workflow: take screenshots → feed them to Stitch 2.0 → curate variants → export the auto-generated design system → copy design.md into your codebase → connect Claude Code to Stitch via MCP for direct HTML/CSS access. Tomar then demonstrates how to integrate backends using Claude Code: Supabase for authentication (with automatic role-level security and session persistence), Stripe for payments (complete checkout flow integration), and Resend for email functionality. He emphasizes that Claude Code &quot;coaches you through every integration,&quot; so developers don't need deep knowledge of webhook systems or auth models.</p>
+<p></p>
+<p>The author acknowledges limitations: fonts sometimes need manual adjustment, colors don't always carry over perfectly, and the workflow is token-hungry. However, he argues these gaps are closing rapidly and the fundamental shift is dramatic—what previously cost thousands of dollars and weeks of designer time can now be executed by one person in an afternoon. He positions this as democratizing access to professional design practices that were previously available only to funded teams with dedicated designers.</p></div>
+
+<h2>Key Takeaways</h2>
+<ul>
+  <li>The 'AI slop' design problem stems from workflow, not AI capability—each isolated prompt lacks design context, causing colors to drift, fonts to change, and spacing to become inconsistent across screens</li>
+  <li>design.md is the critical linchpin: Stitch 2.0 auto-generates this markdown file containing typography scales, color palettes, component rules, and design tokens; Claude Code references it on every prompt to lock design consistency</li>
+  <li>Stitch 2.0's MCP connection gives Claude Code direct access to actual HTML and CSS source code from design frames, not descriptions—Claude rebuilds UI by reading real code and automatically adds details like hover effects and transitions</li>
+  <li>The complete workflow involves: screenshots → Stitch variant curation → design system export → design.md integration → Claude Code backend (Supabase auth, Stripe payments, Resend email, Vercel deployment) all in one session</li>
+  <li>Solo builders can now execute design work that previously required hiring a designer ($3,000–$10,000) and waiting weeks for Figma files—this workflow compresses that timeline to under an hour for app redesigns</li>
+  <li>Claude Code acts as a coach through integrations: developers provide credentials, and the tool handles Stripe webhook systems, Supabase security models, and auth flows automatically without requiring deep technical knowledge</li>
+  <li>Production-ready integrations are achievable: Supabase ensures session persistence on refresh; Stripe sandbox mode (test card 4242 4242 4242 4242) allows safe testing; Vercel auto-deploys every change to live production</li>
+  <li>Design decisions like serif headings + clean sans-serif body text are simple but high-impact—typography is identified as the single fastest way to elevate an app's perceived quality</li>
+  <li>Stitch generates multiple design variants from a single prompt; cherry-picking the best elements from each variant (typography from one, layout from another, color from a third) produces stronger results than accepting first outputs</li>
+  <li>The author built 16 SaaS products for clients using Cursor previously; his shift to Claude Code + Stitch indicates meaningful competitive advantages in the current AI development landscape</li>
+</ul>
+
+<h2>About</h2>
+<div class="about-card">
+  <p><strong>Author:</strong> Prajwal Tomar</p>
+  <p><strong>Publication:</strong> X (Twitter)</p>
+  <p><strong>Published:</strong> 2026-03-30</p>
+</div>
+
+<h2>Sentiment / Tone</h2>
+<p>Confident, evidence-driven, and pragmatic with measured optimism. Tomar avoids hype—he explicitly acknowledges limitations (font adjustments, color accuracy issues, token costs) while arguing these gaps are worth accepting given the dramatic productivity gains. The rhetorical style is instructional and action-oriented: &quot;No theory. Just the workflow.&quot; He positions himself as an experienced builder sharing battle-tested practices, not as a promoter. The tone is conversational but authoritative, with phrases like &quot;This is where the workflow gets CRACKED&quot; balancing technical precision with enthusiasm. He frames the moment as a democratization opportunity for solo builders and small teams, historically excluded from professional design systems, rather than dismissing designer roles entirely.</p>
+
+<h2>Related Links</h2>
+<ul>
+<li><a href="https://stitch.withgoogle.com/docs/mcp/setup/">Stitch MCP Setup Documentation</a><br><span class="relevance">Official documentation for setting up the Stitch MCP integration with Claude Code—directly referenced in Tomar's workflow</span></li>
+<li><a href="https://github.com/davideast/stitch-mcp">Stitch MCP CLI Tool on GitHub</a><br><span class="relevance">Open-source CLI tool for integrating Google Stitch designs with AI coding agents; enables the MCP connection Tomar describes</span></li>
+<li><a href="https://claude.com/product/claude-code">Claude Code by Anthropic</a><br><span class="relevance">Anthropic's official product page for Claude Code, the terminal-based coding agent central to Tomar's workflow</span></li>
+<li><a href="https://earezki.com/ai-news/2026-03-19-google-stitch-20-import-any-websites-design-system-into-your-ai-generated-app/">Google Stitch 2.0: Automated Design System Extraction (Dev|Journal)</a><br><span class="relevance">Technical breakdown of Stitch 2.0's design system capabilities, including live URL crawling and design token extraction</span></li>
+<li><a href="https://www.reddit.com/r/ClaudeCode/comments/1s31vwq/claude_code_can_now_generate_full_ui_designs_with/">Reddit r/ClaudeCode: Community Discussion of Claude Code + Stitch Integration</a><br><span class="relevance">Real-world user testing and validation of the workflow; documents practical implementation details and edge cases</span></li>
+</ul>
+
+<h2>Research Notes</h2>
+<div class="notes">Prajwal Tomar is a credible source: he's the founder of IgnytLabs, an AI-first MVP agency, and creator of the AI MVP Builders community (1,900+ members), where he teaches design-to-production workflows. His background is software engineering (NIT Kurukshetra graduate, previously SDE at KPMG Lighthouse). He has publicly documented building 16 SaaS products for clients and has shifted workflows from Cursor to Claude Code, suggesting evidence-based tool selection rather than marketing alignment. The post references Google Stitch 2.0, which is real and launched in 2025 at Google I/O, with major updates in December 2025 and March 2026. Stitch 2.0 is documented to use Gemini 3.1 Pro and supports 400 free generations monthly. Claude Code is Anthropic's real terminal-based coding agent (launched February 24, 2025). The MCP (Model Context Protocol) integration between Stitch and Claude Code is documented and available via GitHub (davideast/stitch-mcp). The &quot;design.md&quot; concept is validated in multiple sources as Stitch 2.0's actual approach to design system documentation. Community reactions (Reddit r/ClaudeCode) confirm the workflow is functional but highlight ongoing edge cases. The timing of this post (March 30, 2026) coincides with recent Stitch 2.0 updates, suggesting Tomar is commenting on current capability maturity. No significant contradictions or critiques were found—the limitations he mentions are echoed in community discussions. His claim that the workflow &quot;changes everything&quot; is positioned as workflow transformation, not technological revolution, which is reasonable given the demonstrated evidence.</div>
+
+<h2>Topics</h2>
+<div class="topics">
+  <span class="tag">AI design-to-code</span>
+  <span class="tag">Design systems</span>
+  <span class="tag">Claude Code</span>
+  <span class="tag">Google Stitch 2.0</span>
+  <span class="tag">MCP (Model Context Protocol)</span>
+  <span class="tag">AI-generated UI consistency</span>
+  <span class="tag">MVP development</span>
+  <span class="tag">No-code/low-code workflows</span>
+</div>
+
+
+</body>
+</html>
