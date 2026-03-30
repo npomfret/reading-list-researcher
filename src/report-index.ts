@@ -1,7 +1,9 @@
 import fs from "fs";
 import path from "path";
+import crypto from "crypto";
 import { config } from "./config.js";
 import { logger } from "./utils/logger.js";
+import { parseReadingList } from "./utils/plist.js";
 import type { ResearchOutput } from "./researcher.js";
 
 interface IndexEntry {
@@ -25,33 +27,41 @@ function loadResearchEntries(): IndexEntry[] {
   if (!fs.existsSync(config.researchDir)) return [];
 
   const files = fs.readdirSync(config.researchDir).filter((f) => f.endsWith(".json"));
-  const entries: { entry: IndexEntry; createdAt: number }[] = [];
+  const entries: IndexEntry[] = [];
 
   for (const file of files) {
     try {
       const filePath = path.join(config.researchDir, file);
       const data: ResearchOutput = JSON.parse(fs.readFileSync(filePath, "utf-8"));
-      const stat = fs.statSync(filePath);
       entries.push({
-        entry: {
-          hash: file.replace(".json", ""),
-          title: data.title,
-          topics: data.topics,
-          contentType: data.contentType,
-          datePublished: data.datePublished,
-          url: data.url,
-        },
-        createdAt: stat.birthtimeMs || stat.mtimeMs,
+        hash: file.replace(".json", ""),
+        title: data.title,
+        topics: data.topics,
+        contentType: data.contentType,
+        datePublished: data.datePublished,
+        url: data.url,
       });
     } catch {
       logger.warn(`Skipping malformed research file: ${file}`);
     }
   }
 
-  // Sort by file creation time (newest first), limit to 100
-  entries.sort((a, b) => b.createdAt - a.createdAt);
+  // Build a map from URL hash to reading list position
+  const readingList = parseReadingList(config.bookmarksPlist);
+  const positionByHash = new Map<string, number>();
+  readingList.forEach((entry, index) => {
+    const hash = crypto.createHash("sha256").update(entry.url).digest("hex").slice(0, 16);
+    positionByHash.set(hash, index);
+  });
 
-  return entries.slice(0, 100).map((e) => e.entry);
+  // Sort by reading list order; items not in the reading list go to the end
+  entries.sort((a, b) => {
+    const posA = positionByHash.get(a.hash) ?? Infinity;
+    const posB = positionByHash.get(b.hash) ?? Infinity;
+    return posA - posB;
+  });
+
+  return entries.slice(0, 100);
 }
 
 function renderIndex(entries: IndexEntry[]): string {
