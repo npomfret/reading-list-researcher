@@ -1,0 +1,124 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>How Boris Cherny Trains AI at Anthropic: The CLAUDE.md Memory System</title>
+<style>
+  *, *::before, *::after { box-sizing: border-box; }
+  :root {
+    --bg: #fff; --fg: #1a1a1a; --muted: #666; --border: #e0e0e0;
+    --accent: #0066cc; --tag-bg: #f0f0f0; --tag-fg: #333;
+    --card-bg: #fafafa;
+  }
+  @media (prefers-color-scheme: dark) {
+    :root {
+      --bg: #1a1a1a; --fg: #e0e0e0; --muted: #999; --border: #333;
+      --accent: #4da6ff; --tag-bg: #2a2a2a; --tag-fg: #ccc;
+      --card-bg: #222;
+    }
+  }
+  body {
+    font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif;
+    line-height: 1.6; color: var(--fg); background: var(--bg);
+    max-width: 720px; margin: 0 auto; padding: 2rem 1.5rem;
+  }
+  a { color: var(--accent); text-decoration: none; }
+  a:hover { text-decoration: underline; }
+  h1 { font-size: 1.8rem; line-height: 1.2; margin-bottom: 0.25rem; }
+  .meta { color: var(--muted); font-size: 0.9rem; margin-bottom: 2rem; }
+  .meta a { color: var(--muted); }
+  h2 { font-size: 1.2rem; margin-top: 2rem; margin-bottom: 0.75rem; border-bottom: 1px solid var(--border); padding-bottom: 0.25rem; }
+  .summary { font-size: 1.05rem; }
+  ul { padding-left: 1.25rem; }
+  li { margin-bottom: 0.5rem; }
+  .relevance { color: var(--muted); font-size: 0.85rem; }
+  .topics { display: flex; flex-wrap: wrap; gap: 0.5rem; }
+  .tag {
+    background: var(--tag-bg); color: var(--tag-fg);
+    padding: 0.2rem 0.6rem; border-radius: 1rem; font-size: 0.8rem;
+  }
+  .about-card {
+    background: var(--card-bg); padding: 1rem; border-radius: 0.5rem;
+    border: 1px solid var(--border);
+  }
+  .about-card p { margin: 0.25rem 0; }
+  .notes { white-space: pre-wrap; color: var(--muted); font-size: 0.95rem; }
+  .share-btn {
+    display: inline-block; padding: 0.5rem 1rem; border-radius: 0.5rem;
+    background: var(--accent); color: #fff; font-size: 0.9rem; cursor: pointer;
+    border: none; font-family: inherit;
+  }
+  .share-btn:hover { opacity: 0.85; }
+  .share-section { margin-bottom: 1.5rem; }
+  .share-copied { color: var(--muted); font-size: 0.85rem; margin-left: 0.5rem; }
+</style>
+</head>
+<body>
+
+<h1>How Boris Cherny Trains AI at Anthropic: The CLAUDE.md Memory System</h1>
+<div class="meta">
+  <a href="https://x.com/daievolutionhub/status/2038290379989201351?s=12">https://x.com/daievolutionhub/status/2038290379989201351?s=12</a><br>
+  Technical breakdown/explainer of industry best practices sourced from a prominent figure's public statements &middot; Researched March 30, 2026
+</div>
+
+<div class="share-section">
+<button class="share-btn" onclick="navigator.clipboard.writeText(window.location.href).then(()=>{document.getElementById('copied').style.display='inline'});window.open('https://notebooklm.google.com','_blank')">
+  Share to NotebookLM
+</button>
+<span id="copied" class="share-copied" style="display:none">URL copied — paste it as a website source in a new notebook</span>
+</div>
+
+<h2>Summary</h2>
+<div class="summary"><p>This X post by AI educator Kshitij Mishra breaks down how Boris Cherny, Staff Engineer and creator of Claude Code at Anthropic, uses AI with a radically simpler approach than most developers expect. Rather than relying on complex ML pipelines or fine-tuning, Cherny's system centers on a single CLAUDE.md file—a persistent memory layer that evolves through use. Every bug becomes a documented rule; every fix becomes institutional knowledge. The post outlines Cherny's six-part playbook: (1) defaulting to Plan Mode before execution to define specs and prevent mistakes, (2) using subagents aggressively as delegated specialists to keep context clean, (3) building self-improving loops that log errors and turn patterns into rules, (4) never trusting &quot;done&quot; through rigorous testing and verification, (5) demanding elegance while avoiding over-engineering, and (6) fixing bugs autonomously end-to-end without back-and-forth. The post frames this not as prompt engineering tricks but as a compounding system design—where AI becomes reliable through external memory management, structured process discipline, and feedback loops. The core insight reframes how developers should think about AI: the bottleneck isn't model intelligence, but attention allocation and institutional knowledge capture. Rather than re-prompting every session, Claude reads the accumulated CLAUDE.md each run and learns from previous iterations, creating a feedback cycle where the system improves without retraining.</p></div>
+
+<h2>Key Takeaways</h2>
+<ul>
+  <li>CLAUDE.md is a persistent memory file stored in git that documents rules, coding conventions, and learned lessons—when Claude makes mistakes, they're added as rules so it doesn't repeat them, creating institutional memory without retraining.</li>
+  <li>Plan Mode is used first for all non-trivial tasks: break into explicit steps, define specifications, and gain approval before execution, preventing the common failure where AI makes unwanted changes autonomously.</li>
+  <li>Subagents are deployed as specialized workflow atoms—one for research, one for coding, one for verification—rather than relying on a single omniscient agent, improving reliability through specialization and reducing main context window clutter.</li>
+  <li>Verification-first mindset: Every bug demands automated checks (tests, types, linting) plus manual verification, with the question 'Would a senior engineer approve this?' Boris uses browser testing to verify UI output and iterate until correct.</li>
+  <li>Parallel session management: Boris runs 10-15 concurrent Claude Code instances (5 in terminal, 5+ in browser, plus mobile) simultaneously, treating AI capacity as compute to be scheduled rather than a single tool to be conversed with.</li>
+  <li>Model selection prioritizes reliability over speed: Opus 4.5 with extended thinking is used for everything, accepting slower output because correctness reduces the 'correction tax'—every hallucination costs human attention.</li>
+  <li>Code review integration: Claude participates in pull request reviews via @.claude tagging, with learnings automatically logged to CLAUDE.md, turning review into meta-work that trains the entire development system.</li>
+  <li>The core philosophy is simplicity over cleverness: no complex pipelines, no hidden magic, just disciplined process design (Plan → Execute → Track → Document → Learn) that turns AI into a reliable, auditable, compounding system.</li>
+  <li>Post-tool-use hooks format code automatically and enforce standards without human intervention, embedding best practices into tooling rather than relying on AI to remember them.</li>
+  <li>Memory architecture shifts the bottleneck from model capability to attention allocation and knowledge management: AI doesn't need better prompts, it needs better memory and clearer process constraints.</li>
+</ul>
+
+<h2>About</h2>
+<div class="about-card">
+  <p><strong>Author:</strong> Kshitij Mishra (@DAIEvolutionHub)</p>
+  <p><strong>Publication:</strong> X (Twitter)</p>
+  <p><strong>Published:</strong> 2026 (exact date not specified, but references Boris Cherny's January 2026 threads)</p>
+</div>
+
+<h2>Sentiment / Tone</h2>
+<p>Celebratory and revelatory with an engineering-focused, practical tone. Mishra positions Cherny's approach as &quot;insane&quot; (in an excited, positive way) not because of complexity but because of elegant simplicity hidden behind sophisticated thinking. The writing style oscillates between hype (&quot;Breaking:&quot; premise, &quot;this is key&quot;) and grounded pragmatism (concrete implementation steps, honest assessment of what matters). There's a tone of pattern recognition—the author is excited to identify and articulate principles that successful practitioners use implicitly. The framing is aspirational but achievable: &quot;steal this&quot; invites readers to copy rather than worship. Underlying sentiment: this is counterintuitive wisdom revealed, a contrast between how people think AI should work (complex, magic) versus how it actually works best (disciplined, memorable, verifiable).</p>
+
+<h2>Related Links</h2>
+<ul>
+<li><a href="https://karozieminski.substack.com/p/boris-cherny-claude-code-workflow">How Boris Cherny Uses Claude Code (Karo Zieminski Substack)</a><br><span class="relevance">In-depth breakdown of Cherny's workflow with additional context and implications; expands the Twitter thread into detailed analysis of what each principle means for different use cases.</span></li>
+<li><a href="https://howborisusesclaudecode.com/">How Boris Uses Claude Code (Official Interactive Guide)</a><br><span class="relevance">Interactive exploration of Cherny's 13 original tips from his January 2026 thread, with code examples and detailed explanations; serves as primary source documentation.</span></li>
+<li><a href="https://code.claude.com/docs/en/memory">Claude Code Memory Documentation</a><br><span class="relevance">Official documentation for the CLAUDE.md memory system and hierarchical memory architecture; explains the technical foundation underlying Cherny's approach.</span></li>
+<li><a href="https://venturebeat.com/technology/the-creator-of-claude-code-just-revealed-his-workflow-and-developers-are">The Creator of Claude Code Just Revealed His Workflow (VentureBeat)</a><br><span class="relevance">Mainstream tech media coverage of Cherny's thread with community reaction summary and broader implications for developer tooling.</span></li>
+<li><a href="https://github.com/Meirtz/Awesome-Context-Engineering">Awesome Context Engineering (GitHub)</a><br><span class="relevance">Comprehensive survey showing the industry-wide shift from prompt engineering to context engineering; contextualizes Cherny's CLAUDE.md approach within broader AI systems thinking (March 2026 update).</span></li>
+<li><a href="https://www.shareuhack.com/en/posts/claude-memory-feature-guide-2026">Claude Memory Guide: Understanding the 3-Layer Architecture (2026 Update)</a><br><span class="relevance">Explains Claude's three-layer memory system (session memory, CLAUDE.md, API memory tools) and practical migration paths from other AI assistants.</span></li>
+</ul>
+
+<h2>Research Notes</h2>
+<div class="notes">This post aggregates and synthesizes Boris Cherny's public statements about Claude Code usage, primarily from his January 2026 Twitter threads (@bcherny/status/2007179832300581177 and follow-up threads in late January and February 2026). Cherny is a Staff Engineer at Anthropic who led the creation of Claude Code, giving him unique credibility as both tool builder and practitioner. The post was widely circulated and discussed in developer communities (Reddit r/ClaudeAI, VentureBeat coverage, multiple substack analyses). Key context: (1) Cherny's own claim: &quot;I have not written a single line of code by hand since November&quot;—he purely directs AI now, lending credibility to his system design; (2) The CLAUDE.md memory system is official Claude Code documentation, not a hack, available at code.claude.com/docs/en/memory; (3) Broader industry context: Cherny's approach aligns with the 2025-2026 shift from &quot;prompt engineering&quot; to &quot;context engineering&quot; / &quot;agentic context engineering&quot; (ICLR 2026 workshop papers, academic literature shows this is a recognized paradigm shift); (4) Community reaction: developers split between admiration for simplicity and skepticism that &quot;just CLAUDE.md&quot; could be sufficient (many were surprised by the &quot;surprisingly vanilla&quot; setup lacking exotic subagent chains). (5) The philosophy reflects Anthropic's &quot;power tool&quot; positioning: Claude Code is deliberately low-level and scriptable, requiring discipline and systems thinking from users rather than claiming to be fully autonomous. No claims here are revolutionary from a research standpoint—memory augmentation and feedback loops are known techniques—but the post's value lies in articulating a clear, implementable system that a credible figure actually uses. The DAIEvolutionHub account (Kshitij Mishra) is an AI education/resource curator with significant reach in the developer community; the post's framing and selection of Cherny's ideas emphasizes implementability and pattern extraction over theory.</div>
+
+<h2>Topics</h2>
+<div class="topics">
+  <span class="tag">AI agent memory architecture</span>
+  <span class="tag">Claude Code workflow optimization</span>
+  <span class="tag">Context engineering vs prompt engineering</span>
+  <span class="tag">Self-improving AI systems</span>
+  <span class="tag">Agentic development practices</span>
+  <span class="tag">Institutional AI knowledge capture</span>
+</div>
+
+
+</body>
+</html>
