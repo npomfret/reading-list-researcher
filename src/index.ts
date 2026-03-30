@@ -58,19 +58,15 @@ async function processOne(): Promise<boolean> {
     generateIndex();
 
     if (config.deployEnabled) {
-      try {
-        const publicUrl = deployReport(reportPath, hash);
-        state.items[newEntry.url].publicUrl = publicUrl;
+      const publicUrl = deployReport(reportPath, hash);
+      state.items[newEntry.url].publicUrl = publicUrl;
 
-        reportPath = generateReport(output, hash, publicUrl);
-        deployReport(reportPath, hash);
-        deployIndex();
-        pushDeploy();
+      reportPath = generateReport(output, hash, publicUrl);
+      deployReport(reportPath, hash);
+      deployIndex();
+      pushDeploy();
 
-        logger.info(`Deployed to ${publicUrl}`);
-      } catch (deployErr: any) {
-        logger.warn(`Deploy failed (non-fatal): ${deployErr.message}`);
-      }
+      logger.info(`Deployed to ${publicUrl}`);
     }
 
     state.items[newEntry.url].status = "complete";
