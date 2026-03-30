@@ -1,0 +1,131 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>15 Hidden and Under-Utilized Features in Claude Code</title>
+<style>
+  *, *::before, *::after { box-sizing: border-box; }
+  :root {
+    --bg: #fff; --fg: #1a1a1a; --muted: #666; --border: #e0e0e0;
+    --accent: #0066cc; --tag-bg: #f0f0f0; --tag-fg: #333;
+    --card-bg: #fafafa;
+  }
+  @media (prefers-color-scheme: dark) {
+    :root {
+      --bg: #1a1a1a; --fg: #e0e0e0; --muted: #999; --border: #333;
+      --accent: #4da6ff; --tag-bg: #2a2a2a; --tag-fg: #ccc;
+      --card-bg: #222;
+    }
+  }
+  body {
+    font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif;
+    line-height: 1.6; color: var(--fg); background: var(--bg);
+    max-width: 720px; margin: 0 auto; padding: 2rem 1.5rem;
+  }
+  a { color: var(--accent); text-decoration: none; }
+  a:hover { text-decoration: underline; }
+  h1 { font-size: 1.8rem; line-height: 1.2; margin-bottom: 0.25rem; }
+  .meta { color: var(--muted); font-size: 0.9rem; margin-bottom: 2rem; }
+  .meta a { color: var(--muted); }
+  h2 { font-size: 1.2rem; margin-top: 2rem; margin-bottom: 0.75rem; border-bottom: 1px solid var(--border); padding-bottom: 0.25rem; }
+  .summary { font-size: 1.05rem; }
+  ul { padding-left: 1.25rem; }
+  li { margin-bottom: 0.5rem; }
+  .relevance { color: var(--muted); font-size: 0.85rem; }
+  .topics { display: flex; flex-wrap: wrap; gap: 0.5rem; }
+  .tag {
+    background: var(--tag-bg); color: var(--tag-fg);
+    padding: 0.2rem 0.6rem; border-radius: 1rem; font-size: 0.8rem;
+  }
+  .about-card {
+    background: var(--card-bg); padding: 1rem; border-radius: 0.5rem;
+    border: 1px solid var(--border);
+  }
+  .about-card p { margin: 0.25rem 0; }
+  .notes { white-space: pre-wrap; color: var(--muted); font-size: 0.95rem; }
+  .share-btn {
+    display: inline-block; padding: 0.5rem 1rem; border-radius: 0.5rem;
+    background: var(--accent); color: #fff; font-size: 0.9rem; cursor: pointer;
+    border: none; font-family: inherit;
+  }
+  .share-btn:hover { opacity: 0.85; }
+  .share-section { margin-bottom: 1.5rem; }
+  .share-copied { color: var(--muted); font-size: 0.85rem; margin-left: 0.5rem; }
+</style>
+</head>
+<body>
+
+<h1>15 Hidden and Under-Utilized Features in Claude Code</h1>
+<div class="meta">
+  <a href="https://x.com/bcherny/status/2038454336355999749?s=12">https://x.com/bcherny/status/2038454336355999749?s=12</a><br>
+  Twitter thread / developer tutorial &middot; Researched March 30, 2026
+</div>
+
+<div class="share-section">
+<button class="share-btn" onclick="navigator.clipboard.writeText(window.location.href).then(()=>{document.getElementById('copied').style.display='inline'});window.open('https://notebooklm.google.com','_blank')">
+  Share to NotebookLM
+</button>
+<span id="copied" class="share-copied" style="display:none">URL copied — paste it as a website source in a new notebook</span>
+</div>
+
+<h2>Summary</h2>
+<div class="summary"><p>Boris Cherny, creator and head of Claude Code at Anthropic, shares a comprehensive thread revealing 15 hidden and under-utilized features of Claude Code that he uses daily in his own workflow. The thread has generated significant viral buzz in the developer community, with industry observers calling it a &quot;watershed moment&quot; for AI-powered development tools.</p>
+<p></p>
+<p>Cherny emphasizes that Claude Code ships with powerful features that many developers don't know exist or underutilize. Rather than requiring extensive customization, he argues that Claude Code &quot;works great out of the box,&quot; but knowing these advanced features can dramatically enhance productivity. The features range from mobile access and cross-device session management, to advanced automation with loops and scheduled tasks, to sophisticated development patterns like parallel git worktrees and verification loops.</p>
+<p></p>
+<p>The most striking feature Cherny highlights is the ability to give Claude ways to verify its own output—whether through browser automation, test suites, or end-to-end testing. He claims this verification loop improves code quality by &quot;2-3x,&quot; fundamentally changing how developers should think about AI-assisted coding: not as a text generator, but as a testing and iterating agent that can write, execute, and refine its own work until it's production-ready.</p>
+<p></p>
+<p>Cherny's personal workflow, also shared in earlier threads, demonstrates the power of these features: he runs 5 parallel Claude instances simultaneously, each in separate git worktrees, shipping 20-30 pull requests per day. This approach has resonated deeply with the developer community, with VentureBeat describing it as turning &quot;coding into a real-time strategy game,&quot; where the engineer acts as a fleet commander rather than a typist.</p>
+<p></p>
+<p>The thread sparked a broader conversation about the future of software engineering, with developers sharing implementations of Cherny's advice and creating tools (like &quot;howborisusesclaudecode.com&quot;) to aggregate and teach his workflows to others.</p></div>
+
+<h2>Key Takeaways</h2>
+<ul>
+  <li>Claude Code includes a native mobile app (iOS/Android) that allows developers to write and edit code from their phones, with seamless /teleport integration to move sessions between mobile, web, desktop, and terminal environments.</li>
+  <li>/loop and /schedule are powerful features for automating repetitive tasks—Cherny uses loops to continuously babysit PRs, gather slack feedback, clean up post-merge code review comments, and prune stale PRs, with loops running for up to a week at a time.</li>
+  <li>Hooks enable deterministic logic execution at key points in the agent lifecycle (SessionStart, PreToolUse, PermissionRequest, Stop), allowing developers to dynamically load context, log commands, route permissions, or keep Claude actively working.</li>
+  <li>Verification loops—where Claude automatically tests its own output via browser automation, test suites, or end-to-end testing—improve code quality by 2-3x and are the 'real unlock' for AI-generated code, fundamentally changing how to approach AI-assisted development.</li>
+  <li>Git worktrees are essential for parallel work: Cherny runs dozens of Claude instances simultaneously, each in a separate worktree, enabling massive throughput. The /batch feature can fan out work to dozens or hundreds of parallel agents for large code migrations.</li>
+  <li>The Chrome extension for frontend work is critical for web development: it provides browser access so Claude can write code, test the UI, iterate, and verify that the UX feels good—something impossible without direct verification.</li>
+  <li>Custom agents and slash commands can be checked into a project repository and used dozens of times daily, automating complex multi-step workflows like /commit-push-pr or specialized subagents for code simplification and verification.</li>
+  <li>/btw enables side queries while the main agent continues working, providing a lightweight way to ask quick questions without interrupting ongoing tasks.</li>
+  <li>The --bare flag accelerates SDK startup by up to 10x in non-interactive usage by skipping automatic discovery of CLAUDE.md files, settings, and MCPs—important for scaling to hundreds or thousands of parallel agents.</li>
+  <li>Cowork Dispatch is a secure remote control for Claude Desktop that can manage Slack, emails, and computer tasks from anywhere, blurring the line between coding and task automation for a truly distributed workflow.</li>
+</ul>
+
+<h2>About</h2>
+<div class="about-card">
+  <p><strong>Author:</strong> Boris Cherny</p>
+  <p><strong>Publication:</strong> X (Twitter)</p>
+  <p><strong>Published:</strong> 2026-03 (early March 2026)</p>
+</div>
+
+<h2>Sentiment / Tone</h2>
+<p>Professionally enthusiastic and matter-of-fact; Cherny adopts an educator's tone rather than a salesperson's pitch. He consistently emphasizes that &quot;there is no one right way to use Claude Code&quot; and encourages experimentation, avoiding dogmatism. His writing reflects confidence born from hands-on daily use—he presents features not as theoretical possibilities but as practical tools he personally relies on, often citing specific automation routines (like /babysit and /pr-pruner) he runs constantly. There's an underlying current of excitement about the paradigm shift from developer-as-typist to developer-as-orchestrator, but it's grounded and pragmatic rather than hype-driven. The tone is also inclusive and encouraging—Cherny positions himself as sharing learnings from the team, not gatekeeping expertise.</p>
+
+<h2>Related Links</h2>
+<ul>
+<li><a href="https://venturebeat.com/technology/the-creator-of-claude-code-just-revealed-his-workflow-and-developers-are">VentureBeat: The creator of Claude Code just revealed his workflow, and developers are losing their minds</a><br><span class="relevance">In-depth analysis of Cherny's workflow revealing how his parallel Claude setup achieves 20-30 PRs/day, with expert reactions calling it a 'watershed moment' for AI development</span></li>
+<li><a href="https://www.lennysnewsletter.com/p/head-of-claude-code-what-happens">Lenny's Newsletter: Head of Claude Code—What happens after coding is solved</a><br><span class="relevance">Full podcast interview with Cherny discussing his views on why 'coding is solved,' Claude Code's rapid growth to 4% of public GitHub commits, and principles for getting the most from the tool</span></li>
+<li><a href="https://newsletter.pragmaticengineer.com/p/building-claude-code-with-boris-cherny">Pragmatic Engineer: Building Claude Code with Boris Cherny</a><br><span class="relevance">Deep technical discussion with Gergely Orosz covering how Claude Code's architecture actually works, Cherny's parallel agent workflow, and his learnings from 5 years as Principal Engineer at Meta</span></li>
+<li><a href="https://www.developing.dev/p/boris-cherny-creator-of-claude-code">Developing.dev: Boris Cherny on How His Career Grew</a><br><span class="relevance">Career retrospective explaining how Cherny went from startup founder at 18 to Principal Engineer at Meta to creator of Claude Code, with insights on earning promotions and building credibility</span></li>
+<li><a href="https://howborisusesclaudecode.com/">How Boris Uses Claude Code (Interactive Collection)</a><br><span class="relevance">Comprehensive aggregation of all 42+ tips Cherny shared across five Twitter threads (January-February 2026), organized by theme with direct links to each tip's original thread</span></li>
+</ul>
+
+<h2>Research Notes</h2>
+<div class="notes">**Author credibility**: Boris Cherny is exceptionally well-positioned to speak about Claude Code—he created it from a side project in September 2024 and is now the head of the product at Anthropic. He previously spent five years at Meta as a Principal Engineer (IC8, the second-highest individual contributor level), leading major projects and eventually managing infrastructure for hundreds of engineers. He's also the author of &quot;Programming TypeScript&quot; (published 2019, well-regarded in the community), demonstrating deep expertise in both developer tools and communication. Notably, Cherny has no computer science degree—he studied economics and dropped out to pursue startups—which gives him a different perspective on how to build tools for developers. **Reactions and impact**: The thread went viral within the developer community, generating 1.6K+ upvotes on Reddit's r/ClaudeAI, with developers calling it &quot;game-changing&quot; and &quot;watershed moment&quot; content. The enthusiasm led to third-party projects like howborisusesclaudecode.com aggregating all his tips, and developers openly discussing how they've restructured their workflows around his advice. Multiple major tech publications (VentureBeat, Pragmatic Engineer, Lenny's Newsletter) have since produced in-depth analysis or interviews. **Broader context**: This thread is part of a series—Cherny has shared 40+ tips across five threads from January through February 2026, with themes ranging from basic workflow setup to advanced customization (hooks, permissions, agents). The recurring message is that Claude Code's power lies not in requiring deep customization but in understanding how to leverage built-in features for parallel work, verification loops, and automation. **Limitations and caveats**: The thread focuses on power-user features that require some technical comfort (git worktrees, terminal commands, settings configuration). Cherny himself notes these are advanced techniques, not required to use Claude Code effectively. Some features mentioned (like hooks and custom agents) require familiarity with Claude Code's configuration system. The thread is aspirational—achieving his 20-30 PRs/day workflow requires significant setup and infrastructure thinking, not just knowledge of individual features.</div>
+
+<h2>Topics</h2>
+<div class="topics">
+  <span class="tag">Claude Code</span>
+  <span class="tag">AI-assisted development</span>
+  <span class="tag">developer productivity</span>
+  <span class="tag">automation workflows</span>
+  <span class="tag">software engineering</span>
+  <span class="tag">AI agents</span>
+</div>
+
+
+</body>
+</html>
