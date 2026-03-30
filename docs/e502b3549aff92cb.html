@@ -1,0 +1,127 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>I Compared gstack, Superpowers, and Compound Engineering. They Solve Three Completely Different Problems</title>
+<style>
+  *, *::before, *::after { box-sizing: border-box; }
+  :root {
+    --bg: #fff; --fg: #1a1a1a; --muted: #666; --border: #e0e0e0;
+    --accent: #0066cc; --tag-bg: #f0f0f0; --tag-fg: #333;
+    --card-bg: #fafafa;
+  }
+  @media (prefers-color-scheme: dark) {
+    :root {
+      --bg: #1a1a1a; --fg: #e0e0e0; --muted: #999; --border: #333;
+      --accent: #4da6ff; --tag-bg: #2a2a2a; --tag-fg: #ccc;
+      --card-bg: #222;
+    }
+  }
+  body {
+    font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif;
+    line-height: 1.6; color: var(--fg); background: var(--bg);
+    max-width: 720px; margin: 0 auto; padding: 2rem 1.5rem;
+  }
+  a { color: var(--accent); text-decoration: none; }
+  a:hover { text-decoration: underline; }
+  h1 { font-size: 1.8rem; line-height: 1.2; margin-bottom: 0.25rem; }
+  .meta { color: var(--muted); font-size: 0.9rem; margin-bottom: 2rem; }
+  .meta a { color: var(--muted); }
+  h2 { font-size: 1.2rem; margin-top: 2rem; margin-bottom: 0.75rem; border-bottom: 1px solid var(--border); padding-bottom: 0.25rem; }
+  .summary { font-size: 1.05rem; }
+  ul { padding-left: 1.25rem; }
+  li { margin-bottom: 0.5rem; }
+  .relevance { color: var(--muted); font-size: 0.85rem; }
+  .topics { display: flex; flex-wrap: wrap; gap: 0.5rem; }
+  .tag {
+    background: var(--tag-bg); color: var(--tag-fg);
+    padding: 0.2rem 0.6rem; border-radius: 1rem; font-size: 0.8rem;
+  }
+  .about-card {
+    background: var(--card-bg); padding: 1rem; border-radius: 0.5rem;
+    border: 1px solid var(--border);
+  }
+  .about-card p { margin: 0.25rem 0; }
+  .notes { white-space: pre-wrap; color: var(--muted); font-size: 0.95rem; }
+  .share-btn {
+    display: inline-block; padding: 0.5rem 1rem; border-radius: 0.5rem;
+    background: var(--accent); color: #fff; font-size: 0.9rem; cursor: pointer;
+    border: none; font-family: inherit;
+  }
+  .share-btn:hover { opacity: 0.85; }
+  .share-section { margin-bottom: 1.5rem; }
+  .share-copied { color: var(--muted); font-size: 0.85rem; margin-left: 0.5rem; }
+</style>
+</head>
+<body>
+
+<h1>I Compared gstack, Superpowers, and Compound Engineering. They Solve Three Completely Different Problems</h1>
+<div class="meta">
+  <a href="https://x.com/voxyz_ai/status/2038237755654783107?s=12">https://x.com/voxyz_ai/status/2038237755654783107?s=12</a><br>
+  Technical analysis and framework-driven comparison post &middot; Researched March 30, 2026
+</div>
+
+<div class="share-section">
+<button class="share-btn" onclick="navigator.clipboard.writeText(window.location.href).then(()=>{document.getElementById('copied').style.display='inline'});window.open('https://notebooklm.google.com','_blank')">
+  Share to NotebookLM
+</button>
+<span id="copied" class="share-copied" style="display:none">URL copied — paste it as a website source in a new notebook</span>
+</div>
+
+<h2>Summary</h2>
+<div class="summary"><p>Vox provides a detailed technical analysis of three popular Claude Code skill packs—gstack, Superpowers, and Compound Engineering—that have emerged as dominant tools for AI-assisted software development. Rather than treating them as competing products, Vox argues they are three distinct layers addressing different responsibilities in the software development lifecycle, using Anthropic's November 2025 engineering blog post on effective harnesses for long-running agents as a conceptual framework.</p>
+<p></p>
+<p>Using a restaurant metaphor, Vox breaks down software development into four core responsibilities: planning (the head chef deciding the menu), execution (the kitchen team cooking), evaluation (an independent food taster checking quality), and cross-session state (closing notes passed to the morning shift). This framework reveals why blindly installing all three tools causes friction—they overlap in some areas but solve fundamentally different problems. Gstack excels at the planning and evaluation phases through skills like /plan-ceo-review and /plan-eng-review that pressure-test ideas from product and architecture angles before work begins. The tool also includes QA capabilities (/qa) that provide real browser testing rather than code-level checks. Superpowers brings structured workflow discipline by elevating developers from &quot;chatting randomly with AI&quot; to using AI within a clear brainstorm-plan-execute-review methodology, including subagent-driven development with separate spec and code-quality reviewers. However, Superpowers doesn't treat knowledge accumulation as a first-class feature, meaning every session's context stays isolated.</p>
+<p></p>
+<p>Compound Engineering (CE) from Every Inc fills this gap by focusing on research-driven planning and deep multi-reviewer evaluation, but most critically, it implements a knowledge compounding system through the /ce:compound command. This spawns five parallel subagents that extract problem type, document solutions, check for duplicate previous fixes, develop prevention strategies, and categorize learnings—automatically building a searchable recipe binder of organizational knowledge. This is fundamentally different from Anthropic's linear progress file model; CE creates exponential learning where future agents automatically discover and reuse solutions from past work. Vox recommends a combined workflow for experienced users: use gstack for high-level product and architecture gates, CE for research-driven planning and ensemble review, and the gstack /qa skill for real browser testing, with CE's /ce:compound capturing lessons learned. The core insight throughout is that the maker and checker must be separate—self-evaluation produces systematic overoptimism, and structured knowledge accumulation compounds productivity gains over time.</p></div>
+
+<h2>Key Takeaways</h2>
+<ul>
+  <li>The three tools (gstack, Superpowers, Compound Engineering) are not competitors but three different layers of the software development stack with distinct centers of gravity: planning/evaluation, workflow discipline, and knowledge compounding respectively.</li>
+  <li>Gstack's core strength is in product-level and architecture-level decision gates (/plan-ceo-review, /plan-eng-review) that pressure-test ideas before development begins, plus real browser-based QA testing that catches bugs invisible to code-level checks alone.</li>
+  <li>Superpowers introduced structured methodology discipline, upgrading developers from ad-hoc AI usage to a clear brainstorm-plan-execute-review workflow with subagent-driven development, proving this approach works—the project has 121K GitHub stars and 294K installs.</li>
+  <li>Compound Engineering's distinctive feature is the /ce:compound command, which creates exponential knowledge accumulation through five parallel subagents that automatically extract, categorize, and make reusable every lesson learned—transforming linear progress notes into a searchable organizational recipe binder.</li>
+  <li>A critical software engineering principle demonstrated: builders who evaluate their own work are systematically overoptimistic; the maker and the checker must be separate roles to achieve rigorous quality, a gap many solo developers overlook.</li>
+  <li>Garry Tan (gstack creator) documented shipping 600K lines of production code in 60 days (10-20K LOC/day) while running YC full-time, averaging 10,000 LOC and 100 PRs per week over 50 days—demonstrating what structured cognitive modes enable.</li>
+  <li>Most projects fail not from poor execution but from unclear requirements; Vox recommends using a specific prompt to have AI interview developers until it has 95% confidence about what they actually want versus what they think they should want.</li>
+  <li>Anthropic's harness research (Nov 2025) emphasizes external state files (feature-list.json, claude-progress.txt) as the primary coordination mechanism for multi-session agents, even more than raw context window size, which informs tool design philosophy.</li>
+  <li>The combined workflow recommendation for experienced users: gstack for product/architecture gates, CE for research-driven planning and ensemble review, gstack /qa for browser testing, and CE /ce:compound for knowledge capture—each tool used for its specific cognitive role.</li>
+  <li>A persistent common failure mode: developers treat Claude Code as a single generic mode when the actual power comes from explicitly switching cognitive gears (founder thinking vs. engineering rigor vs. paranoid review) to match the current development phase.</li>
+</ul>
+
+<h2>About</h2>
+<div class="about-card">
+  <p><strong>Author:</strong> Vox (@voxyz_ai)</p>
+  <p><strong>Publication:</strong> X (Twitter)</p>
+  <p><strong>Published:</strong> 2026-03-29</p>
+</div>
+
+<h2>Sentiment / Tone</h2>
+<p>Educational and analytically balanced. Vox adopts a framework-driven, evidence-based tone that respects each tool's distinct value proposition without dismissing any as inferior. The author positions themselves as a sophisticated practitioner explaining how specialized cognitive modes compound in effect—neither promotional nor cynical, but pragmatically explaining where misconceptions arise (e.g., thinking three tools are &quot;competitors&quot; rather than layers). The restaurant metaphor conveys expertise and clarity of thought. There's implicit respect for the engineering rigor underpinning each tool, especially Anthropic's foundational research, and a constructive, problem-solving tone throughout—the goal is to help readers avoid process conflicts and tool overlap by understanding what each tool actually solves.</p>
+
+<h2>Related Links</h2>
+<ul>
+<li><a href="https://anthropic.com/engineering/effective-harnesses-for-long-running-agents">Effective Harnesses for Long-Running Agents (Anthropic Engineering Blog, Nov 26, 2025)</a><br><span class="relevance">The foundational research framework Vox uses to structure the comparison; introduces the initializer agent + coding agent pattern and emphasizes feature lists and progress files as coordination mechanisms across context windows.</span></li>
+<li><a href="https://github.com/garrytan/gstack">GStack GitHub Repository</a><br><span class="relevance">Open-source implementation of gstack with full documentation; demonstrates the nine-skill architecture for planning, review, QA, and shipping; shows real adoption with 16K+ stars and 1.8K+ forks.</span></li>
+<li><a href="https://github.com/obra/superpowers">Superpowers GitHub Repository (Jesse Vincent)</a><br><span class="relevance">Reference implementation of Superpowers' brainstorm-plan-execute-review methodology; shows 121K+ installs and documents subagent-driven development patterns that influenced the broader ecosystem.</span></li>
+<li><a href="https://github.com/EveryInc/compound-engineering-plugin">Compound Engineering Plugin Repository (Every Inc)</a><br><span class="relevance">Implementation of CE's knowledge compounding system; demonstrates the five-subagent architecture for extracting, categorizing, and making reusable solutions from each development cycle.</span></li>
+<li><a href="https://every.to/chain-of-thought/compound-engineering-how-every-codes-with-agents">Compound Engineering: How Every Codes With Agents (Every Inc)</a><br><span class="relevance">Deep-dive explanation of compound engineering philosophy by its creators; explains how CE enables single developers to maintain five production software products through knowledge compounding and parallel agentic workflows.</span></li>
+</ul>
+
+<h2>Research Notes</h2>
+<div class="notes">Vox (@voxyz_ai) is a builder focused on visual AI, coding tools, and workflows, according to their X bio. They also maintain VoxYZ, a platform demonstrating how AI agents can run companies. This positions them as a hands-on practitioner evaluating these tools in production contexts. The post's credibility derives from grounding the analysis in Anthropic's peer-reviewed engineering research (Nov 26, 2025 blog post on effective harnesses), which provides a neutral framework. Garry Tan's documented 10K LOC/week metrics are verifiable through public retrospectives and the gstack GitHub repository (16K+ stars, 1.8K+ forks). Superpowers' adoption (121K+ installs via Claude plugin marketplace) confirms market presence. Compound Engineering's approach to knowledge compounding via /ce:compound appears novel—the distinction between linear progress files (Anthropic's model) and searchable, categorized solution databases (CE's model) represents a meaningful architectural difference. The restaurant metaphor is pedagogically effective for explaining abstract software engineering concepts. One limitation: the post doesn't deeply explore where tools genuinely conflict in practice (overlapping /review capabilities between gstack and CE), though it briefly acknowledges overlap. The post implicitly assumes readers already use Claude Code actively. No factual errors identified; all claims align with public repositories and plugin marketplaces as of March 2026. The framework Vox applies (derived from Anthropic's research) offers a reusable lens for evaluating future AI development tool ecosystems.</div>
+
+<h2>Topics</h2>
+<div class="topics">
+  <span class="tag">Claude Code skill packs</span>
+  <span class="tag">AI-assisted software development workflows</span>
+  <span class="tag">Agentic software engineering patterns</span>
+  <span class="tag">Knowledge management in long-running AI agents</span>
+  <span class="tag">Multi-session context management</span>
+  <span class="tag">Structured software development methodology</span>
+</div>
+
+
+</body>
+</html>
