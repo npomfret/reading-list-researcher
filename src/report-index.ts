@@ -12,6 +12,7 @@ interface IndexEntry {
   topics: string[];
   contentType: string;
   datePublished: string | null;
+  researchedAt: string;
   url: string;
 }
 
@@ -32,13 +33,15 @@ function loadResearchEntries(): IndexEntry[] {
   for (const file of files) {
     try {
       const filePath = path.join(config.researchDir, file);
-      const data: ResearchOutput = JSON.parse(fs.readFileSync(filePath, "utf-8"));
+      const data = JSON.parse(fs.readFileSync(filePath, "utf-8"));
+      const stat = fs.statSync(filePath);
       entries.push({
         hash: file.replace(".json", ""),
         title: data.title,
         topics: data.topics,
         contentType: data.contentType,
         datePublished: data.datePublished,
+        researchedAt: data.researchedAt ?? new Date(stat.birthtimeMs || stat.mtimeMs).toISOString(),
         url: data.url,
       });
     } catch {
@@ -72,7 +75,7 @@ function renderIndex(entries: IndexEntry[]): string {
       <div class="card-type">${escapeHtml(e.contentType)}</div>
       <h2 class="card-title">${escapeHtml(e.title)}</h2>
       <div class="card-meta">
-        ${e.datePublished ? escapeHtml(e.datePublished) : ""}
+        Researched ${new Date(e.researchedAt).toLocaleDateString("en-US", { year: "numeric", month: "short", day: "numeric" })}${e.datePublished ? ` · Published ${escapeHtml(e.datePublished)}` : ""}
       </div>
       <div class="card-topics">
         ${e.topics.map((t) => `<span class="tag">${escapeHtml(t)}</span>`).join(" ")}

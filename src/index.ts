@@ -47,7 +47,7 @@ async function processOne(): Promise<boolean> {
 
     const hash = crypto.createHash("sha256").update(newEntry.url).digest("hex").slice(0, 16);
     const outputPath = `${config.researchDir}/${hash}.json`;
-    fs.writeFileSync(outputPath, JSON.stringify(output, null, 2));
+    fs.writeFileSync(outputPath, JSON.stringify({ ...output, researchedAt: new Date().toISOString() }, null, 2));
 
     logger.info(`Research saved to ${outputPath}`);
 
