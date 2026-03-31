@@ -1,0 +1,142 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Let Claude use your computer from the CLI - Claude Code Docs</title>
+<style>
+  *, *::before, *::after { box-sizing: border-box; }
+  :root {
+    --bg: #fff; --fg: #1a1a1a; --muted: #666; --border: #e0e0e0;
+    --accent: #0066cc; --tag-bg: #f0f0f0; --tag-fg: #333;
+    --card-bg: #fafafa;
+  }
+  @media (prefers-color-scheme: dark) {
+    :root {
+      --bg: #1a1a1a; --fg: #e0e0e0; --muted: #999; --border: #333;
+      --accent: #4da6ff; --tag-bg: #2a2a2a; --tag-fg: #ccc;
+      --card-bg: #222;
+    }
+  }
+  body {
+    font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif;
+    line-height: 1.6; color: var(--fg); background: var(--bg);
+    max-width: 720px; margin: 0 auto; padding: 2rem 1.5rem;
+  }
+  a { color: var(--accent); text-decoration: none; }
+  a:hover { text-decoration: underline; }
+  h1 { font-size: 1.8rem; line-height: 1.2; margin-bottom: 0.25rem; }
+  .meta { color: var(--muted); font-size: 0.9rem; margin-bottom: 2rem; }
+  .meta a { color: var(--muted); }
+  h2 { font-size: 1.2rem; margin-top: 2rem; margin-bottom: 0.75rem; border-bottom: 1px solid var(--border); padding-bottom: 0.25rem; }
+  .summary { font-size: 1.05rem; }
+  ul { padding-left: 1.25rem; }
+  li { margin-bottom: 0.5rem; }
+  .relevance { color: var(--muted); font-size: 0.85rem; }
+  .topics { display: flex; flex-wrap: wrap; gap: 0.5rem; }
+  .tag {
+    background: var(--tag-bg); color: var(--tag-fg);
+    padding: 0.2rem 0.6rem; border-radius: 1rem; font-size: 0.8rem;
+  }
+  .about-card {
+    background: var(--card-bg); padding: 1rem; border-radius: 0.5rem;
+    border: 1px solid var(--border);
+  }
+  .about-card p { margin: 0.25rem 0; }
+  .notes { white-space: pre-wrap; color: var(--muted); font-size: 0.95rem; }
+  .share-btn {
+    display: inline-block; padding: 0.5rem 1rem; border-radius: 0.5rem;
+    background: var(--accent); color: #fff; font-size: 0.9rem; cursor: pointer;
+    border: none; font-family: inherit;
+  }
+  .share-btn:hover { opacity: 0.85; }
+  .share-section { margin-bottom: 1.5rem; }
+  .share-copied { color: var(--muted); font-size: 0.85rem; margin-left: 0.5rem; }
+</style>
+</head>
+<body>
+
+<h1>Let Claude use your computer from the CLI - Claude Code Docs</h1>
+<div class="meta">
+  <a href="https://code.claude.com/docs/en/computer-use">https://code.claude.com/docs/en/computer-use</a><br>
+  Technical documentation and feature guide with integrated safety guidance &middot; Researched March 31, 2026
+</div>
+
+<div class="share-section">
+<button class="share-btn" onclick="navigator.clipboard.writeText(window.location.href).then(()=>{document.getElementById('copied').style.display='inline'});window.open('https://notebooklm.google.com','_blank')">
+  Share to NotebookLM
+</button>
+<span id="copied" class="share-copied" style="display:none">URL copied — paste it as a website source in a new notebook</span>
+</div>
+
+<h2>Summary</h2>
+<div class="summary"><p>Anthropic's Claude Code documentation describes a new computer use feature that enables Claude to autonomously control macOS computers through GUI interaction. The feature allows Claude to take screenshots, move the mouse, type text, and interact with any application on a user's machine—enabling the AI to complete tasks that previously required manual desktop interaction. This capability works across native apps, simulators, and GUI-only tools without APIs, and is activated through a CLI-based system with granular per-application permission controls. The system is designed specifically for tasks requiring visual UI automation, such as building native applications, testing UIs end-to-end, debugging visual bugs, and controlling specialty software like design tools and hardware panels.</p>
+<p></p>
+<p>The feature operates through a hierarchical tool selection strategy: Claude prioritizes MCP servers first, then Bash commands, then browser automation (if Claude in Chrome is set up), and finally falls back to computer use only when other approaches can't work. This ensures the most precise and efficient tool is always used. The documentation emphasizes that this is a research preview feature still in beta, available only on Pro and Max subscription plans, currently limited to macOS, and requires Anthropic's authentication (not available through third-party providers like Google Cloud Vertex AI or Amazon Bedrock).</p>
+<p></p>
+<p>Anthropic built multiple safety mechanisms into the computer use system. Before Claude can control any application, users must explicitly approve each app within the session, and those approvals expire at session end. The system includes &quot;sentinel warnings&quot; for apps with broad system reach—like Terminal, Finder, and System Settings—to make users aware of the implications before approval. Additionally, Claude's terminal window is excluded from screenshots and app-hiding logic, preventing potential feedback loops where Claude could see its own output. Users can abort any computer use action instantly via the Esc key or Ctrl+C. Only one session can hold the computer-use lock at a time, preventing conflicts between simultaneous sessions. The documentation acknowledges that while Anthropic has implemented prompt injection defenses and classifiers that flag suspicious activity, vulnerabilities may persist, and users should avoid giving Claude access to sensitive data or accounts without human oversight.</p>
+<p></p>
+<p>Competitive context matters here: the feature arrived as Anthropic responds to the viral success of OpenClaw, an open-source AI agent framework that OpenAI's CEO has publicly praised and which prompted OpenAI to hire its creator. Anthropic explicitly acknowledges that computer use is &quot;still early compared to Claude's ability to code or interact with text,&quot; indicating both confidence in the long-term direction and realism about current limitations. The feature integrates Claude's existing strengths in code generation and debugging with new autonomous GUI control, creating an end-to-end workflow where Claude can write code, compile it, launch it, test it through the UI, identify bugs, fix them, and verify the fixes—all in one conversation.</p></div>
+
+<h2>Key Takeaways</h2>
+<ul>
+  <li>Computer use is a macOS-only, research preview feature available on Claude Pro/Max plans that enables autonomous GUI control: Claude can take screenshots, click, drag, type, and interact with any desktop application just as a human would, but does not yet work on Windows, Linux, or through third-party cloud providers.</li>
+  <li>The feature uses hierarchical tool selection: Claude tries MCP servers first (for structured APIs), then Bash (for CLI tasks), then browser automation if available, and only uses computer use as a last resort for GUI-only tools, maximizing efficiency and accuracy.</li>
+  <li>All-in-one development workflow: Claude can write Swift code, compile the app via xcodebuild, launch it, click through the entire UI, screenshot the results, identify visual bugs, patch the CSS/code, and verify the fixes without the user leaving the terminal.</li>
+  <li>Granular per-session app approval system: Users must explicitly approve each application before Claude can control it, and approvals expire at session end; apps with broad system access (Terminal, Finder, System Settings) trigger extra sentinel warnings to inform users of the implications.</li>
+  <li>Claude's terminal window is excluded from screenshots and hidden apps restore automatically after each turn, preventing feedback loops where Claude could see its own output or interfere with the user's ability to monitor the session.</li>
+  <li>Instant abort capability: Users can press Esc anywhere or Ctrl+C in the terminal to immediately stop Claude and regain control; the key press is consumed by the system so prompt injection cannot use it to dismiss dialogs.</li>
+  <li>Machine-wide locking prevents conflicts: Only one Claude Code session can hold the computer-use lock at a time, with automatic release if the controlling session crashes; attempting to use computer use from a new session fails with a clear message identifying which session holds the lock.</li>
+  <li>Prompt injection defenses are built-in: Anthropic automatically runs classifiers on prompts and screenshots to detect and flag potential prompt injections, steering the model to ask for confirmation before proceeding; however, the documentation advises treating these defenses as one layer among several precautions, not a complete solution.</li>
+  <li>Current limitations are explicitly documented: Computer vision accuracy issues (Claude may hallucinate coordinates), tool selection errors (Claude may make unexpected choices to solve problems), scrolling reliability issues, weak performance on spreadsheet interactions, and inability to reliably create accounts or generate content on social media platforms.</li>
+  <li>Latency, reliability, and vendor lock-in are primary trade-offs: Computer use is slower than human-directed actions and less reliable on complex multi-app tasks; the feature is exclusive to Anthropic's authentication system and Claude models, creating platform dependency for organizations building agents.</li>
+</ul>
+
+<h2>About</h2>
+<div class="about-card">
+  <p><strong>Author:</strong> Anthropic (documentation team)</p>
+  <p><strong>Publication:</strong> Claude Code Documentation / Anthropic</p>
+  <p><strong>Published:</strong> 2026-03-30</p>
+</div>
+
+<h2>Sentiment / Tone</h2>
+<p>Technical, balanced, and cautiously optimistic. The documentation is matter-of-fact in describing capabilities but notably transparent about limitations and risks. Anthropic positions computer use as a powerful but early-stage feature, explicitly stating it's &quot;still early compared to Claude's ability to code or interact with text&quot; and repeatedly emphasizing security considerations rather than overselling capabilities. The tone avoids hype while clearly conveying the significance of the feature (end-to-end UI automation in one conversation). Safety warnings and security precautions receive substantial coverage, signaling that Anthropic is aware of the risks inherent in giving an AI system autonomous computer access and is treating the responsibility seriously, though not presenting computer use as a solved problem.</p>
+
+<h2>Related Links</h2>
+<ul>
+<li><a href="https://www.cnbc.com/2026/03/24/anthropic-claude-ai-agent-use-computer-finish-tasks.html">Anthropic says Claude can now use your computer to finish tasks for you - CNBC</a><br><span class="relevance">Provides external journalism coverage of the computer use feature announcement, including quotes from Anthropic on safeguards and comparison to OpenClaw; contextualizes the feature within the broader AI agent arms race.</span></li>
+<li><a href="https://platform.claude.com/docs/en/agents-and-tools/tool-use/computer-use-tool">Computer use tool - Claude API Docs</a><br><span class="relevance">Complementary official documentation from Anthropic for developers building with the Claude API (not CLI), covering the computer_20250124 and computer_20251124 tool versions, security considerations, implementation patterns, and extended action capabilities like zoom and fine-grained mouse control.</span></li>
+<li><a href="https://code.claude.com/docs/en/overview">Claude Code overview - Claude Code Docs</a><br><span class="relevance">Foundational documentation explaining Claude Code's multi-surface deployment (Terminal CLI, VS Code, Desktop app, Web, JetBrains) and integration across development workflows; provides context for where computer use fits within Anthropic's broader coding assistant ecosystem.</span></li>
+<li><a href="https://siliconangle.com/2026/03/23/anthropics-claude-gets-computer-use-capabilities-preview/">Anthropic's Claude gets computer use capabilities in preview - SiliconANGLE</a><br><span class="relevance">Tech press coverage highlighting platform limitations (macOS only), Anthropic's cautionary language about early-stage status, and safety-first architectural choices; includes industry perspective on competitive positioning.</span></li>
+<li><a href="https://lifehacker.com/tech/claude-computer-use-impressions">This New Claude Feature Can Automate Basically Everything on Your Mac, but It's a Huge Security Risk - Lifehacker</a><br><span class="relevance">Critical security analysis examining the risk surface of computer use, highlighting that Claude can move cursors, delete files, and take arbitrary actions; provides counterweight to optimistic coverage and reinforces the importance of isolation and approval mechanisms.</span></li>
+<li><a href="https://arstechnica.com/ai/2026/03/claude-code-can-now-take-over-your-computer-to-complete-tasks/">Claude Code can now take over your computer to complete tasks - Ars Technica</a><br><span class="relevance">Technical journalism covering default limitations on trading/cryptocurrency apps, safeguards against prompt injection, and comparative analysis of how computer use fits into the OpenClaw/OpenAI competitive landscape.</span></li>
+</ul>
+
+<h2>Research Notes</h2>
+<div class="notes">**Author and credibility**: This documentation comes directly from Anthropic, the creators of Claude and the Claude Code product. Anthropic was founded in 2021 by former members of OpenAI and is one of the largest AI safety-focused research labs. The documentation reflects internal product decisions and safety engineering, so it carries significant weight as an authoritative source.
+
+**Broader competitive context**: Computer use was announced March 24-31, 2026 (contemporaneous with the documentation date), in direct response to the viral success of OpenClaw—an open-source AI agent framework. OpenClaw has been praised by Nvidia CEO Jensen Huang as &quot;definitely the next ChatGPT,&quot; and OpenAI hired OpenClaw's creator, Peter Steinberger, to lead OpenAI's &quot;next generation of personal agents&quot; efforts. Anthropic's computer use announcement represents the company's answer to competitor moves in the AI agent space and demonstrates that autonomous computer control has become a battleground feature among frontier AI labs. However, computer use is not yet as polished or viral as OpenClaw; it's presented as a research preview.
+
+**Security and safety concerns**: Multiple independent journalists and tech outlets (Lifehacker, Ars Technica, Anthropic's own docs) have flagged legitimate security concerns. The feature grants Claude the ability to read any file, change system settings, and execute arbitrary actions—potentially including accessing sensitive data, credentials, or financial accounts if not carefully isolated. Anthropic's response is layered: per-app approval, prompt injection classifiers, terminal exclusion, and escape-key abort. However, the documentation honestly acknowledges that &quot;vulnerabilities like jailbreaking or prompt injection may persist&quot; and recommends using virtual machines or containers with minimal privileges for production use. This is a reasonable security posture, but it means the feature is realistically only safe for development/testing environments, not production workloads managing critical data.
+
+**Platform limitations and vendor lock-in**: Computer use is macOS-only, requires Anthropic authentication (not available through Amazon Bedrock, Google Cloud Vertex AI, or Microsoft Foundry), and is exclusive to Claude models. This creates significant friction for cross-platform teams or organizations committed to multi-vendor cloud strategies. Windows and Linux support are not yet available, limiting the feature's addressable market in enterprise and developer communities that heavily use Linux servers and containers.
+
+**Reactions and adoption signals**: Tech press coverage (CNBC, India Today, Ars Technica, SiliconANGLE) has been positive, with emphasis on the AI agent arms race. However, there's been limited hands-on coverage compared to OpenClaw's launch, suggesting either more cautious interest or lower early adoption. Notably, on the same day the computer use documentation was published (March 31, 2026), Anthropic's entire Claude Code source code was leaked via an npm registry mistake (a 60MB source-map file), which Ars Technica and other outlets noted. This security incident occurred just hours after a major security-focused product launch, creating some irony and perhaps dampening some positive sentiment.
+
+**Reality vs. hype**: The documentation's explicit acknowledgment of limitations is valuable. &quot;Computer vision accuracy and reliability: Claude may make mistakes or hallucinate when outputting specific coordinates&quot; is honest. The admission that latency &quot;may be too slow compared to regular human-directed computer actions&quot; is refreshingly clear. This contrasts with some media coverage that framed computer use as magical or near-fully-autonomous; the docs make clear it's a tool with real constraints.
+
+**Significance**: Computer use represents a significant inflection point in AI product development—moving from text/code-only interfaces to GUI automation. This broadens Claude's applicability to any task that currently requires graphical interaction, which is still the majority of knowledge work (design, video editing, trading platforms, etc.). However, the feature is only useful if it's reliable and safe, and the documentation suggests both dimensions remain under development. The feature is meaningful as a research direction but shouldn't be expected to replace human developers or autonomously handle critical tasks without substantial human oversight.</div>
+
+<h2>Topics</h2>
+<div class="topics">
+  <span class="tag">AI agents and autonomous task completion</span>
+  <span class="tag">GUI automation and computer vision</span>
+  <span class="tag">Claude Code CLI and tooling</span>
+  <span class="tag">AI safety, sandboxing, and permission models</span>
+  <span class="tag">Prompt injection defense mechanisms</span>
+  <span class="tag">Developer productivity tools</span>
+</div>
+
+
+</body>
+</html>
