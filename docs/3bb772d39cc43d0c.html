@@ -1,0 +1,127 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Ollama Announces MLX-Powered Preview: 1.6x-2x Faster LLM Inference on Apple Silicon</title>
+<style>
+  *, *::before, *::after { box-sizing: border-box; }
+  :root {
+    --bg: #fff; --fg: #1a1a1a; --muted: #666; --border: #e0e0e0;
+    --accent: #0066cc; --tag-bg: #f0f0f0; --tag-fg: #333;
+    --card-bg: #fafafa;
+  }
+  @media (prefers-color-scheme: dark) {
+    :root {
+      --bg: #1a1a1a; --fg: #e0e0e0; --muted: #999; --border: #333;
+      --accent: #4da6ff; --tag-bg: #2a2a2a; --tag-fg: #ccc;
+      --card-bg: #222;
+    }
+  }
+  body {
+    font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif;
+    line-height: 1.6; color: var(--fg); background: var(--bg);
+    max-width: 720px; margin: 0 auto; padding: 2rem 1.5rem;
+  }
+  a { color: var(--accent); text-decoration: none; }
+  a:hover { text-decoration: underline; }
+  h1 { font-size: 1.8rem; line-height: 1.2; margin-bottom: 0.25rem; }
+  .meta { color: var(--muted); font-size: 0.9rem; margin-bottom: 2rem; }
+  .meta a { color: var(--muted); }
+  h2 { font-size: 1.2rem; margin-top: 2rem; margin-bottom: 0.75rem; border-bottom: 1px solid var(--border); padding-bottom: 0.25rem; }
+  .summary { font-size: 1.05rem; }
+  ul { padding-left: 1.25rem; }
+  li { margin-bottom: 0.5rem; }
+  .relevance { color: var(--muted); font-size: 0.85rem; }
+  .topics { display: flex; flex-wrap: wrap; gap: 0.5rem; }
+  .tag {
+    background: var(--tag-bg); color: var(--tag-fg);
+    padding: 0.2rem 0.6rem; border-radius: 1rem; font-size: 0.8rem;
+  }
+  .about-card {
+    background: var(--card-bg); padding: 1rem; border-radius: 0.5rem;
+    border: 1px solid var(--border);
+  }
+  .about-card p { margin: 0.25rem 0; }
+  .notes { white-space: pre-wrap; color: var(--muted); font-size: 0.95rem; }
+  .share-btn {
+    display: inline-block; padding: 0.5rem 1rem; border-radius: 0.5rem;
+    background: var(--accent); color: #fff; font-size: 0.9rem; cursor: pointer;
+    border: none; font-family: inherit;
+  }
+  .share-btn:hover { opacity: 0.85; }
+  .share-section { margin-bottom: 1.5rem; }
+  .share-copied { color: var(--muted); font-size: 0.85rem; margin-left: 0.5rem; }
+</style>
+</head>
+<body>
+
+<h1>Ollama Announces MLX-Powered Preview: 1.6x-2x Faster LLM Inference on Apple Silicon</h1>
+<div class="meta">
+  <a href="https://x.com/ollama/status/2038835449012351197?s=12">https://x.com/ollama/status/2038835449012351197?s=12</a><br>
+  Product announcement / technical release notes, posted to social media with backing blog post &middot; Researched March 31, 2026
+</div>
+
+<div class="share-section">
+<button class="share-btn" onclick="navigator.clipboard.writeText(window.location.href).then(()=>{document.getElementById('copied').style.display='inline'});window.open('https://notebooklm.google.com','_blank')">
+  Share to NotebookLM
+</button>
+<span id="copied" class="share-copied" style="display:none">URL copied — paste it as a website source in a new notebook</span>
+</div>
+
+<h2>Summary</h2>
+<div class="summary"><p>Ollama announced the preview release of version 0.19 on March 31, 2026, featuring deep integration with Apple's MLX (Machine Learning eXperimental) framework. This marks a major architectural shift for running large language models on Apple silicon Macs, moving away from the previous llama.cpp-based implementation to leverage MLX's unified memory architecture. The update delivers substantial performance improvements: prefill speeds (prompt processing) increase by approximately 1.6x (from 1154 to 1810 tokens/second), while decode speeds (response generation) nearly double (from 58 to 112 tokens/second). These benchmarks were conducted on Alibaba's Qwen3.5-35B model, with even higher performance possible with int4 quantization.</p>
+<p></p>
+<p>The release introduces three complementary improvements beyond raw speed: intelligent cache management that reuses cache across conversations for tools like Claude Code, improved memory efficiency through smarter cache eviction strategies, and the adoption of NVIDIA's NVFP4 quantization format for maintaining production-level accuracy while reducing memory bandwidth requirements. MLX's unified memory architecture is the key enabler—unlike traditional GPU frameworks that require explicit data movement between CPU and GPU, MLX operations run seamlessly on either processor without memory transfers, a capability uniquely suited to Apple silicon's integrated architecture.</p>
+<p></p>
+<p>The preview targets demanding use cases: personal AI assistants (like OpenClaw) and coding agents (Claude Code, OpenCode, Codex) that previously struggled with responsiveness on local hardware. The update is positioned as a significant milestone in making powerful AI agents practical for individual developers on consumer hardware, though it currently supports only Alibaba's Qwen3.5-35B-A3B model and requires Macs with 32GB or more unified memory. Community reception has been mixed—some developers celebrated the long-awaited MLX support, while others noted that Ollama adoption of MLX was delayed compared to competing tools like LM Studio.</p></div>
+
+<h2>Key Takeaways</h2>
+<ul>
+  <li>Ollama 0.19 replaces its llama.cpp backend with Apple's MLX framework, achieving 1.6x faster prompt processing and nearly 2x faster token generation on Apple silicon Macs—enabling real-time AI agents and assistants that were previously laggy.</li>
+  <li>MLX uniquely exploits Apple silicon's unified memory architecture (shared CPU/GPU memory), eliminating expensive data copy operations that plague traditional GPU frameworks—a capability that frameworks like PyTorch/CUDA cannot replicate on these chips.</li>
+  <li>The update introduces intelligent caching optimizations that make coding agents like Claude Code more responsive by reusing cache across conversations and storing intelligent snapshots at prompt junctures, reducing redundant computation.</li>
+  <li>NVFP4 quantization support maintains production-grade model accuracy while reducing memory bandwidth and storage—enabling Ollama users to match inference results from larger inference deployments and integrate with NVIDIA's model optimization tools.</li>
+  <li>Currently limited to Qwen3.5-35B-A3B model and Macs with 32GB+ unified memory in preview, with Ollama committing to expand supported architectures and model formats in future releases.</li>
+  <li>The M5, M5 Pro, and M5 Max chips gain additional advantages from Apple's new GPU Neural Accelerators, which MLX leverages for both time-to-first-token and generation throughput gains.</li>
+  <li>Ollama's move to MLX positions it for the enterprise/production AI workloads (via NVFP4 parity) while maintaining the developer experience of local, privacy-preserving inference—addressing constraints that previously limited local AI deployment.</li>
+  <li>Community context: Competing projects like LM Studio adopted MLX support earlier, with some users noting Ollama's delayed integration; however, this release represents a complete architectural rebuild rather than an incremental addition.</li>
+  <li>The announcement specifically targets developers building AI-powered tools (personal assistants, coding agents, agentic workflows) who need responsive local inference without cloud dependencies or latency unpredictability.</li>
+  <li>This update reflects broader industry momentum toward Apple silicon as a primary platform for local ML—Apple's MLX research team and ecosystem investment are now yielding tangible performance advantages that justify on-device AI for developer workflows.</li>
+</ul>
+
+<h2>About</h2>
+<div class="about-card">
+  <p><strong>Author:</strong> Ollama Team</p>
+  <p><strong>Publication:</strong> X (Twitter)</p>
+  <p><strong>Published:</strong> 2026-03-31</p>
+</div>
+
+<h2>Sentiment / Tone</h2>
+<p>Professional and achievement-focused, with technical precision. The announcement adopts a &quot;milestone achieved&quot; tone, emphasizing concrete performance metrics and specific use cases without hyperbole. The framing centers on unlocking new capabilities (faster responses for coding agents) rather than abstract performance numbers. Ollama positions this as solving real developer pain points—responsiveness lag in local AI tools—through technical excellence rather than claiming market dominance. The tone is confident but measured, acknowledging current limitations (32GB minimum, single model support) while committing to future expansion.</p>
+
+<h2>Related Links</h2>
+<ul>
+<li><a href="https://ollama.com/blog/mlx">Ollama Blog: MLX-Powered Apple Silicon Preview</a><br><span class="relevance">Official technical deep-dive with benchmarks, architecture details, and setup instructions—directly from Ollama team with performance charts and code examples.</span></li>
+<li><a href="https://github.com/ml-explore/mlx">MLX Framework on GitHub</a><br><span class="relevance">Apple's open-source MLX framework—the foundational technology enabling Ollama's performance gains. Includes documentation on unified memory optimization and array framework design.</span></li>
+<li><a href="https://www.macrumors.com/2026/03/31/ollama-now-runs-faster-apple-silicon-macs/">MacRumors Coverage: Ollama Now Runs Faster on Macs</a><br><span class="relevance">Consumer-focused explanation of the update with context on Apple silicon advantage and practical use cases (Claude Code, OpenCode). Good for understanding market implications.</span></li>
+<li><a href="https://machinelearning.apple.com/research/exploring-llms-mlx-m5">Apple ML Research: LLMs with MLX and M5 Neural Accelerators</a><br><span class="relevance">Technical perspective from Apple's research team on how MLX leverages M5 GPU Neural Accelerators—explains the hardware-software synergy driving Ollama's improvements.</span></li>
+<li><a href="https://thenewstack.io/ollama-taps-apples-mlx/">The New Stack: Ollama Taps Apple's MLX Framework</a><br><span class="relevance">Technical analysis of how this solves developer constraints around local AI inference and agentic workloads—bridges the gap between infrastructure and developer experience.</span></li>
+</ul>
+
+<h2>Research Notes</h2>
+<div class="notes">**Author &amp; Project Context**: Ollama is an open-source project focused on simplifying local LLM deployment, with significant adoption among developers seeking privacy-preserving AI without cloud dependencies. The core team collaborates closely with hardware partners (Apple, NVIDIA) and framework communities (GGML, llama.cpp, MLX). **Why This Matters**: This represents a strategic architectural shift—moving from a generic llama.cpp foundation to a hardware-optimized implementation. It signals that local AI inference is graduating from hobbyist territory to developer-grade infrastructure. **Competitive Context**: LM Studio and other local AI tools had already integrated MLX support; Ollama's delayed adoption was a frequent Reddit/community complaint. This release directly addresses that gap, though the complete rebuild means Ollama is now uniquely positioned between pure MLX tools and generic frameworks. **Community Reactions**: Hacker News and Reddit discussions show genuine enthusiasm tempered by practical concerns—the 32GB memory floor eliminates M1/M2 MacBook Air users, and single-model support feels like beta. However, developers running coding agents (especially with Claude Code integration) immediately recognized the value. **Industry Implications**: This validates Apple's MLX investment and suggests unified memory architecture will increasingly drive framework optimization. NVIDIA's NVFP4 collaboration hints at standardization efforts across hardware for inference workloads. **Reliability Note**: Ollama's partnerships with Apple (MLX), NVIDIA (NVFP4, testing), and Alibaba (Qwen models) are genuine technical collaborations, not marketing. The performance benchmarks are reproducible on specified hardware.</div>
+
+<h2>Topics</h2>
+<div class="topics">
+  <span class="tag">Apple silicon optimization</span>
+  <span class="tag">Large Language Models</span>
+  <span class="tag">Local AI inference</span>
+  <span class="tag">MLX framework</span>
+  <span class="tag">Apple machine learning</span>
+  <span class="tag">AI agents and coding assistants</span>
+</div>
+
+
+</body>
+</html>
