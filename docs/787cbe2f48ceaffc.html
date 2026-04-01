@@ -1,0 +1,137 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>IBM Granite 4.0-3B-Vision Release Announcement</title>
+<style>
+  *, *::before, *::after { box-sizing: border-box; }
+  :root {
+    --bg: #fff; --fg: #1a1a1a; --muted: #666; --border: #e0e0e0;
+    --accent: #0066cc; --tag-bg: #f0f0f0; --tag-fg: #333;
+    --card-bg: #fafafa;
+  }
+  @media (prefers-color-scheme: dark) {
+    :root {
+      --bg: #1a1a1a; --fg: #e0e0e0; --muted: #999; --border: #333;
+      --accent: #4da6ff; --tag-bg: #2a2a2a; --tag-fg: #ccc;
+      --card-bg: #222;
+    }
+  }
+  body {
+    font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif;
+    line-height: 1.6; color: var(--fg); background: var(--bg);
+    max-width: 720px; margin: 0 auto; padding: 2rem 1.5rem;
+  }
+  a { color: var(--accent); text-decoration: none; }
+  a:hover { text-decoration: underline; }
+  h1 { font-size: 1.8rem; line-height: 1.2; margin-bottom: 0.25rem; }
+  .meta { color: var(--muted); font-size: 0.9rem; margin-bottom: 2rem; }
+  .meta a { color: var(--muted); }
+  h2 { font-size: 1.2rem; margin-top: 2rem; margin-bottom: 0.75rem; border-bottom: 1px solid var(--border); padding-bottom: 0.25rem; }
+  .summary { font-size: 1.05rem; }
+  ul { padding-left: 1.25rem; }
+  li { margin-bottom: 0.5rem; }
+  .relevance { color: var(--muted); font-size: 0.85rem; }
+  .topics { display: flex; flex-wrap: wrap; gap: 0.5rem; }
+  .tag {
+    background: var(--tag-bg); color: var(--tag-fg);
+    padding: 0.2rem 0.6rem; border-radius: 1rem; font-size: 0.8rem;
+  }
+  .about-card {
+    background: var(--card-bg); padding: 1rem; border-radius: 0.5rem;
+    border: 1px solid var(--border);
+  }
+  .about-card p { margin: 0.25rem 0; }
+  .notes { white-space: pre-wrap; color: var(--muted); font-size: 0.95rem; }
+  .share-btn {
+    display: inline-block; padding: 0.5rem 1rem; border-radius: 0.5rem;
+    background: var(--accent); color: #fff; font-size: 0.9rem; cursor: pointer;
+    border: none; font-family: inherit;
+  }
+  .share-btn:hover { opacity: 0.85; }
+  .share-section { margin-bottom: 1.5rem; }
+  .share-copied { color: var(--muted); font-size: 0.85rem; margin-left: 0.5rem; }
+</style>
+</head>
+<body>
+
+<h1>IBM Granite 4.0-3B-Vision Release Announcement</h1>
+<div class="meta">
+  <a href="https://x.com/mervenoyann/status/2039015519135641997?s=12">https://x.com/mervenoyann/status/2039015519135641997?s=12</a><br>
+  Technical announcement/endorsement on social media from industry expert &middot; Researched April 2, 2026
+</div>
+
+<div class="share-section">
+<button class="share-btn" onclick="navigator.clipboard.writeText(window.location.href).then(()=>{document.getElementById('copied').style.display='inline'});window.open('https://notebooklm.google.com','_blank')">
+  Share to NotebookLM
+</button>
+<span id="copied" class="share-copied" style="display:none">URL copied — paste it as a website source in a new notebook</span>
+</div>
+
+<h2>Summary</h2>
+<div class="summary"><p>Merve Noyan, a machine learning engineer at Hugging Face specializing in vision-language models, announces IBM's release of Granite 4.0-3B-Vision, a compact vision-language model designed specifically for enterprise document understanding. The model achieves state-of-the-art performance for its size (3 billion parameters) across three critical document processing tasks: table extraction, chart understanding, and semantic key-value pair extraction from forms and documents.</p>
+<p></p>
+<p>The Granite 4.0-3B-Vision represents a significant advancement in making high-quality document AI accessible through efficient, deployable models. Unlike general-purpose vision-language models, this model is purpose-built using specialized datasets and novel architectural innovations. IBM invested in creating ChartNet, a million-scale multimodal dataset with 1.7 million diverse chart samples generated through code-guided synthesis, ensuring models can truly understand charts rather than merely describe them. The model also employs DeepStack Injection architecture, which strategically routes abstract visual features into earlier neural network layers for semantic understanding while injecting high-resolution spatial features into later layers—critical for tasks where document layout matters as much as content.</p>
+<p></p>
+<p>The model ships as a LoRA adapter on top of Granite 4.0 Micro, a dense 3.5B base language model, keeping vision and language modular. This design enables a single production deployment to serve both multimodal and text-only workloads seamlessly. Performance benchmarks are impressive: it achieves 86.4% on Chart2Summary (the highest among all evaluated models including much larger ones), 62.1% on Chart2CSV, ranks first on PubTablesV2 table extraction (92.1 cropped, 79.3 full-page), and achieves 85.5% exact-match accuracy on the VAREX KVP extraction benchmark zero-shot. Released under Apache 2.0, the model is freely available for both research and commercial use, with implementations for Hugging Face Transformers and vLLM.</p>
+<p></p>
+<p>The announcement fits into a broader trend of enterprises needing efficient, specialized models for document processing pipelines rather than relying on general-purpose AI systems. Merve's endorsement carries particular weight given her prominent role in the open-source ML community and her focus on making VLMs accessible and practical.</p></div>
+
+<h2>Key Takeaways</h2>
+<ul>
+  <li>Granite 4.0-3B-Vision achieves state-of-the-art (SOTA) performance for its 3-billion-parameter size on document extraction tasks including tables, charts, and key-value pairs from forms.</li>
+  <li>ChartNet, a million-scale multimodal dataset with 1.7 million chart samples created through code-guided synthesis, enables genuine chart understanding by providing five aligned components per sample: plotting code, rendered image, data table, natural language summary, and QA pairs.</li>
+  <li>DeepStack Injection architecture strategically distributes visual features across LLM layers—abstract features in early layers for semantics, high-resolution spatial features in late layers for layout precision—addressing the core challenge of document processing where both content and positioning matter.</li>
+  <li>The model is packaged as a 0.5B LoRA adapter on Granite 4.0 Micro (3.5B base), enabling production deployments to serve both vision-language and text-only requests from a single system without model switching.</li>
+  <li>Benchmark results show 86.4% Chart2Summary accuracy (highest among all compared models including larger ones), 92.1% TEDS on cropped table extraction (PubTablesV2), 79.3% on full-page documents, and 85.5% exact-match zero-shot on VAREX form field extraction.</li>
+  <li>Released under Apache 2.0 license with full transparency on training data and methodology, enabling free commercial deployment and integration with tools like Docling for enterprise document processing pipelines.</li>
+  <li>Supports specialized task tags (chart2csv, chart2code, chart2summary, tables_html, tables_json, tables_otsl) and schema-based key-value extraction, making complex extraction workflows accessible via simple prompting.</li>
+  <li>Works with standard ML frameworks (Hugging Face Transformers with auto-merge LoRA capability, vLLM with native LoRA runtime) and enables text-only fallback on Granite 4.0 Micro when vision processing is unnecessary.</li>
+  <li>Trained on 32 NVIDIA H100 GPUs for approximately 200 hours on IBM's Blue Vela supercomputing infrastructure, making it computationally accessible for inference on consumer hardware (e.g., NVIDIA RTX 3060 with 12GB RAM).</li>
+  <li>Represents a strategic focus by IBM on enterprise-grade document AI for sectors like finance, insurance, and legal where chart/table extraction and structured field extraction from forms are core business processes.</li>
+</ul>
+
+<h2>About</h2>
+<div class="about-card">
+  <p><strong>Author:</strong> Merve Noyan</p>
+  <p><strong>Publication:</strong> X/Twitter</p>
+  <p><strong>Published:</strong> 2026-03-27</p>
+</div>
+
+<h2>Sentiment / Tone</h2>
+<p>Enthusiastic and technically informed, with a tone of genuine excitement about a significant capability advancement. Merve positions the achievement with measured confidence using the celebratory emoji 🙌🏼 but without hyperbole—she emphasizes the concrete benchmarks (&quot;sota for its size&quot;) rather than generic praise. The message is characterized by technical precision: she calls out the specific strengths (table &amp; chart extraction), mentions the licensing/availability (free license), and provides immediate implementation pathways (transformers &amp; vLLM). Her voice carries the authority of a developer advocate who deeply understands the challenges practitioners face with document processing and recognizes this as a genuinely useful tool.</p>
+
+<h2>Related Links</h2>
+<ul>
+<li><a href="https://huggingface.co/blog/ibm-granite/granite-4-vision">Granite 4.0 3B Vision: Compact Multimodal Intelligence for Enterprise Documents</a><br><span class="relevance">Official technical blog post from IBM/Hugging Face explaining the model architecture, training methodology, performance benchmarks, and usage examples across different frameworks</span></li>
+<li><a href="https://huggingface.co/ibm-granite/granite-4.0-3b-vision">IBM Granite 4.0-3B-Vision Model Card</a><br><span class="relevance">Complete model documentation including supported tasks, benchmark results, code examples for Transformers and vLLM, training data sources, and ethical considerations</span></li>
+<li><a href="https://arxiv.org/abs/2603.27064">ChartNet: A Million-Scale, High-Quality Multimodal Dataset for Robust Chart Understanding</a><br><span class="relevance">Academic paper describing the novel code-guided data synthesis pipeline for creating 1.7 million chart samples with five aligned components, accepted to CVPR 2026</span></li>
+<li><a href="https://github.com/ibm-granite/granite-vision-models">IBM Granite Vision Models GitHub Repository</a><br><span class="relevance">Official source code repository with implementation details, model files, and community discussion threads for feedback and troubleshooting</span></li>
+<li><a href="https://huggingface.co/datasets/ibm-granite/ChartNet">ChartNet Dataset on Hugging Face</a><br><span class="relevance">The million-scale ChartNet dataset publicly released for research and development, enabling reproducibility and community-led improvements to chart understanding capabilities</span></li>
+</ul>
+
+<h2>Research Notes</h2>
+<div class="notes">**Author credibility**: Merve Noyan is a senior machine learning engineer in the ML advocacy engineering team at Hugging Face, a leading open-source AI platform. She is a published author (co-authored &quot;Vision Language Models&quot; with O'Reilly), regular speaker at conferences (MIT Media Lab's AI Visions), and prolific contributor to open-source ML tools. Her focus on vision-language models and multimodal alignment makes her uniquely positioned to evaluate advances in this space. She also runs an educational podcast/newsletter covering ML research, giving her broad influence in the developer community.
+
+**Broader context**: This announcement fits into an increasingly competitive landscape of specialized VLMs (2025-2026) as companies recognize that general-purpose models (GPT-4V, Claude 3.5 Vision, Gemini) are often overkill and cost-prohibitive for specific enterprise tasks. Granite 4.0-3B-Vision directly competes with models like Qwen VL series, and the announcement demonstrates IBM's strategic bet on open-source enterprise AI. The timing aligns with growing demand for document processing automation in financial services, insurance, and legal sectors post-2024.
+
+**Technical significance**: The ChartNet dataset and code-guided data augmentation approach represent methodological innovations that could influence how future VLM research approaches specialized domain understanding. The use of rendering code as training signal—creating charts from code, then learning from both the code and the rendered output—is a clever way to ensure semantic alignment without expensive manual annotation at scale.
+
+**Community reception**: Reddit discussions in r/LocalLLaMA (the community for locally-run LLMs) show balanced reception. Some users note that Granite Vision models &quot;have their niche&quot; and excel at specific tasks but aren't general-purpose replacements for larger models. Comparisons with Qwen VL 2.5 3B suggest Granite excels on document/structured extraction while Qwen may have broader capability. This suggests the announcement is being received as a welcome specialist tool rather than a breakthrough that displaces existing models.
+
+**Limitations to note**: The model is English-only (explicitly stated as a limitation), and like all generative models, it can hallucinate—IBM recommends validation before using in automated high-stakes pipelines. The model focuses specifically on extraction tasks and may not generalize well to open-ended vision-language tasks. The paper (under review for CVPR 2026) hasn't yet undergone full peer review, so independent validation of benchmark claims is pending.</div>
+
+<h2>Topics</h2>
+<div class="topics">
+  <span class="tag">Vision-Language Models (VLMs)</span>
+  <span class="tag">Document Understanding and Extraction</span>
+  <span class="tag">Chart Understanding and Interpretation</span>
+  <span class="tag">Enterprise AI and Document Processing</span>
+  <span class="tag">Open-Source AI Models</span>
+  <span class="tag">Model Efficiency and Deployment</span>
+</div>
+
+
+</body>
+</html>
