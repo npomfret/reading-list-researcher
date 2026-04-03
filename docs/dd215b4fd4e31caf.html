@@ -1,0 +1,139 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Obsidian Mind: Persistent Memory System for Claude Code</title>
+<style>
+  *, *::before, *::after { box-sizing: border-box; }
+  :root {
+    --bg: #fff; --fg: #1a1a1a; --muted: #666; --border: #e0e0e0;
+    --accent: #0066cc; --tag-bg: #f0f0f0; --tag-fg: #333;
+    --card-bg: #fafafa;
+  }
+  @media (prefers-color-scheme: dark) {
+    :root {
+      --bg: #1a1a1a; --fg: #e0e0e0; --muted: #999; --border: #333;
+      --accent: #4da6ff; --tag-bg: #2a2a2a; --tag-fg: #ccc;
+      --card-bg: #222;
+    }
+  }
+  body {
+    font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif;
+    line-height: 1.6; color: var(--fg); background: var(--bg);
+    max-width: 720px; margin: 0 auto; padding: 2rem 1.5rem;
+  }
+  a { color: var(--accent); text-decoration: none; }
+  a:hover { text-decoration: underline; }
+  h1 { font-size: 1.8rem; line-height: 1.2; margin-bottom: 0.25rem; }
+  .meta { color: var(--muted); font-size: 0.9rem; margin-bottom: 2rem; }
+  .meta a { color: var(--muted); }
+  h2 { font-size: 1.2rem; margin-top: 2rem; margin-bottom: 0.75rem; border-bottom: 1px solid var(--border); padding-bottom: 0.25rem; }
+  .summary { font-size: 1.05rem; }
+  ul { padding-left: 1.25rem; }
+  li { margin-bottom: 0.5rem; }
+  .relevance { color: var(--muted); font-size: 0.85rem; }
+  .topics { display: flex; flex-wrap: wrap; gap: 0.5rem; }
+  .tag {
+    background: var(--tag-bg); color: var(--tag-fg);
+    padding: 0.2rem 0.6rem; border-radius: 1rem; font-size: 0.8rem;
+  }
+  .about-card {
+    background: var(--card-bg); padding: 1rem; border-radius: 0.5rem;
+    border: 1px solid var(--border);
+  }
+  .about-card p { margin: 0.25rem 0; }
+  .notes { white-space: pre-wrap; color: var(--muted); font-size: 0.95rem; }
+  .share-btn {
+    display: inline-block; padding: 0.5rem 1rem; border-radius: 0.5rem;
+    background: var(--accent); color: #fff; font-size: 0.9rem; cursor: pointer;
+    border: none; font-family: inherit;
+  }
+  .share-btn:hover { opacity: 0.85; }
+  .share-section { margin-bottom: 1.5rem; }
+  .share-copied { color: var(--muted); font-size: 0.85rem; margin-left: 0.5rem; }
+</style>
+</head>
+<body>
+
+<h1>Obsidian Mind: Persistent Memory System for Claude Code</h1>
+<div class="meta">
+  <a href="https://x.com/tom_doerr/status/2039906409387610408?s=12">https://x.com/tom_doerr/status/2039906409387610408?s=12</a><br>
+  Technical tool announcement and open-source project showcase &middot; Researched April 3, 2026
+</div>
+
+<div class="share-section">
+<button class="share-btn" onclick="navigator.clipboard.writeText(window.location.href).then(()=>{document.getElementById('copied').style.display='inline'});window.open('https://notebooklm.google.com','_blank')">
+  Share to NotebookLM
+</button>
+<span id="copied" class="share-copied" style="display:none">URL copied — paste it as a website source in a new notebook</span>
+</div>
+
+<h2>Summary</h2>
+<div class="summary"><p>Tom Dörr's tweet highlights **Obsidian Mind**, an open-source GitHub template that solves a critical limitation of Claude Code: its inability to retain context between sessions. The project creates an Obsidian vault as a persistent &quot;second brain&quot; that allows Claude Code to remember work patterns, decisions, goals, and project context across multiple sessions.</p>
+<p></p>
+<p>The core problem Obsidian Mind addresses is well-articulated: Claude Code starts every session from zero, forcing users to repeatedly re-explain goals, team context, previous decisions, and architectural patterns. This creates friction in long-term projects and prevents knowledge from compounding across sessions. Traditional note-taking doesn't solve this because context needs to be automatically injected at session start and semantically understood by the AI.</p>
+<p></p>
+<p>Obsidian Mind implements a sophisticated solution using five lifecycle hooks: SessionStart (injects North Star goals and recent context), UserPromptSubmit (classifies incoming information), PostToolUse (validates markdown structure), PreCompact (backs up sessions), and Stop (handles archival). The vault uses Obsidian's wikilink system to create a knowledge graph where work notes automatically link to people, decisions, and competency frameworks. Specialized commands like `/standup`, `/dump`, `/wrap-up`, and `/incident-capture` guide Claude in capturing and organizing information correctly. Nine subagents handle heavy operations like performance tracking (`review-prep`), vault maintenance (`vault-librarian`), and incident analysis (`slack-archaeologist`).</p>
+<p></p>
+<p>The implementation is remarkably comprehensive: it includes folder structures organized by purpose (work/, org/, perf/, brain/), templated notes with YAML frontmatter, database views for real-time dashboards, and even performance review automation. Beyond coding, it tracks 1:1 meetings, incidents, competency development, and &quot;brag doc&quot; wins—transforming the vault into a complete knowledge management and career advancement system. This goes well beyond simple memory retrieval; it creates a computable knowledge base where decisions become searchable, wins become reviewable, and patterns become analyzable.</p></div>
+
+<h2>Key Takeaways</h2>
+<ul>
+  <li>Claude Code's Memory Problem: Without persistent memory, Claude starts every session from scratch, requiring users to repeatedly re-explain goals, team context, and previous architectural decisions—preventing knowledge from compounding across sessions.</li>
+  <li>Five Lifecycle Hooks: Obsidian Mind uses session hooks to automatically inject context at startup (North Star, active projects, recent changes), classify user messages (decisions vs. incidents vs. wins), validate note structure, back up sessions, and handle archival—removing manual routing overhead.</li>
+  <li>Knowledge Graph with Wikilinks: Notes live in purpose-based folders (work/, org/, perf/) but link across meanings; work notes automatically link to people, decisions, and competencies, creating backlink trails that aggregate evidence for performance reviews without manual compilation.</li>
+  <li>Nine Specialized Subagents: Heavy operations run in isolated contexts—vault-librarian for maintenance, slack-archaeologist for incident reconstruction, review-prep for performance aggregation—keeping the main session focused on actual work.</li>
+  <li>15 User Commands: Shortcuts like /standup (morning context load), /dump (freeform brain dump), /wrap-up (session review), and /review-brief (auto-generate review docs) guide workflows without users thinking about structure.</li>
+  <li>Performance Tracking Built-In: Links from work notes to competency notes automatically accumulate as evidence; the brag doc aggregates quarterly wins; review prep becomes reading backlinks on competency notes—transforming memory into a career advancement system.</li>
+  <li>Vault-First Architecture: Durable knowledge lives in markdown files (git-tracked, Obsidian-browsable), while Claude's CLAUDE.md holds only an auto-updated index pointing to vault locations—ensuring memory survives machine changes and stays part of the knowledge graph.</li>
+  <li>Session Lifecycle Design: Sessions auto-inject context at start, users talk naturally, hooks classify and route content, and /wrap-up verifies links and surfaces uncaptured wins—every conversation compounds without extra effort.</li>
+  <li>Database Views and Dashboards: Obsidian bases query note frontmatter properties in real-time (Work Dashboard, Incidents, People Directory, Competency Map)—turning unstructured notes into queryable, filterable dashboards.</li>
+  <li>Open-Source and Extensible: MIT-licensed, includes templates for every use case, upgrade paths from existing vaults, and clear customization guides—solving the template problem that prevents adoption of complex knowledge systems.</li>
+</ul>
+
+<h2>About</h2>
+<div class="about-card">
+  <p><strong>Author:</strong> Tom Dörr (sharing); Original project by breferrari</p>
+  <p><strong>Publication:</strong> X (Twitter)</p>
+  <p><strong>Published:</strong> 2026-03-28</p>
+</div>
+
+<h2>Sentiment / Tone</h2>
+<p>Enthusiastic and solution-oriented, with underlying frustration about a legitimate AI limitation. Tom Dörr shares the project as a tangible answer to a problem he clearly experienced firsthand. The tone across community discussions is one of excitement—many developers describe this as solving a critical pain point they've worked around. The project itself is presented with clarity and pragmatism: the GitHub README doesn't oversell; it shows exactly how the system works, includes real examples, and acknowledges the learning curve. There's credibility built through specificity—exact folder structures, hook behaviors, command outputs, and detailed workflow examples demonstrate this is proven in practice, not theoretical.</p>
+
+<h2>Related Links</h2>
+<ul>
+<li><a href="https://github.com/breferrari/obsidian-mind">Obsidian Mind GitHub Repository</a><br><span class="relevance">The complete open-source template with full documentation, lifecycle hooks, 15 slash commands, 9 subagents, and vault structure—the authoritative source for understanding the implementation.</span></li>
+<li><a href="https://www.xda-developers.com/claude-code-inside-obsidian-and-it-was-eye-opening/">XDA Developers: I put Claude Code inside Obsidian, and it was awesome</a><br><span class="relevance">Practical walkthrough showing how Claude Code loads memory from Obsidian vaults via the CLAUDE.md file and updates notes automatically—demonstrates the integration in action.</span></li>
+<li><a href="https://www.geeky-gadgets.com/claude-code-obsidian-vault-memory/">Geeky Gadgets: Combining Claude Code &amp; Obsidian Vaults for Persistent Project Memory</a><br><span class="relevance">High-level explanation of the memory problem, the Obsidian solution, benefits, and practical use cases—helpful for understanding why this addresses a real productivity bottleneck.</span></li>
+<li><a href="https://www.reddit.com/r/ClaudeAI/comments/1qr19df/claude_code_obsidian_how_i_use_it_short_guide/">Reddit: Claude Code + Obsidian - How I use it &amp; Short Guide</a><br><span class="relevance">Community discussion of multi-project memory management strategies, vault-specific CLAUDE.md approaches, and real-world adaptations—shows how developers are actually using these systems.</span></li>
+<li><a href="https://code.claude.com/docs/en/memory">Claude Code Documentation: Memory</a><br><span class="relevance">Official Claude Code docs on persistent memory mechanisms and CLAUDE.md best practices—the foundational documentation that Obsidian Mind builds upon.</span></li>
+</ul>
+
+<h2>Research Notes</h2>
+<div class="notes">**Tom Dörr's Background**: Tom Dörr (@tom_doerr) is an active open-source developer with 292 GitHub repositories, indicating serious engineering experience. He regularly posts about developer tools and AI integrations on X. This isn't casual promotion—he's sharing a solution to a problem he likely experienced directly. His GitHub activity suggests he's deeply engaged in the developer tool ecosystem.
+
+**The Broader Context**: Claude Code's memory limitation is a well-documented pain point in the AI developer community. Multiple independent solutions have emerged (claude-mem, memsearch, Claude-Mem with SQLite backends), but Obsidian Mind stands out for its depth and comprehensiveness. It's not just memory storage; it's a complete knowledge management system that transforms memory into actionable intelligence for career development, incident response, and decision tracking.
+
+**Community Reception**: Reddit discussions show strong enthusiasm, with developers reporting that Obsidian + Claude Code setups have materially improved their productivity for long-term projects. However, honest assessments also acknowledge the learning curve—the system is powerful but requires initial setup, folder discipline, and commitment to consistent linking conventions.
+
+**Why This Matters Now (April 2026)**: As Claude Code sees increasing adoption for long-term project work and team collaboration, memory retention has become a bottleneck, not a nice-to-have feature. Obsidian Mind arrives as a mature, well-documented solution with lifecycle hooks, subagents, and automation—moving beyond ad-hoc memory files to a systematized, composable knowledge architecture.
+
+**Caveats and Limitations**: The system requires Obsidian (free but local-only by default), substantial initial setup of folder structures and templates, and ongoing discipline to maintain linking conventions. The performance review and competency tracking features are powerful but assume your organization has defined competency frameworks. This is a power-user tool designed for engineers who want control, auditability, and structure—not a one-click solution.
+
+**Philosophical Appeal**: Obsidian Mind reflects a philosophy that knowledge should be stored outside the AI (in human-readable markdown files), discoverable and browsable by humans (via Obsidian's graph visualization), and composable (via wikilinks and backlinks). This appeals to engineers who distrust black-box memory systems and want full audit trails, version control, and the ability to search their knowledge base without AI intermediation.</div>
+
+<h2>Topics</h2>
+<div class="topics">
+  <span class="tag">Claude Code</span>
+  <span class="tag">Persistent Memory</span>
+  <span class="tag">Obsidian Integration</span>
+  <span class="tag">Knowledge Management</span>
+  <span class="tag">AI Workflow Automation</span>
+  <span class="tag">Second Brain System</span>
+</div>
+
+
+</body>
+</html>
