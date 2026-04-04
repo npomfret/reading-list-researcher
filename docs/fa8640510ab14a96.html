@@ -1,0 +1,135 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Gemma 4 26B and 31B Uncensored Models Released</title>
+<style>
+  *, *::before, *::after { box-sizing: border-box; }
+  :root {
+    --bg: #fff; --fg: #1a1a1a; --muted: #666; --border: #e0e0e0;
+    --accent: #0066cc; --tag-bg: #f0f0f0; --tag-fg: #333;
+    --card-bg: #fafafa;
+  }
+  @media (prefers-color-scheme: dark) {
+    :root {
+      --bg: #1a1a1a; --fg: #e0e0e0; --muted: #999; --border: #333;
+      --accent: #4da6ff; --tag-bg: #2a2a2a; --tag-fg: #ccc;
+      --card-bg: #222;
+    }
+  }
+  body {
+    font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif;
+    line-height: 1.6; color: var(--fg); background: var(--bg);
+    max-width: 720px; margin: 0 auto; padding: 2rem 1.5rem;
+  }
+  a { color: var(--accent); text-decoration: none; }
+  a:hover { text-decoration: underline; }
+  h1 { font-size: 1.8rem; line-height: 1.2; margin-bottom: 0.25rem; }
+  .meta { color: var(--muted); font-size: 0.9rem; margin-bottom: 2rem; }
+  .meta a { color: var(--muted); }
+  h2 { font-size: 1.2rem; margin-top: 2rem; margin-bottom: 0.75rem; border-bottom: 1px solid var(--border); padding-bottom: 0.25rem; }
+  .summary { font-size: 1.05rem; }
+  ul { padding-left: 1.25rem; }
+  li { margin-bottom: 0.5rem; }
+  .relevance { color: var(--muted); font-size: 0.85rem; }
+  .topics { display: flex; flex-wrap: wrap; gap: 0.5rem; }
+  .tag {
+    background: var(--tag-bg); color: var(--tag-fg);
+    padding: 0.2rem 0.6rem; border-radius: 1rem; font-size: 0.8rem;
+  }
+  .about-card {
+    background: var(--card-bg); padding: 1rem; border-radius: 0.5rem;
+    border: 1px solid var(--border);
+  }
+  .about-card p { margin: 0.25rem 0; }
+  .notes { white-space: pre-wrap; color: var(--muted); font-size: 0.95rem; }
+  .share-btn {
+    display: inline-block; padding: 0.5rem 1rem; border-radius: 0.5rem;
+    background: var(--accent); color: #fff; font-size: 0.9rem; cursor: pointer;
+    border: none; font-family: inherit;
+  }
+  .share-btn:hover { opacity: 0.85; }
+  .share-section { margin-bottom: 1.5rem; }
+  .share-copied { color: var(--muted); font-size: 0.85rem; margin-left: 0.5rem; }
+</style>
+</head>
+<body>
+
+<h1>Gemma 4 26B and 31B Uncensored Models Released</h1>
+<div class="meta">
+  <a href="https://x.com/dealignai/status/2040216221493395831">https://x.com/dealignai/status/2040216221493395831</a><br>
+  Technical announcement and benchmark post on social media &middot; Researched April 4, 2026
+</div>
+
+<div class="share-section">
+<button class="share-btn" onclick="navigator.clipboard.writeText(window.location.href).then(()=>{document.getElementById('copied').style.display='inline'});window.open('https://notebooklm.google.com','_blank')">
+  Share to NotebookLM
+</button>
+<span id="copied" class="share-copied" style="display:none">URL copied — paste it as a website source in a new notebook</span>
+</div>
+
+<h2>Summary</h2>
+<div class="summary"><p>On April 4, 2026, ML researcher dealignai announced the release of uncensored versions of Google's newly-launched Gemma 4 large language models (26B and 31B parameter sizes), claiming these abliterated variants perform within 5% of the original models on MMLU benchmarks. The post, accompanied by a benchmark comparison table, represents a significant moment in the ongoing tension between AI safety and open-source model accessibility.</p>
+<p></p>
+<p>Gemma 4 was released by Google on April 2, 2026, as its most capable open-source model family to date, with the 31B model ranking #3 on the Arena AI leaderboard and the 26B MoE model ranking #6. The models feature advanced reasoning, agentic workflows, native multimodal support (vision and audio), 256K context windows, and—critically—built-in safety guardrails designed to prevent the models from generating harmful, illegal, or unethical content.</p>
+<p></p>
+<p>Dealignai's post demonstrates that these safety guardrails can be circumvented through abliteration, a technique that surgically removes the neural mechanisms underlying refusal behavior. By identifying and neutralizing specific latent directions in the model's transformer layers that encode safety responses, researchers can &quot;uncensor&quot; models without requiring expensive retraining. The claim that performance remains within 5% of baseline is significant because it suggests safety alignment can be removed with minimal capability loss—a finding that contradicts assumptions that safety mechanisms are deeply integrated with reasoning abilities.</p>
+<p></p>
+<p>The rapid emergence of uncensored variants (dealignai's alongside competitors like HauhauCS with &quot;aggressive&quot; uncensoring methods) within hours of Gemma 4's release demonstrates a broader community pattern: whenever Google or other labs release new open models, jailbreak and abliteration specialists immediately produce uncensored versions. This has become a reliable, predictable cycle in the open-source AI ecosystem. The post signals both technical capability and ideological commitment to unrestricted model access, with dealignai's Hugging Face profile explicitly stating an &quot;obsession with making high quality red teaming LLM's&quot; and rejecting &quot;fine tuning, lora, template bs&quot; in favor of &quot;pure real ablation.&quot;</p></div>
+
+<h2>Key Takeaways</h2>
+<ul>
+  <li>Dealignai released uncensored Gemma 4 26B and 31B models using abliteration techniques, with performance within 5% of Google's original models on MMLU benchmarks—suggesting safety mechanisms can be removed without major capability degradation.</li>
+  <li>Abliteration works by identifying and neutralizing specific neural directions in transformer layers that encode refusal behavior, allowing researchers to surgically remove safety guardrails without retraining the full model.</li>
+  <li>Google's Gemma 4 (released April 2, 2026) ranks #3 and #6 on the Arena AI leaderboard for open models, making it one of the most capable open-source options available and therefore a high-value target for uncensoring efforts.</li>
+  <li>The Gemma 4 models feature native multimodal capabilities (vision, audio, video), 256K context windows, and were released under an Apache 2.0 license—the commercial permissiveness of this license enables rapid derivative works like uncensored variants.</li>
+  <li>Uncensored variants appeared within hours of Gemma 4's release through multiple research teams (dealignai, HauhauCS using CRACK methods, Heretic using ARA methods), establishing a predictable pattern in the open-source AI ecosystem.</li>
+  <li>Dealignai's work represents an ideological stance against model alignment, as evidenced by the account name 'dealignai' (de-align) and their stated focus on 'red teaming' and removing 'template bs' in favor of producing models without restrictions.</li>
+  <li>The benchmark claim reveals a critical fragility in AI safety: safety alignment appears to be compartmentalized in specific neural mechanisms rather than deeply integrated with core reasoning, making it vulnerable to targeted removal.</li>
+  <li>Google has been concerned about this trend since Gemma 3 was reportedly 'cancelled' after users jailbroke it into generating offensive content, raising questions about whether Google took comparable precautions with Gemma 4 despite its wider release.</li>
+  <li>The MLX optimization mentioned in the post is significant—it enables efficient local inference on consumer hardware, making uncensored frontier-class models practically deployable on personal computers without cloud services.</li>
+  <li>This represents a fundamental dispute over AI governance: whether open models should come with mandatory safety mechanisms (Google's position) or whether users should have unrestricted access to modify and uncensor models they download (dealignai's position).</li>
+</ul>
+
+<h2>About</h2>
+<div class="about-card">
+  <p><strong>Author:</strong> dealignai (@dealignai)</p>
+  <p><strong>Publication:</strong> X (formerly Twitter)</p>
+  <p><strong>Published:</strong> 2026-04-04</p>
+</div>
+
+<h2>Sentiment / Tone</h2>
+<p>Technical and matter-of-fact, with an undercurrent of ideological confidence. Dealignai presents the uncensored models as a straightforward technical achievement (with benchmark evidence), without rhetorical flourish, suggesting this is routine work within their community. The brevity and directness of the post—just a claim and a benchmark image—conveys certainty and normalcy around the process of removing safety mechanisms. There's an implicit position that uncensoring is not controversial but rather a natural and desirable capability, with no disclaimer or discussion of potential harms. The tone reflects a researcher community that views safety guardrails as obstacles to be overcome through technical methods rather than as valuable safeguards, positioning unrestricted model access as the default good.</p>
+
+<h2>Related Links</h2>
+<ul>
+<li><a href="https://blog.google/innovation-and-ai/technology/developers-tools/gemma-4/">Google's Official Gemma 4 Announcement</a><br><span class="relevance">Essential context: official specs, benchmarks, safety claims, and the Apache 2.0 license that enables derivative works like dealignai's uncensored versions</span></li>
+<li><a href="https://huggingface.co/dealignai">Dealignai's Hugging Face Profile</a><br><span class="relevance">Shows the author's full body of work: 84+ uncensored/abliterated models across multiple architectures, and their stated mission of making 'high quality red teaming LLM's'</span></li>
+<li><a href="https://github.com/RubensZimbres/heretic-crack-safety-LLM">Heretic: Automated Safety Removal Tool for LLMs</a><br><span class="relevance">The CRACK abliteration method mentioned in Gemma 4 jailbreak discussions; demonstrates the reproducible technical toolkit now available for safety removal</span></li>
+<li><a href="https://huggingface.co/blog/mlabonne/abliteration">Abliteration Technique Guide and Theory</a><br><span class="relevance">Accessible explanation of how abliteration works: identifying and nullifying refusal directions in transformer layers, directly relevant to understanding dealignai's approach</span></li>
+<li><a href="https://www.reddit.com/r/LocalLLaMA/comments/1sanln7/pewgemma4e2bithereticara_gemma_4s_defenses/">Reddit Discussion: Gemma 4's Defenses Broken 90 Minutes After Release</a><br><span class="relevance">Community documentation of the rapid jailbreaking cycle and the predictable pattern of uncensored variants emerging within hours of any major model release</span></li>
+</ul>
+
+<h2>Research Notes</h2>
+<div class="notes">**Author Credibility &amp; Background:** Dealignai is an active ML researcher in the open-source jailbreaking and red-teaming community, maintaining 84+ public models on Hugging Face, many of them abliterated or &quot;uncensored&quot; variants of frontier models (Nemotron, Qwen, Mistral, MiniMax). The account links to dealign.ai, a dedicated website, and appears to be the primary work of this researcher. While not an academic publishing researcher with visible papers, they demonstrate consistent technical competence across multiple model architectures and abliteration methods. The work is positioned as red-teaming and safety research (they maintain &quot;Safety Across Scale&quot; and &quot;MoE Safety - GateBreaker Findings&quot; research spaces), though the primary output is uncensored models rather than published findings. This positions them as part of a broader open-source community focused on adversarial testing of AI safety mechanisms.
+
+**Broader Context &amp; Reactions:** The post arrives in a heated moment for Google's Gemma line. Gemma 3 was reportedly pulled from Google AI Studio after Senator Blackburn complaints about jailbreak capabilities. Gemma 4's release has already drawn extensive community analysis: Reddit discussions show multiple jailbreak methods working within hours (basic system prompt engineering, Heretic's ARA method, CRACK abliteration). HauhauCS released &quot;fully unlocked&quot; aggressive uncensored variants claiming 0/465 refusals, while other teams focused on more conservative uncensoring. The technical bar for abliteration has clearly lowered—multiple independent implementations now exist (Heretic, CRACK, Nous Research's llm-abliteration), and research papers on abliteration methods appeared on arXiv in 2025. This is no longer specialized knowledge but reproducible community practice.
+
+**Significance &amp; Implications:** This post exemplifies a fundamental mismatch between Google's safety intentions and technical reality: no matter how carefully a model is aligned at release, if it's open-source under a permissive license, an active community will remove those mechanisms within hours. The &quot;within 5% of base models&quot; claim is particularly damaging to the alignment-as-integrated-capability narrative—if safety can be surgically removed with minimal performance loss, it suggests safety was never deeply woven into reasoning but rather added as a separable layer. This has implications for AI governance: it suggests that safety cannot be relied upon in open-source models once released, and that purely technical approaches to alignment (fine-tuning, RLHF) are fragile against motivated modification.
+
+**Potential Biases &amp; Caveats:** (1) The 5% performance claim is unverified in the post itself—viewers must trust the benchmark image and dealignai's methodology. (2) The framing ignores potential harms: uncensored models can be used for disinformation, illegal content generation, social engineering, etc. (3) The &quot;red teaming&quot; framing is a legitimizing narrative for what is functionally model jailbreaking. (4) Dealignai's position appears ideologically driven (evidenced by account name &quot;dealignai&quot; meaning &quot;de-align&quot;), which may affect their work. (5) MMLU benchmarks measure general knowledge, not downstream safety behavior—they tell us nothing about whether the uncensored model will still refuse harmful requests.</div>
+
+<h2>Topics</h2>
+<div class="topics">
+  <span class="tag">LLM safety and alignment removal</span>
+  <span class="tag">Abliteration and model jailbreaking</span>
+  <span class="tag">Open-source AI governance</span>
+  <span class="tag">Gemma 4 models and benchmarks</span>
+  <span class="tag">Red teaming and adversarial AI</span>
+  <span class="tag">Model quantization and MLX optimization</span>
+</div>
+
+
+</body>
+</html>
