@@ -1,0 +1,129 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Flash-MoE: Running 397B Parameter Model on MacBook Pro with 48GB RAM</title>
+<style>
+  *, *::before, *::after { box-sizing: border-box; }
+  :root {
+    --bg: #fff; --fg: #1a1a1a; --muted: #666; --border: #e0e0e0;
+    --accent: #0066cc; --tag-bg: #f0f0f0; --tag-fg: #333;
+    --card-bg: #fafafa;
+  }
+  @media (prefers-color-scheme: dark) {
+    :root {
+      --bg: #1a1a1a; --fg: #e0e0e0; --muted: #999; --border: #333;
+      --accent: #4da6ff; --tag-bg: #2a2a2a; --tag-fg: #ccc;
+      --card-bg: #222;
+    }
+  }
+  body {
+    font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif;
+    line-height: 1.6; color: var(--fg); background: var(--bg);
+    max-width: 720px; margin: 0 auto; padding: 2rem 1.5rem;
+  }
+  a { color: var(--accent); text-decoration: none; }
+  a:hover { text-decoration: underline; }
+  h1 { font-size: 1.8rem; line-height: 1.2; margin-bottom: 0.25rem; }
+  .meta { color: var(--muted); font-size: 0.9rem; margin-bottom: 2rem; }
+  .meta a { color: var(--muted); }
+  h2 { font-size: 1.2rem; margin-top: 2rem; margin-bottom: 0.75rem; border-bottom: 1px solid var(--border); padding-bottom: 0.25rem; }
+  .summary { font-size: 1.05rem; }
+  ul { padding-left: 1.25rem; }
+  li { margin-bottom: 0.5rem; }
+  .relevance { color: var(--muted); font-size: 0.85rem; }
+  .topics { display: flex; flex-wrap: wrap; gap: 0.5rem; }
+  .tag {
+    background: var(--tag-bg); color: var(--tag-fg);
+    padding: 0.2rem 0.6rem; border-radius: 1rem; font-size: 0.8rem;
+  }
+  .about-card {
+    background: var(--card-bg); padding: 1rem; border-radius: 0.5rem;
+    border: 1px solid var(--border);
+  }
+  .about-card p { margin: 0.25rem 0; }
+  .notes { white-space: pre-wrap; color: var(--muted); font-size: 0.95rem; }
+  .share-btn {
+    display: inline-block; padding: 0.5rem 1rem; border-radius: 0.5rem;
+    background: var(--accent); color: #fff; font-size: 0.9rem; cursor: pointer;
+    border: none; font-family: inherit;
+  }
+  .share-btn:hover { opacity: 0.85; }
+  .share-section { margin-bottom: 1.5rem; }
+  .share-copied { color: var(--muted); font-size: 0.85rem; margin-left: 0.5rem; }
+</style>
+</head>
+<body>
+
+<h1>Flash-MoE: Running 397B Parameter Model on MacBook Pro with 48GB RAM</h1>
+<div class="meta">
+  <a href="https://x.com/techwith_ram/status/2040758843538591799">https://x.com/techwith_ram/status/2040758843538591799</a><br>
+  Technical announcement with viral social media impact; accompanied by deep-dive technical analysis and engineering documentation &middot; Researched April 6, 2026
+</div>
+
+<div class="share-section">
+<button class="share-btn" onclick="navigator.clipboard.writeText(window.location.href).then(()=>{document.getElementById('copied').style.display='inline'});window.open('https://notebooklm.google.com','_blank')">
+  Share to NotebookLM
+</button>
+<span id="copied" class="share-copied" style="display:none">URL copied — paste it as a website source in a new notebook</span>
+</div>
+
+<h2>Summary</h2>
+<div class="summary"><p>The tweet announces Flash-MoE, an open-source C/Metal inference engine that runs Qwen3.5-397B-A17B (a 397 billion parameter Mixture-of-Experts model) on a MacBook Pro M3 Max with only 48GB RAM at 4.4+ tokens per second with production-quality output including tool calling. Built by Dan Woods, VP of AI Platforms at CVS Health, as a side project in 24 hours with Claude as a coding partner, the project challenges conventional assumptions about memory requirements for large language models.</p>
+<p></p>
+<p>The breakthrough works by exploiting MoE's sparse activation architecture: while the model contains 397 billion total parameters, only 17 billion are active per token. Specifically, the system activates just 4 experts (K=4) out of 512 available per layer. The entire 209GB model streams from SSD on demand using parallel pread() calls and OS-managed page caching, requiring only 5.5GB of actual RAM during inference. The implementation is remarkably lean—approximately 7,000 lines of pure C and 1,200 lines of hand-tuned Metal compute shaders, with no Python, PyTorch, or ML frameworks.</p>
+<p></p>
+<p>The project went viral on Hacker News (scoring 393 points with 121 comments, the week's top story) and sparked significant discussion in the local LLM community. Russell Clare's technical analysis highlights that the key insight is memory constraints are about active parameters, not total ones. The work included 58 experiments optimizing every aspect—from FMA-optimized dequantization kernels (12% faster) to careful testing of what doesn't work (custom caching, speculative routing, compression all degraded performance). An important research finding emerged: testing K=3 expert activation causes immediate quality collapse, while K=4 shows no degradation, suggesting the model's routing distributes critical reasoning across specific concentrated experts rather than evenly.</p>
+<p></p>
+<p>The economic implications are significant: a 397B-parameter model that typically costs hundreds of dollars per hour on cloud GPU infrastructure runs completely locally on a $3,499 MacBook with no API calls, no surveillance, and no monthly bills. However, practical limitations exist: 4.4 tokens/second is borderline for interactive use (typically 15+ t/s is desired), and the technique only works for MoE architectures, not dense models like Llama.</p></div>
+
+<h2>Key Takeaways</h2>
+<ul>
+  <li>Flash-MoE streams a 209GB model from SSD using only 5.5GB of actual RAM during inference, enabled by MoE's sparse activation that keeps only 4 out of 512 experts per layer resident at any time.</li>
+  <li>Built by a CVS Health VP of AI in 24 hours with Claude as coding partner—demonstrating that modern AI-assisted development can enable single individuals to implement and validate research-grade systems in compressed timeframes.</li>
+  <li>The K=3/K=4 boundary represents a critical research finding: quality immediately collapses at K=3 but shows zero degradation at K=4, revealing that expert routing distributes essential reasoning across specific concentrated experts rather than evenly.</li>
+  <li>Achieves 4.4 tokens/second with full tool calling and production-quality output on consumer hardware (M3 Max MacBook Pro), using pure C and Metal with no ML frameworks—completely eliminating the need for cloud GPU infrastructure.</li>
+  <li>The key insight challenges 15 years of memory-based hardware selection logic: for MoE models, the constraint is active parameters (17B for Qwen3.5) not total parameters (397B), fundamentally reshaping local inference economics.</li>
+  <li>Contains 58 documented experiments showing what worked and what didn't—FMA kernel optimization gained 12%, trusting OS page cache proved 38% better than custom Metal LRU, while speculative routing and compression both degraded performance.</li>
+  <li>Went viral on Hacker News as the week's top story (393 points, 121 comments) and spawned derivative projects including FlashTier-MoE with quantization variants and mlx-flash ports, indicating strong community validation.</li>
+  <li>Practical speed of 4.4 t/s is suitable for batch processing and agent pipelines but borderline for interactive conversational use, and the sparse-activation technique only applies to MoE architectures, not the dense models dominating current deployments.</li>
+  <li>Economics shift dramatically: models that cost $300-500/hour on cloud GPUs now cost zero per query, zero per month, with zero cloud provider access to user data—fundamentally changing deployment economics for organizations with local infrastructure.</li>
+  <li>Uses Apple Silicon's unified memory and fast SSD architecture as a critical component—the technique streams experts from NVMe at ~17.5 GB/s with &lt;2.5ms latency per layer, making the approach less trivial to port to x86+discrete GPU architectures.</li>
+</ul>
+
+<h2>About</h2>
+<div class="about-card">
+  <p><strong>Author:</strong> Ramakrushna (shared from Dan Woods' project)</p>
+  <p><strong>Publication:</strong> X (Twitter)</p>
+  <p><strong>Published:</strong> 2026-03-18</p>
+</div>
+
+<h2>Sentiment / Tone</h2>
+<p>Celebratory yet technically grounded; the tweet radiates enthusiasm about challenging industry assumptions (&quot;No Cloud. No GPU. No Cluster. Only a laptop&quot;) while Ramakrushna's sharing demonstrates awe at the efficiency and the human-AI collaboration story. The broader sentiment in reactions is cautiously optimistic—genuine excitement about the capability breakthrough tempered by pragmatic acknowledgment of speed limitations (4.4 t/s isn't production-ready for most real-time applications). Russell Clare's analysis is measured and analytical, positioning the work as significant for what it reveals about MoE architecture and memory constraints rather than as a silver bullet. The tone across most discussions respects this as serious engineering while noting it remains experimental rather than production-ready infrastructure.</p>
+
+<h2>Related Links</h2>
+<ul>
+<li><a href="https://github.com/danveloper/flash-moe">Flash-MoE GitHub Repository</a><br><span class="relevance">The complete open-source implementation with technical paper, 58 experiments logged, Metal shaders, and C code—essential for understanding the actual engineering approach and reproducing results.</span></li>
+<li><a href="https://russellclare.com/ai-flash-moe-397b-macbook/">Russell Clare's Technical Analysis: Flash-MoE and Active-Parameter Insight</a><br><span class="relevance">Provides deep-dive analysis of why Flash-MoE works, explaining MoE sparse activation, the K=3/K=4 boundary research finding, and how this changes hardware selection logic for local inference workloads.</span></li>
+<li><a href="https://news.ycombinator.com/item?id=47476422">Hacker News Discussion: Flash-MoE</a><br><span class="relevance">393-point top story with 121 comments showing community reactions, practitioners testing on M1 Ultra achieving 20 t/s, discussions of quantization variants, and practical limitations in real-world use.</span></li>
+<li><a href="https://github.com/danveloper/flash-moe/blob/main/paper/flash_moe.pdf">Flash-MoE Technical Paper</a><br><span class="relevance">Full peer-review style paper with 90+ experiments documenting architectural decisions, performance trade-offs, and the research methodology that guided the 24-hour development cycle.</span></li>
+<li><a href="https://github.com/QwenLM/Qwen3.5">Qwen3.5 Official Repository</a><br><span class="relevance">The underlying model documentation—essential for understanding Qwen3.5-397B-A17B's architecture, the 512-expert, K=10 default configuration, and why K=4 pruning was feasible.</span></li>
+</ul>
+
+<h2>Research Notes</h2>
+<div class="notes">**Creator Background**: Dan Woods is a seasoned technologist with unexpected pedigree—he served as CTO for Biden for President (2020) and Hillary Clinton's 2016 campaign before moving into healthcare AI infrastructure at CVS Health. His current role as VP of AI Platforms at CVS Health likely gave him both the expertise and the resources mindset to approach this as an optimization problem rather than starting from first principles. **Why This Matters**: This demonstrates a crucial inflection point in AI infrastructure—the ability to run very large models locally isn't primarily constrained by raw hardware anymore but by algorithmic insight and low-level optimization. The fact that this was built by one person in 24 hours with AI assistance (Claude) is arguably more significant than the technical achievement itself: it shows the barrier to entry for AI research has dramatically lowered. **MoE Context**: Mixture of Experts is becoming the dominant architecture for frontier models (Qwen3.5, Llama 4, Gemini, Claude), making this technique increasingly relevant. The K=3/K=4 finding is novel research that contradicts assumptions about expert redundancy—this sharp boundary suggests future work should investigate expert specialization patterns. **Practical Limitations Not Mentioned in Hype**: The technique only works for MoE models, dense models like standard Llama or Mistral don't benefit. Speed at 4.4 t/s is 3-4x slower than what most users expect for interactive chat. The approach requires Apple Silicon or equivalent unified memory architecture—porting to x86+discrete GPU setups is non-trivial due to PCIe bottlenecks. **Community Response**: The Hacker News discussion shows the community recognizes the significance while remaining realistic about limitations. Practitioners on M1 Ultra systems reported 20+ tokens/second, suggesting the approach scales better with more memory and compute. **Broader Implications**: This represents a shift in AI infrastructure economics from cloud-dependent to local-capable for a growing category of models. For healthcare (CVS Health's sector), privacy and cost implications are substantial. This may accelerate adoption of on-premise AI for regulated industries.</div>
+
+<h2>Topics</h2>
+<div class="topics">
+  <span class="tag">Local LLM Inference</span>
+  <span class="tag">Mixture of Experts (MoE) Architecture</span>
+  <span class="tag">Apple Silicon Optimization</span>
+  <span class="tag">AI Model Compression</span>
+  <span class="tag">SSD-based Model Streaming</span>
+  <span class="tag">AI Development Economics</span>
+</div>
+
+
+</body>
+</html>
