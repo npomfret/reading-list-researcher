@@ -1,0 +1,133 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>code-review-graph: A local knowledge graph that cuts Claude Code token usage by up to 49x</title>
+<style>
+  *, *::before, *::after { box-sizing: border-box; }
+  :root {
+    --bg: #fff; --fg: #1a1a1a; --muted: #666; --border: #e0e0e0;
+    --accent: #0066cc; --tag-bg: #f0f0f0; --tag-fg: #333;
+    --card-bg: #fafafa;
+  }
+  @media (prefers-color-scheme: dark) {
+    :root {
+      --bg: #1a1a1a; --fg: #e0e0e0; --muted: #999; --border: #333;
+      --accent: #4da6ff; --tag-bg: #2a2a2a; --tag-fg: #ccc;
+      --card-bg: #222;
+    }
+  }
+  body {
+    font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif;
+    line-height: 1.6; color: var(--fg); background: var(--bg);
+    max-width: 720px; margin: 0 auto; padding: 2rem 1.5rem;
+  }
+  a { color: var(--accent); text-decoration: none; }
+  a:hover { text-decoration: underline; }
+  h1 { font-size: 1.8rem; line-height: 1.2; margin-bottom: 0.25rem; }
+  .meta { color: var(--muted); font-size: 0.9rem; margin-bottom: 2rem; }
+  .meta a { color: var(--muted); }
+  h2 { font-size: 1.2rem; margin-top: 2rem; margin-bottom: 0.75rem; border-bottom: 1px solid var(--border); padding-bottom: 0.25rem; }
+  .summary { font-size: 1.05rem; }
+  ul { padding-left: 1.25rem; }
+  li { margin-bottom: 0.5rem; }
+  .relevance { color: var(--muted); font-size: 0.85rem; }
+  .topics { display: flex; flex-wrap: wrap; gap: 0.5rem; }
+  .tag {
+    background: var(--tag-bg); color: var(--tag-fg);
+    padding: 0.2rem 0.6rem; border-radius: 1rem; font-size: 0.8rem;
+  }
+  .about-card {
+    background: var(--card-bg); padding: 1rem; border-radius: 0.5rem;
+    border: 1px solid var(--border);
+  }
+  .about-card p { margin: 0.25rem 0; }
+  .notes { white-space: pre-wrap; color: var(--muted); font-size: 0.95rem; }
+  .share-btn {
+    display: inline-block; padding: 0.5rem 1rem; border-radius: 0.5rem;
+    background: var(--accent); color: #fff; font-size: 0.9rem; cursor: pointer;
+    border: none; font-family: inherit;
+  }
+  .share-btn:hover { opacity: 0.85; }
+  .share-section { margin-bottom: 1.5rem; }
+  .share-copied { color: var(--muted); font-size: 0.85rem; margin-left: 0.5rem; }
+</style>
+</head>
+<body>
+
+<h1>code-review-graph: A local knowledge graph that cuts Claude Code token usage by up to 49x</h1>
+<div class="meta">
+  <a href="https://x.com/hasantoxr/status/2041487311536603629?s=12">https://x.com/hasantoxr/status/2041487311536603629?s=12</a><br>
+  Technical announcement / open-source tool promotion with benchmarks &middot; Researched April 8, 2026
+</div>
+
+<div class="share-section">
+<button class="share-btn" onclick="navigator.clipboard.writeText(window.location.href).then(()=>{document.getElementById('copied').style.display='inline'});window.open('https://notebooklm.google.com','_blank')">
+  Share to NotebookLM
+</button>
+<span id="copied" class="share-copied" style="display:none">URL copied — paste it as a website source in a new notebook</span>
+</div>
+
+<h2>Summary</h2>
+<div class="summary"><p>Hasan Toor announced code-review-graph, an open-source tool built by AI engineer Tirth Kanani that addresses a critical inefficiency in AI-assisted code review: when Claude Code (and other AI assistants) are asked to review code or add features, they typically re-read an entire codebase unnecessarily, wasting tokens on files unrelated to the change. This problem becomes severe on large projects—FastAPI has 2,915 files, Next.js has 27,732 files—making context bloat expensive and reducing review quality.</p>
+<p></p>
+<p>The solution builds a persistent structural knowledge graph of your codebase using Tree-sitter, parsing all code into an Abstract Syntax Tree (AST) and storing it in a lightweight local SQLite database. Rather than reading raw files, the AI assistant queries this graph to understand the &quot;blast radius&quot; of changes—which functions call the modified code, which tests cover it, which dependencies are affected—and reads only the relevant files. The results are dramatic: across real production repositories, token reduction ranges from 6.8x on average to 49x on specific daily coding tasks, while paradoxically improving review quality (8.8/10 with the graph vs. 7.2/10 without).</p>
+<p></p>
+<p>The tool requires zero configuration, installs in 30 seconds, works offline with no telemetry or cloud dependencies, and integrates seamlessly with Claude Code, Cursor, Windsurf, Zed, and other AI coding platforms via the Model Context Protocol (MCP). It supports 19+ programming languages and includes 22 MCP tools for blast-radius analysis, call-graph tracing, risk scoring, and semantic search. The implementation is production-tested on real commits, fully open-source under MIT license, and represents a broader trend of developers optimizing AI-assisted workflows by providing better structured context instead of raw code dumps.</p></div>
+
+<h2>Key Takeaways</h2>
+<ul>
+  <li>code-review-graph uses Tree-sitter AST parsing to build a persistent, locally-stored SQLite knowledge graph of your entire codebase, enabling AI assistants to query only relevant code instead of re-reading entire repositories on every task.</li>
+  <li>Token reduction is context-dependent: httpx (125 files) achieves 26.2x fewer tokens, FastAPI (2,915 files) gets 8.1x, Next.js (27,732 files) achieves 6.0x on reviews and 49x on live coding tasks, with review quality improving from 7.2 to 8.8 out of 10.</li>
+  <li>Incremental updates re-parse only changed files and their dependants in under 2 seconds using file-hash deduplication and Git-based change detection, keeping the knowledge graph current without rebuilding the entire index.</li>
+  <li>The tool operates entirely offline with no external databases, cloud services, or telemetry—just a single SQLite file in a .code-review-graph/ directory with automatic updates via pre-commit hooks.</li>
+  <li>Blast-radius analysis traces which functions, tests, and dependencies are affected by code changes, allowing the AI to understand the full impact scope before reading files—a capability that both reduces token usage and improves code review quality.</li>
+  <li>Compatible with 9 platforms including Claude Code, Cursor, Windsurf, Zed, and GitHub Copilot via the Model Context Protocol (MCP), supporting 19+ programming languages plus Jupyter notebooks.</li>
+  <li>Created by Tirth Kanani, an AI engineer with 3+ years of ML products experience who built the tool after frustration with watching Claude re-read unnecessary code, addressing a real pain point in the AI-assisted development workflow.</li>
+  <li>Installation is frictionless—either pip install + one command, or a single VS Code/Cursor click—with zero configuration needed, making it accessible to developers of all skill levels.</li>
+  <li>The 3,700-line Python codebase includes 770 lines of tests and implements advanced features like qualified node naming (src/auth.py::AuthService.login), NetworkX graph traversal with caching, and optional hybrid search combining BM25 full-text search with vector embeddings.</li>
+  <li>This represents part of a broader ecosystem of token-optimization tools (Claudette, Understand-Anything, graphify) and reflects growing demand for structured context management as AI coding assistants become standard in developer workflows.</li>
+</ul>
+
+<h2>About</h2>
+<div class="about-card">
+  <p><strong>Author:</strong> Hasan Toor (promoting); Tirth Kanani (creator)</p>
+  <p><strong>Publication:</strong> X (Twitter)</p>
+  <p><strong>Published:</strong> 2026-02-16</p>
+</div>
+
+<h2>Sentiment / Tone</h2>
+<p>Enthusiastic yet technically credible. The announcement uses &quot;BREAKING&quot; language typical of tech news promotion, matching Hasan Toor's style as a tech educator and curator. However, the underlying content is grounded in concrete benchmarks from real repositories and technical depth. Tirth Kanani's Hacker News comment shifts to a problem-solution narrative with specific technical details, demonstrating deep expertise while remaining accessible. The tone positions token efficiency as a solved problem rather than speculative—the creator takes ownership of the solution and invites technical questions, suggesting confidence backed by implementation. No hype; the metrics speak for themselves.&quot;</p>
+
+<h2>Related Links</h2>
+<ul>
+<li><a href="https://github.com/tirth8205/code-review-graph">code-review-graph GitHub repository</a><br><span class="relevance">Official repository containing the complete open-source implementation, documentation, benchmarks, and 570+ tests mentioned in the announcement.</span></li>
+<li><a href="https://code-review-graph.com/">code-review-graph official website</a><br><span class="relevance">Interactive demo site with visual explanations, benchmark comparisons, installation guides, and an interactive graph visualization showing how the tool works.</span></li>
+<li><a href="https://news.ycombinator.com/item?id=47314090">Hacker News discussion: code-review-graph</a><br><span class="relevance">Technical community discussion where Tirth Kanani (creator) answered detailed questions about the implementation, benchmarks, Tree-sitter integration, and incremental engine design.</span></li>
+<li><a href="https://github.com/nicmarti/Claudette">Claudette: Alternative Go implementation</a><br><span class="relevance">A competing implementation of the same concept (knowledge graphs for code review) written in Go, showing the broader movement toward token-efficient AI-assisted code review.</span></li>
+<li><a href="https://www.tirthkanani.com/">Tirth Kanani's personal website</a><br><span class="relevance">Creator's portfolio demonstrating background in AI/ML engineering with 3+ years of experience building ML products, including expertise in PyTorch, LLMs, and MLOps.</span></li>
+</ul>
+
+<h2>Research Notes</h2>
+<div class="notes">Hasan Toor is an established tech educator and AI tool curator with significant Twitter reach (hundreds of thousands of followers), known for spotting and promoting emerging AI tools rather than creating them himself. He operates as an early amplifier in the tech ecosystem. The actual creator, Tirth Kanani, is a credible AI engineer with demonstrated expertise in machine learning products, responsible AI research, and mechanistic interpretability. He actively participated in Hacker News discussions, answering technical questions directly—a signal of authentic ownership and confidence.
+
+The tool addresses a genuine and measurable problem: AI coding assistants like Claude Code waste tokens on irrelevant code. This isn't hypothetical—large codebases (Next.js at 27,732 files) make the issue acute. The benchmarks appear legitimate: they're measured on real open-source projects (httpx, FastAPI, Next.js) with real commits, not synthetic test cases. The fact that review quality improves while token usage decreases is noteworthy and counter-intuitive, suggesting the graph-based approach provides cleaner signal.
+
+The project achieved traction quickly—featured on Hacker News, integrated into multiple AI coding platforms (Claude Code, Cursor, Windsurf, Zed), and cited by other developers building similar tools (e.g., Claudette). This suggests the problem it solves is widely recognized. The MIT license and 100% open-source approach lower friction for adoption and inspection.
+
+Potential considerations: The tool's effectiveness depends on accurate static analysis via Tree-sitter. Languages with dynamic features, metaprogramming, or reflection might see lower accuracy. The SQLite approach works well for single-developer workflows but the multi-repo registry feature suggests awareness of team use cases. The 49x token reduction is the highest claim and appears to apply to specific live coding tasks on large repos—average reductions across all tasks and repos are lower (6.8x). No negative criticisms surfaced during research, though the tool is relatively new (announcement in Feb 2026, Hacker News discussion recent), so long-term reliability is unproven.&quot;</div>
+
+<h2>Topics</h2>
+<div class="topics">
+  <span class="tag">token optimization</span>
+  <span class="tag">AI coding assistants</span>
+  <span class="tag">knowledge graphs</span>
+  <span class="tag">Tree-sitter</span>
+  <span class="tag">code analysis</span>
+  <span class="tag">Claude Code</span>
+</div>
+
+
+</body>
+</html>
