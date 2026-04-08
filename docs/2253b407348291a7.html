@@ -1,0 +1,132 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>OCR Fine-Tuning Lands in mlx-tune: Native Apple Silicon Support for Document AI</title>
+<style>
+  *, *::before, *::after { box-sizing: border-box; }
+  :root {
+    --bg: #fff; --fg: #1a1a1a; --muted: #666; --border: #e0e0e0;
+    --accent: #0066cc; --tag-bg: #f0f0f0; --tag-fg: #333;
+    --card-bg: #fafafa;
+  }
+  @media (prefers-color-scheme: dark) {
+    :root {
+      --bg: #1a1a1a; --fg: #e0e0e0; --muted: #999; --border: #333;
+      --accent: #4da6ff; --tag-bg: #2a2a2a; --tag-fg: #ccc;
+      --card-bg: #222;
+    }
+  }
+  body {
+    font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif;
+    line-height: 1.6; color: var(--fg); background: var(--bg);
+    max-width: 720px; margin: 0 auto; padding: 2rem 1.5rem;
+  }
+  a { color: var(--accent); text-decoration: none; }
+  a:hover { text-decoration: underline; }
+  h1 { font-size: 1.8rem; line-height: 1.2; margin-bottom: 0.25rem; }
+  .meta { color: var(--muted); font-size: 0.9rem; margin-bottom: 2rem; }
+  .meta a { color: var(--muted); }
+  h2 { font-size: 1.2rem; margin-top: 2rem; margin-bottom: 0.75rem; border-bottom: 1px solid var(--border); padding-bottom: 0.25rem; }
+  .summary { font-size: 1.05rem; }
+  ul { padding-left: 1.25rem; }
+  li { margin-bottom: 0.5rem; }
+  .relevance { color: var(--muted); font-size: 0.85rem; }
+  .topics { display: flex; flex-wrap: wrap; gap: 0.5rem; }
+  .tag {
+    background: var(--tag-bg); color: var(--tag-fg);
+    padding: 0.2rem 0.6rem; border-radius: 1rem; font-size: 0.8rem;
+  }
+  .about-card {
+    background: var(--card-bg); padding: 1rem; border-radius: 0.5rem;
+    border: 1px solid var(--border);
+  }
+  .about-card p { margin: 0.25rem 0; }
+  .notes { white-space: pre-wrap; color: var(--muted); font-size: 0.95rem; }
+  .share-btn {
+    display: inline-block; padding: 0.5rem 1rem; border-radius: 0.5rem;
+    background: var(--accent); color: #fff; font-size: 0.9rem; cursor: pointer;
+    border: none; font-family: inherit;
+  }
+  .share-btn:hover { opacity: 0.85; }
+  .share-section { margin-bottom: 1.5rem; }
+  .share-copied { color: var(--muted); font-size: 0.85rem; margin-left: 0.5rem; }
+</style>
+</head>
+<body>
+
+<h1>OCR Fine-Tuning Lands in mlx-tune: Native Apple Silicon Support for Document AI</h1>
+<div class="meta">
+  <a href="https://x.com/_arahim_/status/2041612642050290040">https://x.com/_arahim_/status/2041612642050290040</a><br>
+  Technical product announcement on social media; brief but substantive feature release notification &middot; Researched April 8, 2026
+</div>
+
+<div class="share-section">
+<button class="share-btn" onclick="navigator.clipboard.writeText(window.location.href).then(()=>{document.getElementById('copied').style.display='inline'});window.open('https://notebooklm.google.com','_blank')">
+  Share to NotebookLM
+</button>
+<span id="copied" class="share-copied" style="display:none">URL copied — paste it as a website source in a new notebook</span>
+</div>
+
+<h2>Summary</h2>
+<div class="summary"><p>Abdur Rahim, creator of mlx-tune, announced the release of OCR (Optical Character Recognition) fine-tuning capabilities for his open-source library that enables machine learning model training natively on Apple Silicon Macs. The announcement highlights a unified API that supports five major trending OCR and vision-language models: DeepSeek-OCR, GLM-OCR (the current #1 model on the OmniDocBench benchmark), olmOCR-2, Qwen-VL, and any vision language model compatible with mlx-vlm.</p>
+<p></p>
+<p>The new feature includes production-ready capabilities for OCR fine-tuning: built-in Character Error Rate (CER) and Word Error Rate (WER) evaluation metrics for assessing accuracy, as well as GRPO (Group Relative Policy Optimization) training with character-level rewards—enabling reinforcement learning optimizations specifically designed for OCR tasks. The announcement includes references to five ready-to-run example scripts covering practical use cases: LaTeX document OCR, handwriting recognition, multilingual receipt parsing, and RL-based OCR optimization.</p>
+<p></p>
+<p>mlx-tune itself is a Unsloth-compatible fine-tuning library designed to solve a specific workflow problem: allowing developers to prototype and experiment with model training locally on their MacBooks using Apple's MLX framework (which leverages the unified memory architecture of Apple Silicon), then seamlessly scale the same training scripts to cloud GPU clusters running CUDA and the original Unsloth library. The OCR fine-tuning addition expands the library's existing support for LLM fine-tuning, vision-language models, text-to-speech, speech-to-text, embeddings, and continual pretraining—all accessible through a consistent API.</p></div>
+
+<h2>Key Takeaways</h2>
+<ul>
+  <li>OCR fine-tuning is now natively supported on Apple Silicon Macs via mlx-tune, enabling users to fine-tune state-of-the-art OCR models locally without cloud GPU costs or infrastructure setup.</li>
+  <li>GLM-OCR (supported in mlx-tune) currently ranks #1 on OmniDocBench v1.5 with 94.62% accuracy, outperforming frontier models like Gemini 3 Pro and GPT-5.2 on document understanding benchmarks.</li>
+  <li>Built-in CER/WER metrics and GRPO with character-level rewards enable both supervised fine-tuning and reinforcement learning optimization specifically tailored to OCR accuracy improvements.</li>
+  <li>The unified API abstracts away model-specific differences, allowing developers to switch between DeepSeek-OCR, GLM-OCR, olmOCR-2, Qwen-VL, and Pixtral using the same code—reducing friction when experimenting with different model architectures.</li>
+  <li>mlx-tune maintains 100% API compatibility with Unsloth (the CUDA standard), enabling code written and tested locally on Mac to run unchanged on cloud GPU clusters—solving a critical workflow problem for Mac-using ML engineers.</li>
+  <li>The library bundles five practical example scripts covering document OCR, handwriting recognition, multilingual receipt extraction, and RL-based OCR optimization—lowering the barrier to entry for users new to OCR fine-tuning.</li>
+  <li>OCR fine-tuning joins an expanding ecosystem of modality-specific trainers in mlx-tune, which now supports LLMs, vision-language models, text-to-speech, speech-to-text, embeddings, and continual pretraining—all on Apple Silicon.</li>
+  <li>DeepSeek-OCR uses innovative context compression to reduce token usage by 7-20× compared to traditional OCR approaches while maintaining accuracy, making it particularly efficient for document-heavy workloads.</li>
+</ul>
+
+<h2>About</h2>
+<div class="about-card">
+  <p><strong>Author:</strong> Abdur Rahim (@_arahim_)</p>
+  <p><strong>Publication:</strong> X (Twitter)</p>
+  <p><strong>Published:</strong> 2026-04-08</p>
+</div>
+
+<h2>Sentiment / Tone</h2>
+<p>Technical and enthusiastic, with a collaborative tone. Rahim's announcement balances professional confidence in the feature's maturity with humble positioning of mlx-tune as a complementary tool to Unsloth rather than a competitor. The emoji usage (🍏 for Mac, ✅ for checkmarks) conveys approachability and excitement while maintaining technical credibility. The phrasing emphasizes practical value (&quot;natively on your Mac&quot;) and developer quality-of-life improvements rather than performance benchmarks, reflecting an audience of pragmatic engineers.</p>
+
+<h2>Related Links</h2>
+<ul>
+<li><a href="https://github.com/ARahim3/mlx-tune">mlx-tune GitHub Repository</a><br><span class="relevance">The official source for mlx-tune, containing comprehensive documentation, API reference, 46+ example scripts, and the full OCR fine-tuning implementation. Critical for understanding feature details, supported models, and training workflows.</span></li>
+<li><a href="https://github.com/zai-org/GLM-OCR">GLM-OCR Official Repository</a><br><span class="relevance">The source for GLM-OCR, the top-ranked model on OmniDocBench v1.5. Provides context on why this model is emphasized in the announcement and demonstrates real-world OCR architecture design.</span></li>
+<li><a href="https://github.com/deepseek-ai/DeepSeek-OCR">DeepSeek-OCR Official Repository</a><br><span class="relevance">DeepSeek's OCR model implementation, showcasing the context compression approach that makes OCR more efficient. One of the five core models supported by mlx-tune's OCR fine-tuning.</span></li>
+<li><a href="https://deepseek.ai/blog/deepseek-ocr-context-compression">DeepSeek-OCR: Context Compression Technical Blog</a><br><span class="relevance">Explains the novel context compression technique behind DeepSeek-OCR, providing technical depth on why this model is valuable for fine-tuning and offering insights into modern OCR architecture.</span></li>
+<li><a href="https://www.llamaindex.ai/blog/omnidocbench-is-saturated-what-s-next-for-ocr-benchmarks">OmniDocBench Analysis and Benchmark Discussion</a><br><span class="relevance">Contextualizes the OmniDocBench benchmark that validates GLM-OCR's #1 ranking. Discusses the saturation of OCR benchmarks and future directions, providing perspective on the competitive landscape of OCR models.</span></li>
+<li><a href="https://machinelearning.apple.com/research/exploring-llms-mlx-m5">Apple MLX Research: Training LLMs on Apple Silicon</a><br><span class="relevance">Official Apple research into MLX capabilities, demonstrating the underlying framework powering mlx-tune and its efficiency advantages on Apple Silicon hardware.</span></li>
+</ul>
+
+<h2>Research Notes</h2>
+<div class="notes">Abdur Rahim is a software engineer with deep expertise in machine learning infrastructure who created mlx-tune to solve a personal workflow problem he described transparently in the GitHub README: wanting to prototype on his M4 MacBook without rewriting scripts for cloud training. His positioning is credible and non-competitive—he explicitly frames mlx-tune as complementary to Unsloth, not a replacement, and acknowledges Unsloth as the &quot;gold standard&quot; for CUDA environments.
+
+The OCR fine-tuning feature lands at a significant moment: GLM-OCR has just claimed the #1 spot on OmniDocBench (94.62% accuracy, beating Gemini 3 Pro and GPT-5.2), and DeepSeek-OCR's context compression approach has generated substantial interest in making OCR more cost-efficient. By integrating multiple leading OCR models into mlx-tune, Rahim has positioned his library as a bridge between local experimentation and cloud-scale training—valuable for developers working across both environments.
+
+The emphasis on &quot;every trending OCR model, one API&quot; reflects real developer pain points when switching between competing architectures. The inclusion of GRPO with character-level rewards is noteworthy because it indicates mlx-tune is not just a convenience layer but a research-grade tool enabling novel optimization strategies tailored to OCR. The project shows strong maintenance: the GitHub repository has extensive documentation, 46+ example scripts, active issue resolution, and support for cutting-edge models like LFM2 from Liquid AI. Community engagement is evident in discussions about integration issues, indicating real users building on the library.
+
+MLX itself—Apple's machine learning framework—leverages the unified memory architecture unique to Apple Silicon, enabling models to access up to 512GB of shared memory (on Mac Studio), which is a genuine advantage for large-model fine-tuning without the VRAM constraints of traditional discrete GPUs. This is a compelling value proposition for researchers and developers who own high-end Macs and want to avoid cloud infrastructure costs during prototyping phases.</div>
+
+<h2>Topics</h2>
+<div class="topics">
+  <span class="tag">OCR fine-tuning</span>
+  <span class="tag">MLX machine learning framework</span>
+  <span class="tag">Apple Silicon development</span>
+  <span class="tag">Vision-language models</span>
+  <span class="tag">Document understanding AI</span>
+  <span class="tag">Local LLM fine-tuning</span>
+</div>
+
+
+</body>
+</html>
