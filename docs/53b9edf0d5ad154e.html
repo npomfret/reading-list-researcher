@@ -1,0 +1,132 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>How I Cancelled $2,600/Month in Trading Subscriptions with Open-Source Tools</title>
+<style>
+  *, *::before, *::after { box-sizing: border-box; }
+  :root {
+    --bg: #fff; --fg: #1a1a1a; --muted: #666; --border: #e0e0e0;
+    --accent: #0066cc; --tag-bg: #f0f0f0; --tag-fg: #333;
+    --card-bg: #fafafa;
+  }
+  @media (prefers-color-scheme: dark) {
+    :root {
+      --bg: #1a1a1a; --fg: #e0e0e0; --muted: #999; --border: #333;
+      --accent: #4da6ff; --tag-bg: #2a2a2a; --tag-fg: #ccc;
+      --card-bg: #222;
+    }
+  }
+  body {
+    font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif;
+    line-height: 1.6; color: var(--fg); background: var(--bg);
+    max-width: 720px; margin: 0 auto; padding: 2rem 1.5rem;
+  }
+  a { color: var(--accent); text-decoration: none; }
+  a:hover { text-decoration: underline; }
+  h1 { font-size: 1.8rem; line-height: 1.2; margin-bottom: 0.25rem; }
+  .meta { color: var(--muted); font-size: 0.9rem; margin-bottom: 2rem; }
+  .meta a { color: var(--muted); }
+  h2 { font-size: 1.2rem; margin-top: 2rem; margin-bottom: 0.75rem; border-bottom: 1px solid var(--border); padding-bottom: 0.25rem; }
+  .summary { font-size: 1.05rem; }
+  ul { padding-left: 1.25rem; }
+  li { margin-bottom: 0.5rem; }
+  .relevance { color: var(--muted); font-size: 0.85rem; }
+  .topics { display: flex; flex-wrap: wrap; gap: 0.5rem; }
+  .tag {
+    background: var(--tag-bg); color: var(--tag-fg);
+    padding: 0.2rem 0.6rem; border-radius: 1rem; font-size: 0.8rem;
+  }
+  .about-card {
+    background: var(--card-bg); padding: 1rem; border-radius: 0.5rem;
+    border: 1px solid var(--border);
+  }
+  .about-card p { margin: 0.25rem 0; }
+  .notes { white-space: pre-wrap; color: var(--muted); font-size: 0.95rem; }
+  .share-btn {
+    display: inline-block; padding: 0.5rem 1rem; border-radius: 0.5rem;
+    background: var(--accent); color: #fff; font-size: 0.9rem; cursor: pointer;
+    border: none; font-family: inherit;
+  }
+  .share-btn:hover { opacity: 0.85; }
+  .share-section { margin-bottom: 1.5rem; }
+  .share-copied { color: var(--muted); font-size: 0.85rem; margin-left: 0.5rem; }
+</style>
+</head>
+<body>
+
+<h1>How I Cancelled $2,600/Month in Trading Subscriptions with Open-Source Tools</h1>
+<div class="meta">
+  <a href="https://x.com/seelffff/status/2042247428930248939">https://x.com/seelffff/status/2042247428930248939</a><br>
+  Technical thread / Software breakdown / Developer resource guide &middot; Researched April 9, 2026
+</div>
+
+<div class="share-section">
+<button class="share-btn" onclick="navigator.clipboard.writeText(window.location.href).then(()=>{document.getElementById('copied').style.display='inline'});window.open('https://notebooklm.google.com','_blank')">
+  Share to NotebookLM
+</button>
+<span id="copied" class="share-copied" style="display:none">URL copied — paste it as a website source in a new notebook</span>
+</div>
+
+<h2>Summary</h2>
+<div class="summary"><p>Self.dll, a London-based web3 developer known for building Claude AI-powered trading bots, published a comprehensive breakdown of how they eliminated $2,600/month in paid financial software subscriptions by replacing each tool with free open-source alternatives. The thread systematically maps paid tools to their open-source equivalents: TradingView Pro becomes lightweight-charts (a 14KB, 14K-star charting library from TradingView themselves), Bloomberg Terminal becomes fredapi plus Claude for accessing Federal Reserve economic data, expensive backtesting platforms become prediction-market-backtesting (a NautilusTrader fork with Polymarket adapters), and proprietary trading bots are replaced with polymarket-trading-bot (53K lines of TypeScript implementing 7 distinct strategies including arbitrage, momentum, and AI forecasting).</p>
+<p></p>
+<p>The author demonstrates a sophisticated technical stack for modern prediction market trading, including a real-time dashboard called polyrec built with Chainlink oracles and Binance feeds, a paper trading simulator for AI agents (polymarket-paper-trader), and a Kafka/ClickHouse/Grafana analytics pipeline. Notably, they also highlight RTK, a Rust CLI proxy that reduces Claude Code token consumption by 60-90%, and Goose (Block's open-source AI agent framework) as replacements for Claude Code itself. The only paid tool they retained is Kreo ($59/month for Polymarket wallet tracking and copy trading), justified because it generates more revenue than it costs—demonstrating a pragmatic &quot;pay only for what's profitable&quot; philosophy.</p>
+<p></p>
+<p>This is not merely a cost-cutting exercise but a statement about software accessibility and developer independence. By curating and cross-referencing high-quality open-source projects (many with thousands of GitHub stars), self.dll demonstrates that sophisticated, professional-grade trading infrastructure is now available for free to developers willing to integrate tools themselves. The tweet resonates because it challenges the premise that serious traders need expensive proprietary platforms, and shows how modern AI, specifically Claude, has made it feasible for individual developers to assemble institutional-grade trading systems from open components.</p></div>
+
+<h2>Key Takeaways</h2>
+<ul>
+  <li>The author replaced $2,600/month in subscriptions ($0 + only $59/month for Kreo, a single profitable tool) by systematically finding open-source alternatives—a 98% cost reduction while maintaining or improving functionality.</li>
+  <li>Lightweight-charts (14K stars, 45KB, maintained by TradingView) replaces TradingView Pro ($30/mo), demonstrating that TradingView itself open-sourced a production-grade charting library that undercuts its own paid offering.</li>
+  <li>FRED API + Claude combines free Federal Reserve economic data with Claude AI for analysis, entirely replacing Bloomberg Terminal ($2,000/mo)—one of the most expensive financial tools—at zero cost.</li>
+  <li>The Polymarket-Trading-Bot is a 53K-line TypeScript codebase implementing 7 distinct strategies (arbitrage, momentum, market making, AI forecasting, whale copy-trading, and convergence) replacing a $100/month backtest platform.</li>
+  <li>RTK (a Rust CLI proxy) cuts Claude Code token usage by 60-90%, directly addressing cost at the AI level—a typical 30-minute session drops from ~150,000 tokens to ~45,000, stretching expensive Claude API quotas.</li>
+  <li>Goose (Jack Dorsey's Block, 35K stars, open-source) can replace Claude Code ($200/mo) entirely, supporting any LLM and running a full agent loop locally, shifting from subscription to on-demand AI usage.</li>
+  <li>Kreo ($59/month) is intentionally the sole remaining paid tool because it's net-positive profitable—the author explicitly filters for ROI-positive tools, not free ones, showing a business-focused approach to tool selection.</li>
+  <li>The technical stack leverages Kafka, ClickHouse, and Grafana for institutional-grade analytics, proving that 'free' doesn't mean 'amateur'—these are the same tools used by hedge funds and trading firms.</li>
+  <li>The author's background in building Claude-powered trading bots (with documented cases of $50→$435K and $1→$3.3M returns) validates the credibility of this stack—they're not recommending untested tools.</li>
+  <li>The timing reflects a broader trend (early 2026) where open-source AI agent frameworks (Goose, Claude via API) and accessible prediction markets (Polymarket, Kalshi) have democratized quantitative trading infrastructure once locked behind expensive institutional paywalls.</li>
+</ul>
+
+<h2>About</h2>
+<div class="about-card">
+  <p><strong>Author:</strong> self.dll (@seelffff)</p>
+  <p><strong>Publication:</strong> X (Twitter)</p>
+  <p><strong>Published:</strong> 2026</p>
+</div>
+
+<h2>Sentiment / Tone</h2>
+<p>Pragmatic and empowering, with an implicit challenge to the premium software industry. The tone is matter-of-fact and technical—no hype or cheerleading, just detailed tool recommendations and numbers. There's an undertone of &quot;this information should be accessible&quot; and subtle irony in how TradingView's own open-source charting library outperforms their paid product. The author positions themselves as a builder and efficiency-optimizer rather than a salesperson, which makes the recommendations feel credible rather than promotional. The repeated emphasis on specific GitHub star counts, file sizes (45KB), and actual performance metrics (70+ indicators, 1000+ orders per second) grounds the argument in engineering rigor rather than marketing speak.</p>
+
+<h2>Related Links</h2>
+<ul>
+<li><a href="https://x.com/seelffff/status/2027498003028955206">One Polymarket Account Quietly Turned $50 Into $435,000 (self.dll's documented arbitrage bot)</a><br><span class="relevance">Provides concrete evidence of the author's trading bot success, establishing credibility for the tools and strategies discussed in the main thread.</span></li>
+<li><a href="https://medium.com/@weare1010/claude-ai-trading-bots-are-making-hundreds-of-thousands-on-polymarket-2840efb9f2cd">Claude AI Trading Bots Are Making Hundreds of Thousands on Polymarket</a><br><span class="relevance">Documents the broader trend of Claude-powered trading bots achieving outsized returns, contextualizing the author's work within a growing ecosystem.</span></li>
+<li><a href="https://github.com/tradingview/lightweight-charts">TradingView Lightweight Charts (14K stars, production charting library)</a><br><span class="relevance">The primary replacement for TradingView Pro—a real GitHub project with substantial community adoption proving the viability of the recommendation.</span></li>
+<li><a href="https://github.com/mortada/fredapi">FRED API Python Wrapper for Federal Reserve Economic Data</a><br><span class="relevance">Core tool replacing Bloomberg Terminal; provides free access to every macro dataset the Fed publishes, the lifeblood of institutional macro analysis.</span></li>
+<li><a href="https://github.com/rtk-ai/rtk">RTK: Rust CLI Proxy Reducing Claude Code Token Consumption by 60-90%</a><br><span class="relevance">Demonstrates how developers in 2026 are optimizing AI costs at the infrastructure level, representing a second-order concern for anyone using Claude API in production.</span></li>
+<li><a href="https://goose-docs.ai">Goose: Jack Dorsey's Open-Source AI Agent Framework</a><br><span class="relevance">The replacement for Claude Code in the author's stack; shows how major fintech figures are investing in open-source AI infrastructure.</span></li>
+<li><a href="https://www.wired.com/story/jack-dorseys-block-made-an-ai-agent-to-boost-its-own-productivity/">Jack Dorsey's Block Made an AI Agent to Boost Its Own Productivity (Goose context)</a><br><span class="relevance">Provides background on Goose's development at Block and its real-world use cases, reinforcing its readiness for production trading applications.</span></li>
+<li><a href="https://www.reddit.com/r/ClaudeAI/comments/1r2tt7q/i_saved_10m_tokens_89_on_my_claude_code_sessions/">RTK Token Savings Discussion: 10M Tokens (89%) Saved in Claude Code Sessions</a><br><span class="relevance">Community validation of RTK's effectiveness; shows the tweet's recommendations are already being tested and adopted by other Claude Code power users.</span></li>
+</ul>
+
+<h2>Research Notes</h2>
+<div class="notes">**Author Credibility**: @seelffff (self.dll) is an established figure in the AI-trading intersection. Previous posts document building Claude-powered bots that achieved extraordinary returns—$50→$435K through arbitrage, and $1→$3.3M through market inefficiency exploitation. This validates the credibility of the technical stack recommended, as they're tools actually used in production by someone with proven results. **Broader Context**: This tweet arrives in April 2026 amid a documented boom in Claude-powered trading bots on Polymarket. Multiple recent Medium articles and Reddit posts confirm that Claude AI has become a go-to tool for building trading strategies, with educators, students, and experienced quants all experimenting. The tweet fits into a larger narrative: as AI agents (especially Claude) became more capable, the barrier to entry for quantitative trading dropped dramatically. **RTK Significance**: The inclusion of RTK (Rust Token Killer) is particularly noteworthy because it reveals a second-order problem emerging in early 2026—not just API costs, but token consumption within interactive AI sessions. The 60-90% savings suggest developers are now optimizing for AI efficiency as a core infrastructure concern, similar to optimizing database queries. **Goose Context**: Jack Dorsey's Block announced Goose in early 2026 as an open-source competitor to Claude Code and other AI development tools. The timing of this tweet citing Goose as a replacement suggests it has already matured enough to be production-ready for trading applications. **Only Counter-Example**: The single paid tool retained (Kreo) is significant—the author explicitly filters for profitability. This is not ideological (free &gt; paid) but utilitarian (ROI &gt; everything). It suggests that the &quot;replace all SaaS with open-source&quot; framing is actually &quot;replace commoditized SaaS with open-source, pay only for specialized competitive advantages.&quot; **Missing Context**: The tweet assumes significant technical skill—users need to integrate these tools, potentially write some glue code, manage infrastructure (Kafka, ClickHouse), and understand trading strategy. This is not a consumer-facing guide but a developer's toolkit. **Related Trend**: This feeds into a 2026 narrative where the barrier between &quot;retail trader&quot; and &quot;algorithmic trader&quot; continues to blur, and where AI+open-source is democratizing capabilities once exclusive to institutional quants. However, it's worth noting that on-chain data cited in Polymarket research shows 92.4% of wallets lose money—access to tools ≠ profitability.</div>
+
+<h2>Topics</h2>
+<div class="topics">
+  <span class="tag">Open-source trading tools</span>
+  <span class="tag">AI-powered trading bots</span>
+  <span class="tag">Claude API applications</span>
+  <span class="tag">Polymarket prediction markets</span>
+  <span class="tag">Cost optimization</span>
+  <span class="tag">Trading infrastructure</span>
+  <span class="tag">FinTech alternatives</span>
+  <span class="tag">AI agents</span>
+</div>
+
+
+</body>
+</html>
