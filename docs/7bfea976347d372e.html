@@ -1,0 +1,138 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Andrej Karpathy's LLM Coding Failure Patterns Converted Into a Single Configuration File Gains 3,741 Stars</title>
+<style>
+  *, *::before, *::after { box-sizing: border-box; }
+  :root {
+    --bg: #fff; --fg: #1a1a1a; --muted: #666; --border: #e0e0e0;
+    --accent: #0066cc; --tag-bg: #f0f0f0; --tag-fg: #333;
+    --card-bg: #fafafa;
+  }
+  @media (prefers-color-scheme: dark) {
+    :root {
+      --bg: #1a1a1a; --fg: #e0e0e0; --muted: #999; --border: #333;
+      --accent: #4da6ff; --tag-bg: #2a2a2a; --tag-fg: #ccc;
+      --card-bg: #222;
+    }
+  }
+  body {
+    font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif;
+    line-height: 1.6; color: var(--fg); background: var(--bg);
+    max-width: 720px; margin: 0 auto; padding: 2rem 1.5rem;
+  }
+  a { color: var(--accent); text-decoration: none; }
+  a:hover { text-decoration: underline; }
+  h1 { font-size: 1.8rem; line-height: 1.2; margin-bottom: 0.25rem; }
+  .meta { color: var(--muted); font-size: 0.9rem; margin-bottom: 2rem; }
+  .meta a { color: var(--muted); }
+  h2 { font-size: 1.2rem; margin-top: 2rem; margin-bottom: 0.75rem; border-bottom: 1px solid var(--border); padding-bottom: 0.25rem; }
+  .summary { font-size: 1.05rem; }
+  ul { padding-left: 1.25rem; }
+  li { margin-bottom: 0.5rem; }
+  .relevance { color: var(--muted); font-size: 0.85rem; }
+  .topics { display: flex; flex-wrap: wrap; gap: 0.5rem; }
+  .tag {
+    background: var(--tag-bg); color: var(--tag-fg);
+    padding: 0.2rem 0.6rem; border-radius: 1rem; font-size: 0.8rem;
+  }
+  .about-card {
+    background: var(--card-bg); padding: 1rem; border-radius: 0.5rem;
+    border: 1px solid var(--border);
+  }
+  .about-card p { margin: 0.25rem 0; }
+  .notes { white-space: pre-wrap; color: var(--muted); font-size: 0.95rem; }
+  .share-btn {
+    display: inline-block; padding: 0.5rem 1rem; border-radius: 0.5rem;
+    background: var(--accent); color: #fff; font-size: 0.9rem; cursor: pointer;
+    border: none; font-family: inherit;
+  }
+  .share-btn:hover { opacity: 0.85; }
+  .share-section { margin-bottom: 1.5rem; }
+  .share-copied { color: var(--muted); font-size: 0.85rem; margin-left: 0.5rem; }
+</style>
+</head>
+<body>
+
+<h1>Andrej Karpathy's LLM Coding Failure Patterns Converted Into a Single Configuration File Gains 3,741 Stars</h1>
+<div class="meta">
+  <a href="https://x.com/sharbel/status/2042914348859867218?s=12">https://x.com/sharbel/status/2042914348859867218?s=12</a><br>
+  Social media curation and technical recommendation (X/Twitter post highlighting a GitHub repository discovery) &middot; Researched April 11, 2026
+</div>
+
+<div class="share-section">
+<button class="share-btn" onclick="navigator.clipboard.writeText(window.location.href).then(()=>{document.getElementById('copied').style.display='inline'});window.open('https://notebooklm.google.com','_blank')">
+  Share to NotebookLM
+</button>
+<span id="copied" class="share-copied" style="display:none">URL copied — paste it as a website source in a new notebook</span>
+</div>
+
+<h2>Summary</h2>
+<div class="summary"><p>Sharbel highlights a GitHub repository that has rapidly gained 3,741 stars in a single week by converting Andrej Karpathy's documented observations about LLM coding failures into a practical, single CLAUDE.md configuration file. Karpathy, a prominent AI researcher and former Tesla AI Director, recently published extensive notes on the systematic mistakes that Claude Code (and similar LLMs) repeatedly make across projects—including making incorrect assumptions without verification, overcomplicating code with unnecessary abstractions, bloating implementations beyond what's needed, and making orthogonal changes to existing code without explicit instruction.</p>
+<p></p>
+<p>The repository, created by Forrest Chang and titled &quot;andrej-karpathy-skills,&quot; directly operationalizes Karpathy's observations into four actionable behavioral principles: (1) Think Before Coding—forcing explicit reasoning about assumptions and seeking clarification rather than silent guessing; (2) Simplicity First—implementing only what was asked for without speculative features or unnecessary error handling; (3) Surgical Changes—touching only code directly related to the user's request and not refactoring unrelated sections; and (4) Goal-Driven Execution—defining verifiable success criteria and looping until goals are met rather than giving imperative instructions.</p>
+<p></p>
+<p>The solution is remarkably simple: users drop the CLAUDE.md file into any project root, and Claude automatically reads and applies these behavioral guidelines on every session, eliminating the need for repeated prompt engineering or babysitting the AI on every request. This represents a significant shift in how developers can work with LLMs—moving from constant per-session correction to permanent, one-time configuration of AI behavior. The post resonates because it addresses a deeply felt pain point: developers accept systematic failures from LLMs as baseline behavior, but Karpathy's documentation proves these failures are predictable, catalogued, and fixable.</p>
+<p></p></div>
+
+<h2>Key Takeaways</h2>
+<ul>
+  <li>Andrej Karpathy documented specific, recurring failure patterns in how Claude Code makes mistakes—not syntax errors but subtle conceptual errors resembling a 'sloppy, hasty junior dev'—such as making wrong assumptions without checking, overcomplicating solutions, and making unnecessary orthogonal changes.</li>
+  <li>The 'andrej-karpathy-skills' repository converts Karpathy's observations into a single CLAUDE.md configuration file containing four principles (Think Before Coding, Simplicity First, Surgical Changes, Goal-Driven Execution) that directly address documented failure modes.</li>
+  <li>The repository gained 3,741 stars in one week, indicating strong developer demand for a concrete solution to a widespread, well-understood problem with LLM-assisted coding.</li>
+  <li>The solution requires zero per-session configuration: dropping one file into a project root causes Claude to apply behavioral guidelines automatically on every session, replacing the need for constant prompt engineering or babysitting.</li>
+  <li>Karpathy's 'Goal-Driven Execution' principle (transforming imperative instructions into declarative goals with verification criteria) is identified as the source of LLM leverage—'Don't tell it what to do, give it success criteria and watch it go.'</li>
+  <li>The file can be installed either as a Claude Code plugin (marketplace-based, project-independent) or dropped directly into project roots (per-project approach), providing flexibility for different team structures and workflows.</li>
+  <li>Sharbel's post is timely because Karpathy recently documented that he shifted from 80% manual coding + 20% agent assistance to 80% agent coding + 20% manual edits in a single month, representing a paradigm shift in how professional developers work.</li>
+  <li>The four principles directly address systemic behaviors: wrong assumptions are caught by 'Think Before Coding'; overcomplication is handled by 'Simplicity First'; side effects are prevented by 'Surgical Changes'; and brittleness is addressed by 'Goal-Driven Execution' with test-first approaches.</li>
+  <li>LLMs are identified as 'exceptionally good at looping until they meet specific goals'—the real capability emerges not from model intelligence but from clear direction and verification mechanisms, a paradigm shift from prompt engineering to goal specification.</li>
+  <li>Community adoption spans multiple LLM skill marketplaces (Lobehub, Skills.sh, AgentSkills.so), indicating this behavioral guideline pattern is becoming standard practice for LLM-assisted development across different platforms.</li>
+</ul>
+
+<h2>About</h2>
+<div class="about-card">
+  <p><strong>Author:</strong> Sharbel (@sharbel)</p>
+  <p><strong>Publication:</strong> X (formerly Twitter)</p>
+  <p><strong>Published:</strong> 2026-04-10</p>
+</div>
+
+<h2>Sentiment / Tone</h2>
+<p>Sharbel's post is enthusiastic and validating, positioned as highlighting a clever, practical solution to a well-documented problem. The tone is one of &quot;see, someone solved this&quot;—combining technical respect for Karpathy's analytical work with appreciation for the elegance of the configuration-based solution. The post uses urgent formatting (the 🚨 emoji and &quot;It's called...&quot;) to signal this is a discovery worth attention, not a dry announcement. The framing assumes the reader already experiences the frustrations Karpathy documented, positioning the repository as relief rather than instruction. There's an implicit acknowledgment that developers have been accepting these failures as inevitable (&quot;most people just accept this as the baseline&quot;), which adds to the sense of vindication that someone has mapped and solved the problem systematically.</p>
+
+<h2>Related Links</h2>
+<ul>
+<li><a href="https://github.com/forrestchang/andrej-karpathy-skills">andrej-karpathy-skills GitHub Repository</a><br><span class="relevance">The actual repository containing the CLAUDE.md configuration file and comprehensive documentation of the four principles, including installation instructions and customization guidance.</span></li>
+<li><a href="https://x.com/karpathy/status/2015883857489522876">Andrej Karpathy's Original X Post on LLM Coding Observations</a><br><span class="relevance">Karpathy's detailed original post documenting systematic failure patterns in Claude Code, including specific examples of wrong assumptions, overcomplication, orthogonal changes, and lack of clarification-seeking behavior—the foundation for the entire repository.</span></li>
+<li><a href="https://karpathy.bearblog.dev/year-in-review-2025/">Andrej Karpathy's 2025 Year in Review</a><br><span class="relevance">Broader context on Karpathy's shift to agent-driven development, his philosophy on 'vibe coding,' and his perspective on LLMs as the next major computing paradigm; includes discussions of paradigm-shifting changes to software engineering workflows.</span></li>
+<li><a href="https://x.com/sharbel">Sharbel's X Profile and Posts</a><br><span class="relevance">Shows Sharbel's background as an AI agent specialist focused on practical applications (trading bots, content automation, business systems), establishing his credibility for curating and explaining cutting-edge LLM development tools.</span></li>
+<li><a href="https://todatabeyond.substack.com/p/turning-andrej-karpathys-llm-coding">Turning Andrej Karpathy's LLM Coding Thoughts into Claude.md</a><br><span class="relevance">Analysis of how Karpathy's observations map to the four principles in the configuration file, providing additional context on the conceptual framework underlying the solution.</span></li>
+</ul>
+
+<h2>Research Notes</h2>
+<div class="notes">**Author Background:** Sharbel is an AI systems engineer and entrepreneur who specializes in practical agent-driven applications—he's built trading bots with LLMs, automated X content creation via agents, and regularly curates trending GitHub projects for his audience. His credibility on this topic derives from hands-on experience with LLM limitations and solutions, not theoretical knowledge. He operates in the intersection of crypto/trading, AI agents, and developer tools, which explains his focus on practical, working solutions rather than academic discussion.
+
+**Andrej Karpathy's Credibility:** Karpathy is a highly influential AI researcher with deep practical experience—he led Tesla's Autopilot vision work, created the influential cs231n course, and was a co-founder at xAI. His recent detailed documentation of LLM coding failures carries significant weight because he's not speculating; he spent weeks using Claude Code intensively (shifting from 80% manual to 80% agent coding) and documented what he observed. His observations are data-driven (specific failure patterns, not complaints) and his framework is constructive (identifying problems + proposing fixes).
+
+**Why This Resonates:** The timing is critical. Karpathy published his observations at the exact moment when LLMs crossed a capability threshold (December 2025) that made agent-driven coding viable for professional work. Before this, LLM coding was viewed as a novelty; after this threshold, it became a mainstream alternative to manual coding. The &quot;andrej-karpathy-skills&quot; repository arrives precisely when developers are frantically trying to figure out how to use this new capability—the emotional journey is: (1) excitement at new capability, (2) frustration with systematic failures, (3) vindication seeing failures documented, (4) relief finding solutions. Sharbel's post captures this moment of collective realization.
+
+**Broader Context:** This is part of a larger conversation about &quot;AI agent governance&quot;—how to reliably direct LLMs to do what you want without supervision. Solutions range from RAG (retrieval-augmented generation) to tool use to specialized prompting to configuration files. The andrej-karpathy-skills approach is elegant because it's minimal, persistent, and doesn't require per-request prompting. It's also being adopted across multiple LLM skill marketplaces (Lobehub, AgentSkills.so), suggesting this pattern is becoming standard practice.
+
+**Potential Counterarguments:** Some developers might view the approach as overly cautious (the documentation acknowledges this: &quot;These guidelines bias toward caution over speed&quot;). For trivial one-liner fixes, the full rigor may feel like overkill. Additionally, while the CLAUDE.md approach works well within Claude's ecosystem, it's less clear how this generalizes to other LLMs (Claude was the primary focus of Karpathy's observations because that's what he uses heavily). The solution is also somewhat opaque in execution—the CLAUDE.md file modifies Claude's behavior through system instructions, which means the exact mechanism of behavioral change isn't fully transparent to users.
+
+**Reliability and Verification:** The repository has legitimate adoption signals (3,741 stars in one week, multiple marketplace listings, citations in developer blogs), but as of April 2026 the project is still relatively new (appears to have been created in early 2026). Real-world validation through long-term use across diverse projects is still accumulating, though early reports in communities are positive.</div>
+
+<h2>Topics</h2>
+<div class="topics">
+  <span class="tag">LLM coding assistance</span>
+  <span class="tag">Claude Code configuration</span>
+  <span class="tag">AI failure pattern mitigation</span>
+  <span class="tag">Agent-driven development workflows</span>
+  <span class="tag">Prompt engineering alternatives</span>
+  <span class="tag">Developer productivity tools</span>
+</div>
+
+
+</body>
+</html>
