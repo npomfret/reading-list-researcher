@@ -1,0 +1,139 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>How I Built a $11K Prediction Market Bot in Three Weeks Using Claude AI</title>
+<style>
+  *, *::before, *::after { box-sizing: border-box; }
+  :root {
+    --bg: #fff; --fg: #1a1a1a; --muted: #666; --border: #e0e0e0;
+    --accent: #0066cc; --tag-bg: #f0f0f0; --tag-fg: #333;
+    --card-bg: #fafafa;
+  }
+  @media (prefers-color-scheme: dark) {
+    :root {
+      --bg: #1a1a1a; --fg: #e0e0e0; --muted: #999; --border: #333;
+      --accent: #4da6ff; --tag-bg: #2a2a2a; --tag-fg: #ccc;
+      --card-bg: #222;
+    }
+  }
+  body {
+    font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif;
+    line-height: 1.6; color: var(--fg); background: var(--bg);
+    max-width: 720px; margin: 0 auto; padding: 2rem 1.5rem;
+  }
+  a { color: var(--accent); text-decoration: none; }
+  a:hover { text-decoration: underline; }
+  h1 { font-size: 1.8rem; line-height: 1.2; margin-bottom: 0.25rem; }
+  .meta { color: var(--muted); font-size: 0.9rem; margin-bottom: 2rem; }
+  .meta a { color: var(--muted); }
+  h2 { font-size: 1.2rem; margin-top: 2rem; margin-bottom: 0.75rem; border-bottom: 1px solid var(--border); padding-bottom: 0.25rem; }
+  .summary { font-size: 1.05rem; }
+  ul { padding-left: 1.25rem; }
+  li { margin-bottom: 0.5rem; }
+  .relevance { color: var(--muted); font-size: 0.85rem; }
+  .topics { display: flex; flex-wrap: wrap; gap: 0.5rem; }
+  .tag {
+    background: var(--tag-bg); color: var(--tag-fg);
+    padding: 0.2rem 0.6rem; border-radius: 1rem; font-size: 0.8rem;
+  }
+  .about-card {
+    background: var(--card-bg); padding: 1rem; border-radius: 0.5rem;
+    border: 1px solid var(--border);
+  }
+  .about-card p { margin: 0.25rem 0; }
+  .notes { white-space: pre-wrap; color: var(--muted); font-size: 0.95rem; }
+  .share-btn {
+    display: inline-block; padding: 0.5rem 1rem; border-radius: 0.5rem;
+    background: var(--accent); color: #fff; font-size: 0.9rem; cursor: pointer;
+    border: none; font-family: inherit;
+  }
+  .share-btn:hover { opacity: 0.85; }
+  .share-section { margin-bottom: 1.5rem; }
+  .share-copied { color: var(--muted); font-size: 0.85rem; margin-left: 0.5rem; }
+</style>
+</head>
+<body>
+
+<h1>How I Built a $11K Prediction Market Bot in Three Weeks Using Claude AI</h1>
+<div class="meta">
+  <a href="https://x.com/hanakoxbt/status/2043013404739207676?s=12">https://x.com/hanakoxbt/status/2043013404739207676?s=12</a><br>
+  Technical narrative / proof-of-concept case study with embedded trading strategy &middot; Researched April 11, 2026
+</div>
+
+<div class="share-section">
+<button class="share-btn" onclick="navigator.clipboard.writeText(window.location.href).then(()=>{document.getElementById('copied').style.display='inline'});window.open('https://notebooklm.google.com','_blank')">
+  Share to NotebookLM
+</button>
+<span id="copied" class="share-copied" style="display:none">URL copied — paste it as a website source in a new notebook</span>
+</div>
+
+<h2>Summary</h2>
+<div class="summary"><p>Hanako describes a dramatic entrepreneurial experiment: a Citadel intern casually reveals four quantitative trading factors at a Brooklyn rooftop party, which Hanako memorizes and uses to build an automated trading system for prediction markets. Over three weeks, using Claude AI ($20/month), a $5/month VPS, a freely available GitHub repository of 86 million historical trades (warproxxx/poly), and the free Polymarket API, Hanako creates four autonomous bots that generate $11,514 in profit from an initial $800 seed capital with a 70% win rate.</p>
+<p></p>
+<p>The four scoring factors disclosed are: cross-market divergence (pricing inconsistencies across markets), disposition coefficient (measuring exit behavior—how quickly winners are taken and how long losers are held), capital velocity (how efficiently capital is recycled), and pair network correlation (finding correlated markets to exploit). Hanako emphasizes that the disposition effect alone was transformative: top wallets capture 86% of winner value and cut losers at 12%, while retail traders capture 58% and hold losers to 41%. The insight that &quot;exits make it a completely different game&quot; becomes the core revelation.</p>
+<p></p>
+<p>The infrastructure is minimal: Claude acts as the programming engineer, generating and debugging code; the poly repository provides free historical data at massive scale; Polymarket's own API handles market data and trade execution. Four bots specialize: pulse_alpha, arb_hunter, trend_rider, and cal_engine, each handling different correlation patterns and entry signals. The story concludes with the Citadel intern requesting the information be deleted, making it a narrative of industrial espionage-adjacent knowledge transfer. The post also notes this setup operates opposite to traditional quant fund structure (no team, office, or Bloomberg terminals) and includes a link to follow the copy-trading version on Polymarket.</p></div>
+
+<h2>Key Takeaways</h2>
+<ul>
+  <li>The core insight is behavioral: professional traders exit winners quickly (86% of value captured) and cut losers aggressively (12% held), while retail holders do the opposite (58% captured, 41% of losers held), making exit discipline the primary edge.</li>
+  <li>Four quantitative signals (cross-market divergence, disposition coefficient, capital velocity, pair network correlation) automate market selection and entry/exit timing, removing emotion and creating repeatable, rule-based execution.</li>
+  <li>Claude AI ($20/month) served as the entire engineering team, replacing traditional Bloomberg terminals, teams of engineers, and quant PhDs—democratizing algorithmic trading to solo operators.</li>
+  <li>A single freely available GitHub repository (86 million historical trades) plus the free Polymarket API eliminated data costs that typically cost quant funds millions in subscriptions and real-time feeds.</li>
+  <li>The system achieved 70% win rate with only $800 initial capital and $25/month operating costs, reaching $11,514 profit across four specialized bots in three weeks.</li>
+  <li>Capital velocity of 49x means each dollar recycled 49 times before an average retail trader recycles once, compounding returns faster than traditional strategies.</li>
+  <li>The technology is built with off-the-shelf components: Claude for code generation, Polymarket's public API for execution, and community data for signals—no proprietary systems required.</li>
+  <li>Cross-market correlation analysis found 42 pair correlations across 11 prediction markets, exploiting pricing gaps like MSFT beat Q3 priced at 80¢ but calculated at 93% probability.</li>
+  <li>The narrative frames the knowledge as quasi-insider information obtained at a social event, creating tension between professional secrecy and open-source democratization.</li>
+  <li>The creator offers copytrading via kreo.app, allowing others to follow bot signals without building infrastructure, suggesting both a revenue model and proof-of-concept approach.</li>
+</ul>
+
+<h2>About</h2>
+<div class="about-card">
+  <p><strong>Author:</strong> Hanako (@hanakoxbt)</p>
+  <p><strong>Publication:</strong> X (Twitter)</p>
+  <p><strong>Published:</strong> 2026-04-09</p>
+</div>
+
+<h2>Sentiment / Tone</h2>
+<p>The tone is confidently conversational and self-aware, blending thriller narrative elements (&quot;he got quiet for a second,&quot; &quot;looked around,&quot; &quot;confessing&quot;) with the technical precision of a quant strategy. The author positions themselves as a clever operator who captured and productized insider knowledge, maintaining amused delight (&quot;watching a screen i barely understand print money&quot;). There's subtle technical flexing without arrogance—emphasis on accessibility and simplicity over genius. The ending (intern's request to &quot;delete everything&quot;) adds narrative drama and raises implicit ethics questions about sharing proprietary signals, framed lightly. Overall optimistic and proof-of-concept driven, aimed at demystifying institutional quant trading by showing it's replicable with commodity AI tools and free data.</p>
+
+<h2>Related Links</h2>
+<ul>
+<li><a href="https://medium.com/@itanscott1/ai-bots-and-polymarket-my-trading-experiment-2a89ab13bf75">AI Bots and Polymarket: My Trading Experiment | Medium</a><br><span class="relevance">Parallel case study of another trader using Claude to build Polymarket bots; demonstrates the broader trend and provides context on bot structures and profitability approaches.</span></li>
+<li><a href="https://cryptorank.io/news/feed/fdb0c-claude-ai-prediction-market-bots">Claude AI Trading Bots Dominate Prediction Markets with Shrewd Arbitrage Strategies</a><br><span class="relevance">Comprehensive overview of Claude-powered bots on prediction markets; covers multiple traders and strategies, contextualizing Hanako's approach within a wider movement.</span></li>
+<li><a href="https://www.coindesk.com/markets/2026/04/06/polymarket-reveals-a-full-exchange-upgrade-to-take-control-of-its-own-trading-and-truth">Polymarket just revealed a 'full exchange upgrade' to take control of its own trading and truth</a><br><span class="relevance">Recent Polymarket infrastructure upgrade; shows rapid platform evolution enabling bots like Hanako's to operate at scale.</span></li>
+<li><a href="https://www.trmlabs.com/resources/blog/how-prediction-markets-scaled-to-usd-21b-in-monthly-volume-in-2026">How Prediction Markets Scaled to USD 21B in Monthly Volume in 2026</a><br><span class="relevance">Market overview of prediction market growth in 2026; provides liquidity and volume context making Hanako's bot strategy viable at scale.</span></li>
+<li><a href="https://finbold.com/claude-ai-powered-trading-bot-turns-1-into-3-3-million-on-polymarket/">Claude AI powered trading bot turns $1 into $3.3 million on Polymarket</a><br><span class="relevance">Extreme case study of Claude bot returns; illustrates upside potential and survivorship bias issues when evaluating trading systems.</span></li>
+</ul>
+
+<h2>Research Notes</h2>
+<div class="notes">**Author context:** Hanako (@hanakoxbt) appears to be an active trader and developer in crypto/prediction markets, with the &quot;xbt&quot; handle (Bitcoin ticker) suggesting strong crypto focus. The post demonstrates sophisticated technical knowledge (model scoring, statistical analysis) combined with developer skills. Detailed biographical information is limited publicly.
+
+**Broader context:** This exemplifies a 2026 trend of Claude AI-powered trading bots achieving outsized Polymarket returns. Multiple documented cases exist: one bot reportedly turned $1 into $3.3 million since August 2025; others report six-figure returns. The phenomenon intersects (1) Polymarket volume explosion (reaching $21B monthly in early 2026), (2) Claude API maturity for autonomous code generation, and (3) availability of free high-quality data repositories. Hanako's story is well-articulated but not unique within this emerging trend.
+
+**Disposition effect validation:** The behavioral finance concept (holding losers too long, exiting winners early) is academically established (Shefrin &amp; Statman, 1985). The specific numbers (86% vs 58% win value capture) align with crypto trading research, lending credibility.
+
+**Competitive dynamics:** The story reveals that institutional quant funds use signals now replicable for $25/month. This raises questions about signal durability and whether edges are arbitraged away as adoption spreads. High win rate (70%) may reflect early-mover advantage before broader implementation.
+
+**Verification concerns:** No on-chain proof-of-funds, transaction logs, or verifiable wallet addresses provided. While methodology is plausible, extraordinary returns claims in crypto require caution. Copytrading link offers potential verification but independent audit data is absent. Survivorship bias likely: only successful experiments are shared.
+
+**Reactions and reception:** Post has resonated within crypto and AI trading communities as a narrative case study in AI-enabled democratization of finance. It's typical of a wave showing Claude enabling rapid product development and edge-case monetization. Skepticism centers on sustainability of edges once widely adopted.
+
+**Broader significance:** Exemplifies a 2026 shift where LLMs (particularly Claude) become autonomous code-generating agents for finance, collapsing algorithmic trading barriers from millions in infrastructure/talent to $25/month. Also highlights prediction markets evolving from niche betting to serious price-discovery mechanisms rivaling traditional derivatives.</div>
+
+<h2>Topics</h2>
+<div class="topics">
+  <span class="tag">Prediction markets (Polymarket)</span>
+  <span class="tag">Algorithmic trading and automated trading bots</span>
+  <span class="tag">Claude AI for software development</span>
+  <span class="tag">Quantitative finance and trading signals</span>
+  <span class="tag">Behavioral finance (disposition effect)</span>
+  <span class="tag">Cryptocurrency and decentralized finance</span>
+</div>
+
+
+</body>
+</html>
