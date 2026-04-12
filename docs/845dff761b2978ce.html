@@ -1,0 +1,141 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>UI UX Pro Max Skill - AI Design Intelligence for Claude Code and Other AI Coding Assistants</title>
+<style>
+  *, *::before, *::after { box-sizing: border-box; }
+  :root {
+    --bg: #fff; --fg: #1a1a1a; --muted: #666; --border: #e0e0e0;
+    --accent: #0066cc; --tag-bg: #f0f0f0; --tag-fg: #333;
+    --card-bg: #fafafa;
+  }
+  @media (prefers-color-scheme: dark) {
+    :root {
+      --bg: #1a1a1a; --fg: #e0e0e0; --muted: #999; --border: #333;
+      --accent: #4da6ff; --tag-bg: #2a2a2a; --tag-fg: #ccc;
+      --card-bg: #222;
+    }
+  }
+  body {
+    font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif;
+    line-height: 1.6; color: var(--fg); background: var(--bg);
+    max-width: 720px; margin: 0 auto; padding: 2rem 1.5rem;
+  }
+  a { color: var(--accent); text-decoration: none; }
+  a:hover { text-decoration: underline; }
+  h1 { font-size: 1.8rem; line-height: 1.2; margin-bottom: 0.25rem; }
+  .meta { color: var(--muted); font-size: 0.9rem; margin-bottom: 2rem; }
+  .meta a { color: var(--muted); }
+  h2 { font-size: 1.2rem; margin-top: 2rem; margin-bottom: 0.75rem; border-bottom: 1px solid var(--border); padding-bottom: 0.25rem; }
+  .summary { font-size: 1.05rem; }
+  ul { padding-left: 1.25rem; }
+  li { margin-bottom: 0.5rem; }
+  .relevance { color: var(--muted); font-size: 0.85rem; }
+  .topics { display: flex; flex-wrap: wrap; gap: 0.5rem; }
+  .tag {
+    background: var(--tag-bg); color: var(--tag-fg);
+    padding: 0.2rem 0.6rem; border-radius: 1rem; font-size: 0.8rem;
+  }
+  .about-card {
+    background: var(--card-bg); padding: 1rem; border-radius: 0.5rem;
+    border: 1px solid var(--border);
+  }
+  .about-card p { margin: 0.25rem 0; }
+  .notes { white-space: pre-wrap; color: var(--muted); font-size: 0.95rem; }
+  .share-btn {
+    display: inline-block; padding: 0.5rem 1rem; border-radius: 0.5rem;
+    background: var(--accent); color: #fff; font-size: 0.9rem; cursor: pointer;
+    border: none; font-family: inherit;
+  }
+  .share-btn:hover { opacity: 0.85; }
+  .share-section { margin-bottom: 1.5rem; }
+  .share-copied { color: var(--muted); font-size: 0.85rem; margin-left: 0.5rem; }
+</style>
+</head>
+<body>
+
+<h1>UI UX Pro Max Skill - AI Design Intelligence for Claude Code and Other AI Coding Assistants</h1>
+<div class="meta">
+  <a href="https://github.com/nextlevelbuilder/ui-ux-pro-max-skill">https://github.com/nextlevelbuilder/ui-ux-pro-max-skill</a><br>
+  Open-source software project (GitHub repository), technical tool/plugin &middot; Researched April 12, 2026
+</div>
+
+<div class="share-section">
+<button class="share-btn" onclick="navigator.clipboard.writeText(window.location.href).then(()=>{document.getElementById('copied').style.display='inline'});window.open('https://notebooklm.google.com','_blank')">
+  Share to NotebookLM
+</button>
+<span id="copied" class="share-copied" style="display:none">URL copied — paste it as a website source in a new notebook</span>
+</div>
+
+<h2>Summary</h2>
+<div class="summary"><p>UI UX Pro Max Skill is an open-source AI skill that augments Claude Code, Cursor, Windsurf, and 10+ other AI coding assistants with professional-grade design intelligence. The core innovation is an intelligent design system generator (flagship feature in v2.0) that analyzes project requirements and generates complete, industry-specific design systems in seconds. Rather than offering generic design suggestions, it uses a sophisticated reasoning engine with 161 industry-specific rules that match product types (e.g., SaaS, beauty spa, fintech) to optimal UI patterns, color palettes, typography combinations, and interaction patterns. </p>
+<p></p>
+<p>The skill operates through a hybrid search engine combining BM25 ranking with regex matching to query a comprehensive knowledge base: 67 UI styles (ranging from minimalism and glassmorphism to cyberpunk UI and spatial computing), 161 color palettes tailored to specific industries, 57 Google Fonts pairings with mood-based recommendations, 25 chart type recommendations for analytics dashboards, and 99 UX guidelines covering accessibility, animations, and anti-patterns. When a developer requests UI/UX work (e.g., &quot;Build a landing page for my beauty spa&quot;), the AI automatically invokes the design system generator, which executes five parallel domain searches (product type, style, color, landing page patterns, typography) to identify the best matches, applies industry-specific rules to filter out anti-patterns, and delivers a complete output including recommended patterns, style guides, color systems with specific hex codes, typography pairings, motion guidelines, and a pre-delivery checklist validating WCAG contrast, responsive breakpoints, and accessibility compliance.</p>
+<p></p>
+<p>The project supports 15+ technology stacks including React, Next.js, Vue, Svelte, SwiftUI, React Native, Flutter, and HTML+Tailwind, with each stack receiving framework-specific implementation guidelines. Installation is available through multiple channels: the Claude Marketplace with built-in support, a standalone CLI tool (uipro-cli), or manual CLI setup. The architecture uses Python scripts as the search engine, CSV databases as the source of truth, and platform-specific templates that are dynamically generated during installation. The project is actively maintained, MIT-licensed, and has garnered significant adoption (63.3k stars), positioning it as a production-ready tool for developers who need professional design outputs without requiring specialized design expertise or iterative back-and-forth with designers.</p></div>
+
+<h2>Key Takeaways</h2>
+<ul>
+  <li>Design System Generator (v2.0 Flagship): Automatically generates industry-specific design systems through parallel domain searching (product type, style, color, typography, landing patterns, UX rules) that execute in seconds, eliminating manual design system assembly and ensuring consistency across projects.</li>
+  <li>161 Industry-Specific Reasoning Rules: The skill contains curated decision rules for distinct product categories (SaaS, fintech, healthcare, e-commerce, beauty services, creative portfolios, Web3, quantum computing, etc.) that determine optimal patterns, styles, color moods, typography personalities, and anti-patterns to avoid—making recommendations contextual rather than generic.</li>
+  <li>Hybrid BM25 + Regex Search Engine: Uses industry-standard probabilistic lexical matching (BM25 ranking) combined with regex pattern matching to search CSV databases, balancing semantic understanding with precise keyword matching for relevant design recommendations.</li>
+  <li>Comprehensive Knowledge Base: 67 UI styles (Glassmorphism, Neumorphism, Brutalism, AI-Native UI, Spatial Computing, Y2K Aesthetic, Cyberpunk, etc.), 161 color palettes, 57 font pairings, 25 chart types, 99 UX guidelines, and 24 landing page patterns—all cross-indexed by industry and use case.</li>
+  <li>Multi-Platform AI Assistant Support: Works with Claude Code, Cursor, Windsurf, Antigravity, GitHub Copilot, Kiro, Continue, and 6+ other AI coding assistants through unified CLI installation and auto-activation for UI/UX requests.</li>
+  <li>Stack-Specific Implementation Guidelines: Tailored best practices, patterns, and code examples for 15+ technology stacks (React, Next.js, Vue, Nuxt, Svelte, SwiftUI, Jetpack Compose, React Native, Flutter, HTML+Tailwind, shadcn/ui, Angular, Laravel).</li>
+  <li>Pre-Delivery Quality Checklist: Includes automated validation against common UI/UX anti-patterns: confirms SVG icons over emoji, validates WCAG AA contrast (4.5:1 minimum), checks responsive breakpoints (375px, 768px, 1024px, 1440px), verifies hover states and accessibility compliance.</li>
+  <li>Hierarchical Design System Persistence: Can persist generated design systems as MASTER.md with page-specific override files, enabling hierarchical retrieval where page-specific rules override master rules—supporting context-aware code generation across sessions.</li>
+  <li>CLI-Based Installation Architecture: Uses dynamic template generation via uipro-cli to auto-detect platform and generate platform-specific skill files, reducing installation complexity and ensuring updated templates.</li>
+  <li>Real-World Design Demonstrations: Provides 39 website demo examples spanning 20 categories showing practical implementations and how recommendations translate into production-ready UI.</li>
+</ul>
+
+<h2>About</h2>
+<div class="about-card">
+  <p><strong>Author:</strong> nextlevelbuilder (contact: hi@nextlevelbuilder.io)</p>
+  <p><strong>Publication:</strong> GitHub</p>
+  <p><strong>Published:</strong> 2024</p>
+</div>
+
+<h2>Sentiment / Tone</h2>
+<p>Pragmatic and solution-focused with a builder's mindset. The project documentation is presented with confidence and clarity—straightforward in explaining technical capabilities (BM25 ranking, regex search, CSV databases) while maintaining accessibility for less technical readers through concrete examples and live demos. The author positions this as a practical tool that democratizes professional design intelligence for developers, not as a replacement for designers but as a capability multiplier. The tone avoids hyperbole while emphasizing speed and quality: features are documented with specificity (e.g., &quot;Pre-delivery checklist: [ ] No emojis as icons&quot;) rather than marketing language. There's an implicit acknowledgment of design complexity—extensive anti-pattern lists and accessibility checklists suggest the author understands that AI-generated designs need guardrails and validation.</p>
+
+<h2>Related Links</h2>
+<ul>
+<li><a href="https://ui-ux-pro-max-skill.nextlevelbuilder.io/">UI UX Pro Max Official Website</a><br><span class="relevance">Official project website with live demos, searchable design database, and interactive examples showing the skill in action across multiple design styles and platforms.</span></li>
+<li><a href="https://github.com/nextlevelbuilder">nextlevelbuilder GitHub Organization</a><br><span class="relevance">Shows the author's broader body of work including GoClaw and other infrastructure projects for AI agents, providing context for their design philosophy and engineering approach.</span></li>
+<li><a href="https://marieclairedean.substack.com/p/i-built-63-design-skills-for-claude">I Built 63 Design Skills For Claude - Marie-Claire Dean</a><br><span class="relevance">Complementary perspective on design skills for Claude Code, including discovery and research phases that precede design system generation and implementation.</span></li>
+<li><a href="https://snyk.io/articles/top-claude-skills-ui-ux-engineers/">Top 8 Claude Skills for UI/UX Engineers - Snyk</a><br><span class="relevance">Industry analysis of design skills landscape for Claude Code, positioning ui-ux-pro-max-skill within broader ecosystem of design tools and best practices.</span></li>
+<li><a href="https://uxpin.com/studio/blog/ai-design-systems-consistency-simple/">AI in Design Systems: Consistency Made Simple - UXPin</a><br><span class="relevance">Industry perspective on AI-powered design system consistency, tokens, and design-to-code alignment—concepts aligned with ui-ux-pro-max-skill's architecture.</span></li>
+</ul>
+
+<h2>Research Notes</h2>
+<div class="notes">**Author and Context**: The creator operates under the nextlevelbuilder organization (hi@nextlevelbuilder.io), which positions itself around the philosophy &quot;From Zero to One Is Always the Hardest Part.&quot; The organization maintains several high-impact projects including GoClaw (a Go reimplementation of OpenClaw with multi-tenant isolation and security), indicating a focus on infrastructure and developer tooling for AI agents. UI UX Pro Max appears to be their flagship design intelligence product.
+
+**Ecosystem Position**: This project fits within a growing market of AI design system generators (competitors include UX Pilot, Banani's AI Design System Generator, and Figma's AI Make feature). However, ui-ux-pro-max-skill differentiates through: (1) multi-platform AI assistant support (not locked to one IDE/tool), (2) explicit industry-specific reasoning rules (161 categories vs. generic recommendations), (3) open-source availability (MIT license), and (4) search-and-ranking transparency (BM25 + regex, not black-box neural networks).
+
+**Technical Maturity and Adoption**: The repository shows 63.3k stars and 6.3k forks, indicating substantial adoption in the developer community. The project has progressed from initial release to v2.0 with the major addition of design system generation—a feature that required curating and structuring 161 industry-specific reasoning rules, suggesting significant domain research and iteration. Active releases and clear versioning indicate ongoing maintenance.
+
+**Key Insight on Accessibility**: Multiple README sections explicitly include accessibility validation in pre-delivery checklists (WCAG AA contrast, focus states, prefers-reduced-motion, responsive breakpoints). This reflects awareness of a known challenge in AI-generated design: systems trained on visual aesthetics alone often produce beautiful but inaccessible interfaces. The checklist approach suggests the authors recognize this gap and have designed validation rather than relying on the reasoning engine alone.
+
+**Related Conversation**: Multiple search results highlight a broader discussion about whether AI can augment UI/UX designers. Articles on Snyk and UX Planet emphasize that skilled AI design tools should enable designers to focus on research and strategy, not replace them. This project aligns with that philosophy—it provides recommendations and automation but maintains human control through natural language prompts and validation checklists.
+
+**Potential Limitation Not Emphasized**: The project covers 161 industry categories, which is comprehensive, but startup founders building in truly niche spaces may find the predefined rules insufficient. The system is rules-based rather than adaptive—it cannot learn from your specific brand or user feedback without manual updates to MASTER.md files.
+
+**Notable Related Work**: Marie-Claire Dean's article &quot;I Built 63 Design Skills For Claude&quot; shows a complementary approach: design research discovery skills paired with design system skills. UI UX Pro Max focuses on downstream implementation, suggesting a potential workflow where designers conduct research first, then invoke this skill for system generation and code output.</div>
+
+<h2>Topics</h2>
+<div class="topics">
+  <span class="tag">AI design automation</span>
+  <span class="tag">Claude Code skills</span>
+  <span class="tag">design system generation</span>
+  <span class="tag">reasoning engines</span>
+  <span class="tag">BM25 search ranking</span>
+  <span class="tag">UI/UX intelligence</span>
+  <span class="tag">multi-platform AI integration</span>
+  <span class="tag">industry-specific design rules</span>
+</div>
+
+
+</body>
+</html>
