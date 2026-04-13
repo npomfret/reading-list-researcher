@@ -1,0 +1,130 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Native Apple Silicon MLX Port of Karpathy's Autoresearch</title>
+<style>
+  *, *::before, *::after { box-sizing: border-box; }
+  :root {
+    --bg: #fff; --fg: #1a1a1a; --muted: #666; --border: #e0e0e0;
+    --accent: #0066cc; --tag-bg: #f0f0f0; --tag-fg: #333;
+    --card-bg: #fafafa;
+  }
+  @media (prefers-color-scheme: dark) {
+    :root {
+      --bg: #1a1a1a; --fg: #e0e0e0; --muted: #999; --border: #333;
+      --accent: #4da6ff; --tag-bg: #2a2a2a; --tag-fg: #ccc;
+      --card-bg: #222;
+    }
+  }
+  body {
+    font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif;
+    line-height: 1.6; color: var(--fg); background: var(--bg);
+    max-width: 720px; margin: 0 auto; padding: 2rem 1.5rem;
+  }
+  a { color: var(--accent); text-decoration: none; }
+  a:hover { text-decoration: underline; }
+  h1 { font-size: 1.8rem; line-height: 1.2; margin-bottom: 0.25rem; }
+  .meta { color: var(--muted); font-size: 0.9rem; margin-bottom: 2rem; }
+  .meta a { color: var(--muted); }
+  h2 { font-size: 1.2rem; margin-top: 2rem; margin-bottom: 0.75rem; border-bottom: 1px solid var(--border); padding-bottom: 0.25rem; }
+  .summary { font-size: 1.05rem; }
+  ul { padding-left: 1.25rem; }
+  li { margin-bottom: 0.5rem; }
+  .relevance { color: var(--muted); font-size: 0.85rem; }
+  .topics { display: flex; flex-wrap: wrap; gap: 0.5rem; }
+  .tag {
+    background: var(--tag-bg); color: var(--tag-fg);
+    padding: 0.2rem 0.6rem; border-radius: 1rem; font-size: 0.8rem;
+  }
+  .about-card {
+    background: var(--card-bg); padding: 1rem; border-radius: 0.5rem;
+    border: 1px solid var(--border);
+  }
+  .about-card p { margin: 0.25rem 0; }
+  .notes { white-space: pre-wrap; color: var(--muted); font-size: 0.95rem; }
+  .share-btn {
+    display: inline-block; padding: 0.5rem 1rem; border-radius: 0.5rem;
+    background: var(--accent); color: #fff; font-size: 0.9rem; cursor: pointer;
+    border: none; font-family: inherit;
+  }
+  .share-btn:hover { opacity: 0.85; }
+  .share-section { margin-bottom: 1.5rem; }
+  .share-copied { color: var(--muted); font-size: 0.85rem; margin-left: 0.5rem; }
+</style>
+</head>
+<body>
+
+<h1>Native Apple Silicon MLX Port of Karpathy's Autoresearch</h1>
+<div class="meta">
+  <a href="https://x.com/tom_doerr/status/2043270712178221286?s=12">https://x.com/tom_doerr/status/2043270712178221286?s=12</a><br>
+  Social media curation and link-sharing (brief tweet endorsement); represents discovery aggregation by a technical influencer rather than original analysis or investigation. &middot; Researched April 13, 2026
+</div>
+
+<div class="share-section">
+<button class="share-btn" onclick="navigator.clipboard.writeText(window.location.href).then(()=>{document.getElementById('copied').style.display='inline'});window.open('https://notebooklm.google.com','_blank')">
+  Share to NotebookLM
+</button>
+<span id="copied" class="share-copied" style="display:none">URL copied — paste it as a website source in a new notebook</span>
+</div>
+
+<h2>Summary</h2>
+<div class="summary"><p>Tom Dörr's tweet highlights a significant community contribution: a native Apple Silicon port of Andrej Karpathy's &quot;autoresearch&quot; project using MLX (Apple's machine learning framework). Autoresearch, released in March 2026, is a groundbreaking system where AI agents autonomously conduct machine learning research by iteratively modifying training code, running fixed 5-minute experiments, evaluating results against a single metric (validation bits-per-byte), and keeping or reverting changes based on performance improvements. The original system was designed for H100 GPUs and enables approximately 100 experiments per overnight run through autonomous iteration. The MLX port brings this capability to consumer Apple Silicon Macs (M1, M2, M3, M4 series) without requiring PyTorch, CUDA, or expensive cloud GPU rentals. While the port is approximately 96x slower than an H100 (fitting ~55 optimizer steps in 5 minutes versus 11,500 on H100s), it enables meaningful AI research and experimentation on consumer laptops—a substantial democratization of ML research tools. Community implementations have achieved competitive results: M4 Max machines reaching 1.295 bits-per-byte after overnight autonomous runs, and even M1 Pro machines (16GB unified memory) achieving 2.371 BPB in a single 5-minute run. A key insight from the MLX port reveals that Apple Silicon's fixed time-budget constraints actually lead to discovering fundamentally different optimal architectures than H100-optimized solutions—smaller, faster-converging models and different optimizer configurations often win on Macs. Tom Dörr's tweet is a curator's endorsement through his MAGI//ARCHIVE repository aggregation site, which tracks significant open-source contributions in AI infrastructure and development tools, signaling to the community that this project merits attention.</p></div>
+
+<h2>Key Takeaways</h2>
+<ul>
+  <li>Autoresearch enables autonomous AI-driven ML experimentation: AI agents independently modify training code, run 5-minute experiments, evaluate against a single metric (val_bpb), and iterate without human intervention—achieving ~100 experiments per overnight run on consumer hardware.</li>
+  <li>The MLX port eliminates the H100 requirement and associated cloud costs, making autonomous research possible on consumer Apple Silicon Macs—a major democratization shift from 'serious ML requires expensive cloud GPUs' to 'serious research is accessible on your laptop.'</li>
+  <li>Apple Silicon discovers different winning architectures than H100s: the fixed 5-minute time budget on Macs favors smaller, faster-training models and different optimizer configurations, revealing that hardware constraints drive architecturally divergent solutions.</li>
+  <li>Documented results show meaningful progress despite performance gap: M4 Max reaches 1.295 BPB (down from 2.2+ baseline) after autonomous overnight runs; M1 Pro achieves 2.371 BPB in single runs—all while being 96x slower than H100s in absolute throughput.</li>
+  <li>Technical advantage of Apple Silicon unified memory: no CPU-to-GPU PCIe transfers needed, all model weights/gradients/optimizer states share the same memory pool, eliminating a major bandwidth bottleneck compared to traditional discrete GPU setups.</li>
+  <li>The system's constraints enable AI agents to succeed: single modifiable file (train.py), one evaluation metric, fixed time budget, and git-based keep/revert creates a well-defined problem space that coding agents can optimize effectively while remaining scientifically valid.</li>
+  <li>Strong community ecosystem adoption: multiple forks extend autoresearch beyond H100s (MLX for Mac, MPS alternative, Windows RTX, AMD ports), demonstrating both user demand and the system's architectural portability across hardware platforms.</li>
+  <li>Real-world enterprise interest evidenced by public adoption: Shopify CEO Tobi Lutke demonstrated success with autoresearch experiments, suggesting institutional use cases beyond individual researchers.</li>
+</ul>
+
+<h2>About</h2>
+<div class="about-card">
+  <p><strong>Author:</strong> Tom Dörr (curator); Original autoresearch by Andrej Karpathy; MLX port by Trevin and Naman Goyal</p>
+  <p><strong>Publication:</strong> X (formerly Twitter)</p>
+  <p><strong>Published:</strong> April 2026</p>
+</div>
+
+<h2>Sentiment / Tone</h2>
+<p>Curator's enthusiastic yet understated endorsement. Tom Dörr's tweet is brief but positioned as a notable discovery worthy of aggregation on his MAGI//ARCHIVE platform, signaling technical significance to the developer community. The broader reaction from the AI community is extremely positive, characterized by excitement about accessibility (&quot;no cloud GPU needed&quot;), practical appreciation for local development workflows (&quot;you can leave it running overnight and check results in the morning&quot;), and genuine recognition of the technical achievement in porting to constrained hardware. The tone is optimistic but pragmatic: community members acknowledge the 96x performance gap while emphasizing its irrelevance for prototyping and iteration—the primary use cases. No skepticism detected; the prevailing sentiment is &quot;this unlocks something previously impossible on consumer hardware,&quot; with appreciation for the educational and accessibility value.</p>
+
+<h2>Related Links</h2>
+<ul>
+<li><a href="https://github.com/karpathy/autoresearch">Karpathy's Original Autoresearch Repository</a><br><span class="relevance">The foundational system that sparked the entire project—essential for understanding core concepts, design choices (5-min budgets, single metric, git-based keep/revert), and why the original H100-specific implementation became the starting point for community ports.</span></li>
+<li><a href="https://github.com/trevin-creator/autoresearch-mlx">Apple Silicon (MLX) Port - Trevin's Implementation</a><br><span class="relevance">The earliest and most-cited community MLX port; demonstrates how autoresearch was adapted to Apple hardware constraints and became the reference implementation cited by Karpathy in the original repo's notable forks section.</span></li>
+<li><a href="https://namangoyal.com/blog/2026/autoresearch-mlx/">Your MacBook Can Do Autonomous AI Research Now - Naman Goyal's Technical Deep Dive</a><br><span class="relevance">Comprehensive technical analysis of the MLX port covering architecture details, optimizer configuration, real benchmark data from M1 Pro and M4 Max machines, and practical guidance—the most thorough public documentation of Apple Silicon performance characteristics.</span></li>
+<li><a href="https://www.reddit.com/r/Anthropic/comments/1rs56e2/autoresearchmlx_autonomous_llm_pretraining/">r/Anthropic Community Discussion: Autoresearch-MLX Reception</a><br><span class="relevance">Authentic community reception and practical feedback showing how developers perceive the value proposition and plan to use the system—reveals genuine excitement about accessibility and local workflow benefits.</span></li>
+<li><a href="https://tom-doerr.github.io/repo_posts/">MAGI//ARCHIVE - Tom Dörr's Repository Discovery Platform</a><br><span class="relevance">Tom Dörr's curation platform where this project was featured; shows the ecosystem of emerging AI tools and infrastructure projects that he identifies as significant for the developer community.</span></li>
+</ul>
+
+<h2>Research Notes</h2>
+<div class="notes">**About Tom Dörr**: He's a respected AI developer and infrastructure enthusiast who maintains MAGI//ARCHIVE (tom-doerr.github.io/repo_posts/), a curated discovery site for open-source repositories from &quot;the open source frontier.&quot; He frequently shares emerging AI tools and infrastructure projects through this platform and X. He maintains 292 GitHub repositories and previously created tools like zsh_codex (ZSH plugin enabling OpenAI's Codex in the command line). His amplification suggests the project has reached visibility among technical practitioners seeking cutting-edge tools.
+
+**Timing and broader context**: This tweet arrives at a pivotal moment for Apple Silicon in ML development. For the previous two years, Apple Silicon was positioned as &quot;sufficient for inference but serious ML development requires cloud GPUs.&quot; The MLX port of autoresearch—combined with MLX framework maturation and successful community forks for Windows/AMD platforms—is redefining this narrative. The original autoresearch March 2026 release included explicit guidance directing interested parties to community forks for smaller platforms, validating this expansion as intentional and expected.
+
+**Community reception signals** (from Reddit, GitHub discussions): Strong enthusiasm for the &quot;local iteration&quot; use case, with practitioners appreciating the ability to experiment overnight without cloud costs. Recognition of an emerging Apple Silicon ML ecosystem: &quot;between MLX, on-device foundation models, and accessibility APIs for automation there's actually a solid ecosystem forming for mac-native AI work.&quot; Pragmatic appreciation: despite H100s being 96x faster, local iteration remains valuable for researchers without cloud GPU budgets or those wanting to prototype before scaling.
+
+**Technical credibility assessment**: Both Karpathy's original autoresearch and the MLX ports are well-documented with real experimental results. Methodology is sound: fixed-time budgets ensure fair comparison, single metric prevents gaming, git-based reproducibility enables verification. Training curves shown in Naman Goyal's detailed blog demonstrate proper convergence patterns with no instability—the scientific approach is legitimate.
+
+**Important limitations**: The system is specifically for ML hyperparameter/architecture search, not arbitrary research tasks. Results are hardware-specific (M4 Max and Mac Mini discover different winning configurations), so cross-machine comparisons lack validity. Memory pressure on 16GB Macs causes documented throughput dips from 26K tok/sec to &lt;2K during swap thrashing—affecting practical experiment count. Current Apple Silicon results don't match H100 quality yet, though unsurprising given 96x fewer optimizer steps in the same wall-clock time.
+
+**Significance**: This represents a meaningful shift from &quot;cloud-compute-required&quot; to &quot;local-research-accessible&quot; for ML development. It reflects 2026 trends: more parameter-efficient models (11.5M parameters still learn meaningfully), mature frameworks for consumer hardware (MLX reaching production quality), and AI agents becoming genuinely useful for automating research workflows—not hype but working infrastructure.</div>
+
+<h2>Topics</h2>
+<div class="topics">
+  <span class="tag">Autonomous AI Research Agents</span>
+  <span class="tag">Apple Silicon Machine Learning (MLX)</span>
+  <span class="tag">AI-Driven Neural Architecture Search</span>
+  <span class="tag">Democratized ML Infrastructure</span>
+  <span class="tag">Hardware-Constrained Optimization</span>
+</div>
+
+
+</body>
+</html>
