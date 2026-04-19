@@ -1,0 +1,142 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>5 Shanghai University Students Release Largest Public Polymarket Dataset: 1.1 Billion Trades, 107GB, Free on GitHub</title>
+<style>
+  *, *::before, *::after { box-sizing: border-box; }
+  :root {
+    --bg: #fff; --fg: #1a1a1a; --muted: #666; --border: #e0e0e0;
+    --accent: #0066cc; --tag-bg: #f0f0f0; --tag-fg: #333;
+    --card-bg: #fafafa;
+  }
+  @media (prefers-color-scheme: dark) {
+    :root {
+      --bg: #1a1a1a; --fg: #e0e0e0; --muted: #999; --border: #333;
+      --accent: #4da6ff; --tag-bg: #2a2a2a; --tag-fg: #ccc;
+      --card-bg: #222;
+    }
+  }
+  body {
+    font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif;
+    line-height: 1.6; color: var(--fg); background: var(--bg);
+    max-width: 720px; margin: 0 auto; padding: 2rem 1.5rem;
+  }
+  a { color: var(--accent); text-decoration: none; }
+  a:hover { text-decoration: underline; }
+  h1 { font-size: 1.8rem; line-height: 1.2; margin-bottom: 0.25rem; }
+  .meta { color: var(--muted); font-size: 0.9rem; margin-bottom: 2rem; }
+  .meta a { color: var(--muted); }
+  h2 { font-size: 1.2rem; margin-top: 2rem; margin-bottom: 0.75rem; border-bottom: 1px solid var(--border); padding-bottom: 0.25rem; }
+  .summary { font-size: 1.05rem; }
+  ul { padding-left: 1.25rem; }
+  li { margin-bottom: 0.5rem; }
+  .relevance { color: var(--muted); font-size: 0.85rem; }
+  .topics { display: flex; flex-wrap: wrap; gap: 0.5rem; }
+  .tag {
+    background: var(--tag-bg); color: var(--tag-fg);
+    padding: 0.2rem 0.6rem; border-radius: 1rem; font-size: 0.8rem;
+  }
+  .about-card {
+    background: var(--card-bg); padding: 1rem; border-radius: 0.5rem;
+    border: 1px solid var(--border);
+  }
+  .about-card p { margin: 0.25rem 0; }
+  .notes { white-space: pre-wrap; color: var(--muted); font-size: 0.95rem; }
+  .share-btn {
+    display: inline-block; padding: 0.5rem 1rem; border-radius: 0.5rem;
+    background: var(--accent); color: #fff; font-size: 0.9rem; cursor: pointer;
+    border: none; font-family: inherit;
+  }
+  .share-btn:hover { opacity: 0.85; }
+  .share-section { margin-bottom: 1.5rem; }
+  .share-copied { color: var(--muted); font-size: 0.85rem; margin-left: 0.5rem; }
+</style>
+</head>
+<body>
+
+<h1>5 Shanghai University Students Release Largest Public Polymarket Dataset: 1.1 Billion Trades, 107GB, Free on GitHub</h1>
+<div class="meta">
+  <a href="https://x.com/recogard/status/2045613865690661311">https://x.com/recogard/status/2045613865690661311</a><br>
+  Social media announcement / resource discovery post with technical depth &middot; Researched April 19, 2026
+</div>
+
+<div class="share-section">
+<button class="share-btn" onclick="navigator.clipboard.writeText(window.location.href).then(()=>{document.getElementById('copied').style.display='inline'});window.open('https://notebooklm.google.com','_blank')">
+  Share to NotebookLM
+</button>
+<span id="copied" class="share-copied" style="display:none">URL copied — paste it as a website source in a new notebook</span>
+</div>
+
+<h2>Summary</h2>
+<div class="summary"><p>Recogard, a prominent curator of open-source trading tools on Twitter, announced the release of a comprehensive dataset covering 1.1 billion trading records from Polymarket prediction markets across 268,000+ markets. The dataset, totaling 107GB, was compiled and released for free by five graduate students from Shanghai universities (affiliated with Shanghai Innovation Institute, Westlake University, Shanghai Jiao Tong University, Harbin Institute of Technology, and Fudan University). This represents the largest publicly available dataset of prediction market data, exceeding previous public datasets which contained only 36GB or less.</p>
+<p></p>
+<p>The tweet highlights the practical significance of this dataset for traders and researchers: it enables detailed analysis of Polymarket's actual market behavior and price movements over time. Users can analyze patterns within market categories to discover repeatable trading strategies based on historical data. For example, the dataset might reveal that economic markets tend to be less volatile than other categories and often have clear winners identified early, patterns that could form the basis of profitable trading strategies. Beyond individual trading, the dataset serves academic research purposes for studying prediction market dynamics, collective intelligence, and behavioral finance.</p>
+<p></p>
+<p>Alongside the raw dataset, the GitHub repository provides a complete toolkit for working with Polymarket data. This includes tools to fetch fresh data continuously via Polymarket's API and blockchain interfaces, process and clean the raw data, and convert it into analysis-ready formats (parquet files). The infrastructure supports both historical analysis of the complete dataset and real-time continuous monitoring of new trades. The dataset is available both on GitHub and through Hugging Face, with comprehensive documentation and MIT licensing for commercial and research use.</p>
+<p></p>
+<p>The announcement is significant because it democratizes access to prediction market data that was previously limited to paid third-party providers or proprietary traders. Polymarket is the world's largest prediction market platform (valued at $20+ billion as of 2026) and is increasingly being integrated into institutional trading workflows—Goldman Sachs now uses prediction market data in its oil market analysis, and the Intercontinental Exchange (ICE) has created trading tools to consume Polymarket probability assessments. Having the underlying data freely available enables broader participation in market research and strategy development.</p></div>
+
+<h2>Key Takeaways</h2>
+<ul>
+  <li>The dataset contains 1.1 billion trading records across 268,706 Polymarket markets from inception to present (before 2026), totaling 107GB in size—the largest freely available prediction market dataset.</li>
+  <li>Five analysis-ready dataset formats are provided: orderfilled (raw blockchain events, 293.3M records), trades (processed with market metadata, 293.3M records), markets (market metadata), quant (unified YES perspective, 170.3M records), and users (split maker/taker behavior, 340.6M records).</li>
+  <li>The toolkit enables continuous real-time data fetching with automatic block fetching (batch mode for gaps, real-time mode every 2 seconds when current), error recovery, and graceful shutdown—designed for 24/7 operation.</li>
+  <li>Researchers and traders can use the data to identify repeatable patterns (e.g., economic markets being less volatile with clear winners early) and develop quantitative trading strategies based on historical market behavior.</li>
+  <li>The dataset includes low-level blockchain details (block numbers, contract names, specific fee information) not available in third-party data sources, enabling deeper technical analysis.</li>
+  <li>Polymarket is increasingly integrated into institutional finance: Goldman Sachs uses prediction market data for oil market analysis, and ICE created a data feed for professional traders to consume Polymarket probabilities.</li>
+  <li>The MIT-licensed open-source approach contrasts sharply with paid data providers; comparable datasets from institutional sources or premium APIs cost significant fees.</li>
+  <li>The toolkit includes Python APIs, CLI commands, and shell scripts for batch processing, making the data accessible to researchers without deep blockchain expertise.</li>
+  <li>Use cases span market research (studying price discovery), behavioral studies (analyzing trader decision-making), academic research (collective intelligence and forecasting accuracy), and algorithmic trading strategy development.</li>
+  <li>The data is available through multiple channels: GitHub (complete source code and documentation), Hugging Face (simplified dataset download), and includes comprehensive examples for calculating market statistics, tracking price evolution, and analyzing user behavior.</li>
+</ul>
+
+<h2>About</h2>
+<div class="about-card">
+  <p><strong>Author:</strong> Recogard (Twitter curator highlighting open-source trading resources)</p>
+  <p><strong>Publication:</strong> X (Twitter)</p>
+  <p><strong>Published:</strong> 2026-04-19</p>
+</div>
+
+<h2>Sentiment / Tone</h2>
+<p>Enthusiastic and discovery-oriented. Recogard's tone is celebratory about finding a valuable free resource—&quot;This is the largest public prediction market dataset I have ever found&quot;—positioning this as a genuine win for the community. The commentary is practical rather than hype-driven, focusing on specific actionable use cases (pattern discovery, strategy testing) that demonstrate tangible value. The author presents prediction market trading as a learnable skill based on data analysis rather than luck, appealing to quantitative traders and researchers. There's underlying appreciation for the academic rigor and effort involved in creating such a comprehensive dataset.</p>
+
+<h2>Related Links</h2>
+<ul>
+<li><a href="https://github.com/SII-WANGZJ/Polymarket_data">GitHub: SII-WANGZJ/Polymarket_data - The complete dataset and toolkit</a><br><span class="relevance">The primary source referenced in the tweet; contains the full 107GB dataset, all source code, documentation, and tools for fetching/processing Polymarket data in real-time.</span></li>
+<li><a href="https://huggingface.co/datasets/SII-WANGZJ/Polymarket_data">Hugging Face: Polymarket Data Dataset - Simplified download interface</a><br><span class="relevance">Alternative distribution channel for the dataset with easier access for researchers; provides simplified downloading without requiring git/GitHub familiarity.</span></li>
+<li><a href="https://polymarket.com/">Polymarket: The World's Largest Prediction Market</a><br><span class="relevance">The platform itself; understanding how Polymarket operates (market mechanics, resolution, token economics) is essential context for interpreting the dataset.</span></li>
+<li><a href="https://www.theguardian.com/business/2026/apr/02/energy-traders-polymarket-prediction-datafeeds-global-oil-market">The Guardian: 'Polymarket and other prediction platforms driving oil market'</a><br><span class="relevance">Demonstrates institutional adoption and integration of Polymarket data into professional trading workflows; shows real-world impact and legitimacy of prediction market data.</span></li>
+<li><a href="https://github.com/jon-becker/prediction-market-analysis">GitHub: Jon-Becker/prediction-market-analysis - Competing dataset and analysis framework</a><br><span class="relevance">The previous 'largest' freely available Polymarket dataset (33GB compressed); useful for comparative analysis and alternative data pipelines.</span></li>
+</ul>
+
+<h2>Research Notes</h2>
+<div class="notes">**About Recogard**: Based on search results, Recogard is a Twitter account that curates and shares free, underrated resources for Polymarket trading. Previous tweets highlight other datasets (36GB of 72 million trades) and free trading bots with setup guides. Recogard functions as a bridge between the academic/open-source community and traders, likely adding significant value through curation and explanation of technical tools.
+
+**The Researchers**: The five lead authors—Zhengjie Wang (corresponding at Shanghai Innovation Institute), Leiyu Chao, Yu Bao, Lian Cheng, and Jianhan Liao—are affiliated with multiple prestigious Chinese institutions. The corresponding author is Yikang Li. This is a genuine academic collaboration, not a commercial product, reflected in the MIT licensing and comprehensive documentation.
+
+**Polymarket's Institutional Integration (2026 Context)**: As of April 2026, Polymarket is valued at $20+ billion and has undergone significant structural changes. The platform recently launched infrastructure upgrades and began monetizing through platform fees (a shift from pure growth). Critically, Polymarket data is now being consumed by institutional actors: Goldman Sachs incorporates Polymarket analysis into oil market research shared with institutional clients; the Intercontinental Exchange (ICE) created a data feed to deliver Polymarket probabilities to professional energy traders. This institutional adoption makes the underlying data even more valuable for understanding market sentiment at scale.
+
+**Data Quality and Reliability**: The dataset directly accesses Polygon blockchain RPC nodes and the Gamma API (Polymarket's official data API), avoiding third-party aggregators. This ensures completeness and fidelity. The repository includes specific contract addresses (0x4bFb41d5B3570DeFd03C39a9A4D8dE6Bd8B8982E and 0xC5d563A36AE78145C45a50134d48A1215220f80a) and claims to have no missing blocks, suggesting rigorous verification.
+
+**Competitive Position**: Prior to this release, the largest freely available Polymarket dataset was 36GB (72M trades). There are other commercial and academic Polymarket data sources (Polymarket Analytics, PolymarketData.co, ICE Developer Portal), but this dataset appears to be the largest and most complete available to the general public. The timing (April 2026) coincides with peak institutional interest in prediction markets.
+
+**Potential Reactions/Counterarguments**: Critics of prediction markets (noted in broader research) argue they can be used for manipulation or insider betting. The Guardian reported concerns that deepening ties between prediction platforms and commodity markets could &quot;amplify the impact of insider betting&quot; or incentivize betting behavior designed to influence broader markets. Additionally, some scholars have challenged how efficiently Polymarket actually aggregates information. Academic literature on prediction markets notes they work well in well-defined domains (elections, binary events) but can be subject to bias. The availability of this data could enable either legitimate research or attempts to study market manipulation techniques.
+
+**Practical Value for Traders**: The dataset's value proposition rests on the efficient market hypothesis being *partially* true but not perfectly so—i.e., enough patterns exist to profitably trade, but they're hidden in the data rather than obvious. This is the unstated assumption behind the claimed value for strategy development.
+</div>
+
+<h2>Topics</h2>
+<div class="topics">
+  <span class="tag">prediction markets</span>
+  <span class="tag">Polymarket</span>
+  <span class="tag">quantitative trading</span>
+  <span class="tag">blockchain data analysis</span>
+  <span class="tag">open-source datasets</span>
+  <span class="tag">market microstructure</span>
+</div>
+
+
+</body>
+</html>
