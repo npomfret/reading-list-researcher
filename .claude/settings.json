@@ -16,12 +16,5 @@
   },
   "enabledPlugins": {
     "task-files@npomfret": true
-  },
-  "sandbox": {
-    "enabled": true,
-    "autoAllowBashIfSandboxed": true,
-    "excludedCommands": [
-      "git"
-    ]
   }
 }
