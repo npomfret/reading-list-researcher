@@ -5,7 +5,8 @@
     "allow": [
       "Bash(*)",
       "WebSearch",
-      "WebFetch"
+      "WebFetch",
+      "mcp__gitnexus"
     ],
     "deny": []
   },
@@ -37,6 +38,7 @@
         "~/.cache",
         "~/Library/Caches",
         "~/Library/Developer/Xcode/DerivedData",
+        "~/.gitnexus",
         "/var/folders"
       ]
     }
@@ -48,5 +50,8 @@
   },
   "enabledPlugins": {
     "task-files@npomfret": true
-  }
+  },
+  "enabledMcpjsonServers": [
+    "gitnexus"
+  ]
 }
