@@ -25,6 +25,7 @@
       "allowLocalBinding": true,
       "allowAllUnixSockets": true
     },
+    "enableWeakerNetworkIsolation": true,
     "filesystem": {
       "allowWrite": [
         "~/.npm",
@@ -32,6 +33,7 @@
         "~/Library/Caches",
         "~/Library/Developer/Xcode/DerivedData",
         "~/.gitnexus",
+        "~/.docker/buildx",
         "/var/folders"
       ]
     }
