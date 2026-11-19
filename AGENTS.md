@@ -1,6 +1,12 @@
 # Reading List Researcher
 
-See `README.md` for what this project does and how to run it.
+Researches every article in the Safari Reading List with a Claude agent and publishes HTML reports to GitHub Pages from `docs/`. See `README.md` for setup.
+
+Tech: Node 18+, TypeScript (tsx), Claude Agent SDK, Brave Search API, macOS Safari bookmarks and `osascript`.
+Lifecycle: reports are published at https://npomfret.github.io/reading-list-researcher; maintenance status and any other users are not evidenced.
+
+- `npm start` runs the poller; `npm run typecheck` checks types.
+- `docs/` is generated published output: do not hand-edit it. `npm run reset` deletes `docs/`, the agent state under `~/.reading-list-agent` and the iCloud ResearchPods HTML; run it only on explicit request.
 
 <!-- agent-standards:begin -->
 ## Shared agent guidance

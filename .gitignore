@@ -3,3 +3,4 @@ node_modules
 .claude/settings.local.json
 .gitnexus/
 .codex/config.toml
+tmp/
