@@ -6,7 +6,7 @@ Tech: Node 18+, TypeScript (tsx), Claude Agent SDK, Brave Search API, macOS Safa
 Lifecycle: reports are published at https://npomfret.github.io/reading-list-researcher; maintenance status and any other users are not evidenced.
 
 - `npm start` runs the poller; `npm run typecheck` checks types.
-- `docs/` is generated published output: do not hand-edit it. `npm run reset` deletes `docs/`, the agent state under `~/.reading-list-agent` and the iCloud ResearchPods HTML; run it only on explicit request.
+- `docs/` is generated published output: do not hand-edit it. `npm run reset` deletes `docs/`, the agent state under `~/.reading-list-agent` and the iCloud ResearchPods HTML; run it when the task calls for it and state it in your report.
 
 <!-- agent-standards:begin -->
 ## Operating contract
