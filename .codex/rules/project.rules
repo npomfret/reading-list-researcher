@@ -2,8 +2,6 @@
 # Syntax: Starlark. decision precedence: forbidden > allow.
 # Loads only when this project is trusted.
 
-# ---- git: shared default-branch workflow ----
-
 # ---- gh: GitHub CLI ----
 prefix_rule(
     pattern = ["gh", "issue", "delete"],
