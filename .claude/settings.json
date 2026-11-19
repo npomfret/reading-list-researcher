@@ -7,7 +7,8 @@
       "WebSearch",
       "WebFetch",
       "mcp__gitnexus",
-      "mcp__webstorm"
+      "mcp__webstorm",
+      "mcp__xcode"
     ],
     "deny": [
       "mcp__webstorm__execute_terminal_command",
@@ -17,7 +18,9 @@
       "mcp__webstorm__build_project",
       "mcp__webstorm__apply_patch",
       "mcp__webstorm__create_new_file",
-      "mcp__webstorm__reformat_file"
+      "mcp__webstorm__reformat_file",
+      "mcp__xcode__RunCodeSnippet",
+      "mcp__xcode__InvokeDebuggerCommand"
     ]
   },
   "sandbox": {
@@ -34,7 +37,28 @@
   "enabledPlugins": {
     "task-files@npomfret": true,
     "webstorm@npomfret": true,
-    "auditing@npomfret": true
+    "auditing@npomfret": true,
+    "ios-ui-testing@npomfret": false,
+    "database@npomfret": false,
+    "apple-hig@npomfret": false,
+    "typescript-lsp@claude-plugins-official": false,
+    "playwright@claude-plugins-official": true,
+    "scripting@npomfret": true,
+    "teamcity@npomfret": false,
+    "web-factoring@npomfret": true,
+    "frontend-design@claude-plugins-official": true,
+    "browser-testing@npomfret": true,
+    "typesafe@typesafe-ai": true,
+    "browser@npomfret": true
   },
-  "enabledMcpjsonServers": ["gitnexus", "webstorm"]
+  "enabledMcpjsonServers": ["gitnexus", "webstorm"],
+  "extraKnownMarketplaces": {
+    "npomfret": {
+      "source": {
+        "source": "github",
+        "repo": "npomfret/agent-standards"
+      },
+      "autoUpdate": true
+    }
+  }
 }
