@@ -49,7 +49,12 @@
     "frontend-design@claude-plugins-official": true,
     "browser-testing@npomfret": true,
     "typesafe@typesafe-ai": true,
-    "browser@npomfret": true
+    "browser@npomfret": true,
+    "coding@npomfret": true,
+    "http@npomfret": true,
+    "testing@npomfret": true,
+    "ui@npomfret": true,
+    "workflow@npomfret": true
   },
   "enabledMcpjsonServers": ["gitnexus", "webstorm"],
   "extraKnownMarketplaces": {

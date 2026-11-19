@@ -3,13 +3,18 @@
     "auditing@npomfret": ".codex/agent-standards/plugins/auditing",
     "browser-testing@npomfret": ".codex/agent-standards/plugins/browser-testing",
     "browser@npomfret": ".codex/agent-standards/plugins/browser",
+    "coding@npomfret": ".codex/agent-standards/plugins/coding",
     "frontend-design@claude-plugins-official": ".codex/agent-standards/plugins/frontend-design",
+    "http@npomfret": ".codex/agent-standards/plugins/http",
     "playwright@claude-plugins-official": ".codex/agent-standards/plugins/playwright",
     "scripting@npomfret": ".codex/agent-standards/plugins/scripting",
     "task-files@npomfret": ".codex/agent-standards/plugins/task-files",
+    "testing@npomfret": ".codex/agent-standards/plugins/testing",
     "typesafe@typesafe-ai": ".codex/agent-standards/plugins/typesafe",
+    "ui@npomfret": ".codex/agent-standards/plugins/ui",
     "web-factoring@npomfret": ".codex/agent-standards/plugins/web-factoring",
-    "webstorm@npomfret": ".codex/agent-standards/plugins/webstorm"
+    "webstorm@npomfret": ".codex/agent-standards/plugins/webstorm",
+    "workflow@npomfret": ".codex/agent-standards/plugins/workflow"
   },
   "hooks": {
     "auditing@npomfret": {
@@ -73,20 +78,6 @@
               "type": "command",
               "command": "python3 \"${CLAUDE_PLUGIN_ROOT}/scripts/guard.py\"",
               "timeout": 10
-            }
-          ]
-        }
-      ]
-    },
-    "scripting@npomfret": {
-      "PostToolUse": [
-        {
-          "matcher": "Edit|Write|MultiEdit",
-          "hooks": [
-            {
-              "type": "command",
-              "command": "python3 \"${CLAUDE_PLUGIN_ROOT}/scripts/lint_shell.py\" --hook",
-              "timeout": 30
             }
           ]
         }

@@ -1,12 +1,9 @@
 ---
 name: browser-testing
-description: Project conventions for browser-driven tests and page objects. Read before changing Playwright, component or Vitest browser tests, or investigating their failures and flakiness.
+description: Browser-driven tests. Use for Playwright or Vitest browser mode tests, page objects, locators, end-to-end flows through a web UI, and failing or flaky browser tests, including "test the login flow" and "the e2e keeps failing". Not for unit tests, iOS tests, or using a browser to look at a page while developing.
 ---
 
-## Browser testing
-
 Use these conventions for browser-driven tests, including Playwright component tests and Vitest browser mode. Shared rules and platform notes use the same numbers.
-
 ### Shared UI testing rules
 
 Tests describe user behavior through page objects. The page object model is mandatory for all UI tests. A page object is a test driver that hides interaction mechanics behind meaningful application operations. Keep navigation and element knowledge in those objects so UI changes have one place to update.
@@ -39,7 +36,6 @@ Retain wait timing data for successful tests across builds. Routine screenshots 
 ### Departures
 
 Rules 3, 4 and 7 have no exceptions. Other departures need a comment naming the rule, the concrete constraint and what would remove it. The single-match requirement in rule 2 also has no exception.
-
 ### On the web
 
 1. **Tests never touch the page.**
@@ -120,3 +116,5 @@ Rules 3, 4 and 7 have no exceptions. Other departures need a comment naming the 
 10. **Flaky is failing.**
     - Run with `retries: 0`.
     - After a timing fix, run with `--repeat-each=20` and report the count that passed.
+
+*Generated from `npomfret/agent-standards`. Edit the standard there, not this copy.*
